@@ -6,10 +6,21 @@ title: "Course resources"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>resources.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p>
+<!-- <p style="color: #ba5e00"><b>Useful data sources</b> Open and edit the <b>resources.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p> -->
 
-### More on `distill`
+## Data sources
+### UCSB Library 
+- [All library text mining resources](https://guides.library.ucsb.edu/c.php?g=1095771)
+- [Scholarly Journals](https://guides.library.ucsb.edu/c.php?g=1059769&p=8319664)
+- [Twitter data](https://guides.library.ucsb.edu/c.php?g=1095771)
 
--   RStudio's [`distill` website](https://rstudio.github.io/distill/)
--   Inspiration and examples from the [distillery](https://distillery.rbind.io/showcase.html)
+### Kaggle  
+- [#NLP](https://www.kaggle.com/datasets?tags=13204-NLP)
+
+### APIs
+- [New York Times](https://developer.nytimes.com/)
+
+### Google
+- [Google Trends](https://googletrends.github.io/data/)
+
 

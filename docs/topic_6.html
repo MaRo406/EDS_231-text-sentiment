@@ -23,6 +23,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -83,6 +84,7 @@ code span.va { color: #111111; } /* Variable */
 code span.vs { color: #20794d; } /* VerbatimString */
 code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
+
 
   <!--radix_placeholder_meta_tags-->
   <title>EDS 123: Topic 6: Internal &amp; external links</title>
@@ -451,7 +453,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   </style>
 
-  <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+  <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
   <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
   <script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
@@ -2441,7 +2443,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     color: var(--hover-color, white);
   }</style>
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2480,19 +2482,9 @@ Topics
 <span class="down-arrow">&#x25BE;</span>
 </button>
 <div class="nav-dropdown-content">
-<a href="topic_1.html">Topic 1: Add a new site page</a>
-<a href="topic_2.html">Topic 2: Update site title &amp; subtitle</a>
-<a href="topic_3.html">Topic 3: Add images</a>
-<a href="topic_4.html">Topic 4: Change the theme</a>
-<a href="topic_5.html">Topic 5: Basic formatting</a>
-<a href="topic_6.html">Topic 6: Internal &amp; external links</a>
-<a href="topic_7.html">Topic 7: Remove tables of contents</a>
-<a href="topic_8.html">Topic 8: Add a dropdown menu from navigation bar item</a>
-<a href="topic_9.html">Topic 9: Change site fonts</a>
-<a href="topic_10.html">Topic 10: Add a table</a>
+<a href="topic_2.html">Topic 2: Text Data in R</a>
 </div>
 </div>
-<a href="assignments.html">Assignments</a>
 <a href="resources.html">Resources</a>
 <a href="https://github.com/allisonhorst/meds-distill-template">
 <i class="fab fa-github" aria-hidden="true"></i>
@@ -2518,27 +2510,36 @@ Topics
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#linking-to-internal-parts-of-your-site">Linking to internal parts of your site</a></li>
+<li><a href="#linking-to-internal-parts-of-your-site">Linking to
+internal parts of your site</a></li>
 <li><a href="#external-links">External links</a></li>
 </ul>
 </nav>
 </div>
 <p style="color: #ba5e00">
-<b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_6.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!
+<b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_6.Rmd</b> file,
+in the project root, to delete this placeholder text and customize with
+your own!
 </p>
-<h2 id="linking-to-internal-parts-of-your-site">Linking to internal parts of your site</h2>
-<p>Sometimes you’ll want to have a link to another page <em>in your website</em>. How? Use the format <code>[text](link_to_this_page.html)</code>.</p>
-<p>For example, if I want to link here to the Resources page, within my .Rmd that looks like this:</p>
+<h2 id="linking-to-internal-parts-of-your-site">Linking to internal
+parts of your site</h2>
+<p>Sometimes you’ll want to have a link to another page <em>in your
+website</em>. How? Use the format
+<code>[text](link_to_this_page.html)</code>.</p>
+<p>For example, if I want to link here to the Resources page, within my
+.Rmd that looks like this:</p>
 <pre><code>  Find more resources [here](resources.html). </code></pre>
 <p>Which, when built, looks like this:</p>
 <p>Find more resources <a href="resources.html">here</a>.</p>
 <h2 id="external-links">External links</h2>
-<p>Same thing, just add the full URL within the parentheses. For example, to link to UCSB’s home page that would look like:</p>
+<p>Same thing, just add the full URL within the parentheses. For
+example, to link to UCSB’s home page that would look like:</p>
 <pre><code>  Learn more about [UCSB](https://www.ucsb.edu/).
   </code></pre>
 <p>Which when built looks like this:</p>
 <p>Learn more about <a href="https://www.ucsb.edu/">UCSB</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

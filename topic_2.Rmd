@@ -1,17 +1,91 @@
 ---
-title: "Topic 2: Update site title and subtitle"
+title: "Topic 2: Text Data in R"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+### Connect to the New York Times API and send a query
 
-<p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_2.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p>
+```{r load-packages}
+library(jsonlite) #convert results from API queries into R-friendly formats 
+library(tidyverse)
+```
 
-One of the first things you'll want to do is update your site title, subtitle, and the short link on the right side of the navbar. 
+```{r api, eval = FALSE}
+#create an object called x with the results of our query ("haaland")
+#x <- fromJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V")
+x <- readRDS("initquery.rds")
 
-Here's how:
+class(x) #what type of object is x?
 
-- The main title and subtitle for the home page live in the YAML of the `index.Rmd` file. Open it in your project, update the `title` and `description` fields in the YAML, save, then build your site (In RStudio: Build > Build Website) to see the updated title.
+#flatten the JSON object, then convert to a data frame
+x <- fromJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V", flatten = TRUE) %>% 
+  data.frame()
 
-- The label for the short link in the upper right of the page (right side of the navigation bar) is specified in the `_site.yml` page. Open the `_site.yml` file in your project, update the Title field, save, and rebuild the site to see your update.
+#Inspect our data
+class(x) #now what is it?
+dim(x) # how big is it?
+names(x) # what variables are we working with?
+
+#response.xxx.xxx... is legacy of the json nested hierarchy
+```
+
+### OK, it's working but we want more data. Let's set some parameters
+
+```{r}
+term <- "Haaland" # Need to use + to string together separate words
+begin_date <- "20210120"
+end_date <- "20220401"
+
+baseurl <- paste0("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=",term,
+                  "&begin_date=",begin_date,"&end_date=",end_date,
+                  "&facet_filter=true&api-key=","NTKBHbsb6XFEkGymGumAiba7n3uBvs8V", sep="")
+
+#examine our query url
+baseurl
+```
+
+```{r, eval=FALSE}
+ #initialQuery <- fromJSON(baseurl)
+#maxPages <- round((initialQuery$response$meta$hits[1] / 10)-1) 
+
+pages <- list()
+for(i in 0:maxPages){
+  nytSearch <- fromJSON(paste0(baseurl, "&page=", i), flatten = TRUE) %>% data.frame() 
+  message("Retrieving page ", i)
+  pages[[i+1]] <- nytSearch 
+  Sys.sleep(1) 
+}
+
+nytDat <- rbind_pages(pages)
+nytDat <- as_tibble(nytDat)
+saveRDS(nytDat, "nytDat.rds")
+nytDat <- readRDS("nytDat.RDS")
+```
+
+```{r article-type}
+nytDat <- readRDS("nytDat.RDS")
+nytDat %>% 
+  group_by(response.docs.type_of_material) %>%
+  summarize(count=n()) %>%
+  mutate(percent = (count / sum(count))*100) %>%
+  ggplot() +
+  geom_bar(aes(y=percent, x=response.docs.type_of_material, fill=response.docs.type_of_material), stat = "identity") + coord_flip()
+```
+
+```{r date-plot}
+nytDat %>%
+  mutate(pubDay=gsub("T.*","",response.docs.pub_date)) %>%
+  group_by(pubDay) %>%
+  summarise(count=n()) %>%
+  #filter(count >= 2) %>%
+  ggplot() +
+  geom_bar(aes(x=reorder(pubDay, count), y=count), stat="identity") + coord_flip()
+```
+
+```{r}
+#The 6th column, "response.doc.lead_paragraph", is the one we want here
+
+dat <- nytDat[,6]
+```
