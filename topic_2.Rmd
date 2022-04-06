@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Today we will be grabbing some data from the New York Times database via their API, then running some basic string manipulations, trying out the tidytext format, and creating some basic plots.
 
-## Connect to the New York Times API and send a query
+### Connect to the New York Times API and send a query
 
 ```{r load-packages}
 library(jsonlite) #convert results from API queries into R-friendly formats 
@@ -19,7 +19,7 @@ library(ggplot2) #plot word frequencies and publication dates
 
 We have to decide which New York Times articles we are interested in examining. For this exercise, I chose articles about Deb Haaland, the current US Secretary of the Interior. As a member of the Laguna Pueblo Tribe, Haaland is the first Native American to serve as Cabinet secretary. Very cool!
 
-![](images/Screen%20Shot%202022-04-05%20at%2011.54.20%20AM.png)
+![](images/Screen%20Shot%202022-04-05%20at%2011.54.20%20AM.png){width="250"}
 
 ```{r api, eval = FALSE}
 
@@ -61,7 +61,7 @@ str_detect(x, 't'); str_detect(x, 'tive') ### is pattern in the string? T/F
 str_locate(x, 't'); str_locate_all(x, 'as')
 ```
 
-## OK, it's working but we want more data. Let's set some parameters for a bigger query
+### OK, it's working but we want more data. Let's set some parameters for a bigger query
 
 ```{r}
 term <- "Haaland" # Need to use + to string together separate words
@@ -191,7 +191,7 @@ tokenized %>%
 
 ```
 
-##Assignment (Due by Week 3)
+## Assignment (Due by Week 3)
 
 1.  Create a free New York Times account (<https://developer.nytimes.com/get-started>)
 
