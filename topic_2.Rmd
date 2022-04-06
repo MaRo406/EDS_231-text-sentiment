@@ -5,40 +5,70 @@ title: "Topic 2: Text Data in R"
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-### Connect to the New York Times API and send a query
+
+Today we will be grabbing some data from the New York Times database via their API, then running some basic string manipulations, trying out the tidytext format, and creating some basic plots.
+
+## Connect to the New York Times API and send a query
 
 ```{r load-packages}
 library(jsonlite) #convert results from API queries into R-friendly formats 
-library(tidyverse)
-library(tidytext)
-library(ggplot2)
+library(tidyverse) 
+library(tidytext) #text data management and analysis
+library(ggplot2) #plot word frequencies and publication dates
 ```
 
-```{r api, eval = FALSE}
+We have to decide which New York Times articles we are interested in examining. For this exercise, I chose articles about Deb Haaland, the current US Secretary of the Interior. As a member of the Laguna Pueblo Tribe, Haaland is the first Native American to serve as Cabinet secretary. Very cool!
+
+![](images/Screen%20Shot%202022-04-05%20at%2011.54.20%20AM.png)
+
+```{r api, eval = TRUE}
+
 #create an object called x with the results of our query ("haaland")
+# the from JSON flatten the JSON object, then convert to a data frame
+t <- fromJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V", flatten = TRUE) #the string following "key=" is your API key 
 
-class(x) #what type of object is x?
+class(t) #what type of object is x?
 
-#flatten the JSON object, then convert to a data frame
-x <- fromJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V", flatten = TRUE) %>% #the string following "key=" is the 
+t <- t %>% 
   data.frame()
 
+
 #Inspect our data
-class(x) #now what is it?
-dim(x) # how big is it?
-names(x) # what variables are we working with?
-saveRDS(x, "initquery.RDS")
-x <- readRDS("nytDat.rds")
-#response.xxx.xxx... is legacy of the json nested hierarchy
+class(t) #now what is it?
+dim(t) # how big is it?
+names(t) # what variables are we working with?
+#t <- readRDS("nytDat.rds") #in case of emergency :)
+
 ```
 
-### OK, it's working but we want more data. Let's set some parameters
+The name format, response.xxx.xxx..., is a legacy of the json nested hierarchy.
+
+Let's look at a piece of text. Our data object has a variable called "response.docs.snippet" that contains a short excerpt, or "snippet" from the article. Let's grab a snippet and try out some basic 'stringr' functions.
+
+```{r basic_stringr}
+t$response.docs.snippet[9]
+
+#assign a snippet to x to use as fodder for stringr functions.  You can follow along using the sentence on the next line.
+
+x <- "Her nomination as secretary of the interior is historic, but as the first Native cabinet member, she would have to strike a delicate balance." 
+
+tolower(x)
+str_split(x, ','); str_split(x, 't')
+str_replace(x, 'historic', 'without precedent')
+str_replace(x, ' ', '_') #first one
+str_replace_all(x, ' ', '_') #all of them
+str_detect(x, 't'); str_detect(x, 'tive') ### is pattern in the string? T/F
+str_locate(x, 't'); str_locate_all(x, 'as')
+```
+
+## OK, it's working but we want more data. Let's set some parameters for a bigger query
 
 ```{r}
 term <- "Haaland" # Need to use + to string together separate words
 begin_date <- "20210120"
 end_date <- "20220401"
 
+#construct the query url using API operators
 baseurl <- paste0("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=",term,
                   "&begin_date=",begin_date,"&end_date=",end_date,
                   "&facet_filter=true&api-key=","NTKBHbsb6XFEkGymGumAiba7n3uBvs8V", sep="")
@@ -86,20 +116,27 @@ nytDat %>%
   geom_bar(aes(x=reorder(pubDay, count), y=count), stat="identity") + coord_flip()
 ```
 
-```{r}
-#The 6th column, "response.doc.lead_paragraph", is the one we want here
+The New York Times doesn't make full text of the articles available through the API. But we can use the first paragraph of each article.
+
+```{r plot_frequencies}
+
 names(nytDat)
-paragraph <- names(nytDat)[6]
+paragraph <- names(nytDat)[6] #The 6th column, "response.doc.lead_paragraph", is the one we want here.  
 tokenized <- nytDat %>%
   unnest_tokens(word, paragraph)
 
 tokenized %>%
   count(word, sort = TRUE) %>%
-  filter(n > 50) %>%
+  filter(n > 5) %>% #illegible with all the words displayed
   mutate(word = reorder(word, n)) %>%
   ggplot(aes(n, word)) +
   geom_col() +
   labs(y = NULL)
+```
+
+Uh oh, who knows what we need to do here?
+
+```{r}
 
 data(stop_words)
 
@@ -115,34 +152,53 @@ tokenized %>%
   labs(y = NULL)
 ```
 
-```{r cleaning}
+OK, but look at the most common words. Does one stick out?
+
+```{r cleaning, eval=FALSE}
+
 #inspect the list of tokens (words)
 tokenized$word
 
-clean_tokens <- str_replace_all(tokenized$word,"trib[a-z,A-Z]*","tribe") #stem tribe words
+clean_tokens <- str_replace_all(tokenized$word,"land[a-z,A-Z]*","land") #stem tribe words
 clean_tokens <- str_remove_all(clean_tokens, "[:digit:]") #remove all numbers
+clean_tokens <- str_remove_all(clean_tokens, "washington")
 clean_tokens <- gsub("’s", '', clean_tokens)
 
+tokenized$clean <- clean_tokens
+
+tokenized %>%
+  count(clean, sort = TRUE) %>%
+  filter(n > 10) %>% #illegible with all the words displayed
+  mutate(clean = reorder(clean, n)) %>%
+  ggplot(aes(n, clean)) +
+  geom_col() +
+  labs(y = NULL)
+
+#remove the empty strings
+tib <-subset(tokenized, clean!="")
+
+#reassign
+tokenized <- tib
+
+#try again
+tokenized %>%
+  count(clean, sort = TRUE) %>%
+  filter(n > 10) %>% #illegible with all the words displayed
+  mutate(clean = reorder(clean, n)) %>%
+  ggplot(aes(n, clean)) +
+  geom_col() +
+  labs(y = NULL)
 
 ```
-1. Create a free New York Times account (https://developer.nytimes.com/get-started)
 
-2. Pick an interesting environmental key word(s) and use the jsonlite package to query the API.  Pick something high profile enough and over a large enough time frame that your query yields enough articles for an interesting examination.
+##Assignment (Due by Week 3)
 
-3. Recreate the publications per day and word frequency plots using the first paragraph
- - Make some (at least 3) transformations to the corpus (add stopword(s), stem a key term and its variants, remove numbers)
-  
-4. 
+1.  Create a free New York Times account (<https://developer.nytimes.com/get-started>)
 
-```{r assignment}
+2.  Pick an interesting environmental key word(s) and use the jsonlite package to query the API. Pick something high profile enough and over a large enough time frame that your query yields enough articles for an interesting examination.
 
+3.  Recreate the publications per day and word frequency plots using the first paragraph
 
+-   Make some (at least 3) transformations to the corpus (add stopword(s), stem a key term and its variants, remove numbers)
 
-```
-
-
-
-
-
-
-
+4.  Recreate the publications per day and word frequency plots using the headlines variable (response.docs.headline.main). Compare the distributions of word frequencies between the first paragraph and headlines. Do you see any difference?

@@ -33,7 +33,7 @@ navbar:
     #   href: assignments.html
     - text: "Resources"
       href: resources.html
-    - text:  "Reading Reactions"
+    - text:  "Reading Responses"
       href: Reading_Reactions.html
     # - icon: fab fa-github
       # href: https://github.com/allisonhorst/meds-distill-template
