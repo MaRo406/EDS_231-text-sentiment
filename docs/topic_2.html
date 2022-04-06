@@ -2541,7 +2541,7 @@ width="250" /></p>
 <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span> <span class='co'>#now what is it?</span>
 <span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span> <span class='co'># how big is it?</span>
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span> <span class='co'># what variables are we working with?</span>
-<span class='co'>#t &lt;- readRDS("nytDat.rds") #in case of emergency :)</span>
+<span class='co'>#t &lt;- readRDS("nytDat.rds") #in case of API emergency :)</span>
 </code></pre>
 </div>
 </div>
@@ -2563,7 +2563,8 @@ functions.</p>
 <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_split.html'>str_split</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>','</span><span class='op'>)</span>; <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_split.html'>str_split</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>'t'</span><span class='op'>)</span>
 <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_replace.html'>str_replace</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>'historic'</span>, <span class='st'>'without precedent'</span><span class='op'>)</span>
 <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_replace.html'>str_replace</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>' '</span>, <span class='st'>'_'</span><span class='op'>)</span> <span class='co'>#first one</span>
-<span class='fu'><a href='https://stringr.tidyverse.org/reference/str_replace.html'>str_replace_all</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>' '</span>, <span class='st'>'_'</span><span class='op'>)</span> <span class='co'>#all of them</span>
+<span class='co'>#how do we replace all of them?</span>
+
 <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>'t'</span><span class='op'>)</span>; <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>'tive'</span><span class='op'>)</span> <span class='co'>### is pattern in the string? T/F</span>
 <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_locate.html'>str_locate</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>'t'</span><span class='op'>)</span>; <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_locate.html'>str_locate_all</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>'as'</span><span class='op'>)</span>
 </code></pre>
@@ -2585,14 +2586,13 @@ bigger query</h3>
                   <span class='st'>"&amp;facet_filter=true&amp;api-key="</span>,<span class='st'>"NTKBHbsb6XFEkGymGumAiba7n3uBvs8V"</span>, sep<span class='op'>=</span><span class='st'>""</span><span class='op'>)</span>
 
 <span class='co'>#examine our query url</span>
-<span class='va'>baseurl</span>
 </code></pre>
 </div>
-<pre><code>[1] &quot;http://api.nytimes.com/svc/search/v2/articlesearch.json?q=Haaland&amp;begin_date=20210120&amp;end_date=20220401&amp;facet_filter=true&amp;api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V&quot;</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"> <span class='va'>initialQuery</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>fromJSON</a></span><span class='op'>(</span><span class='va'>baseurl</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#this code allows for obtaining multiple pages of query results </span>
+ <span class='va'>initialQuery</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>fromJSON</a></span><span class='op'>(</span><span class='va'>baseurl</span><span class='op'>)</span>
 <span class='va'>maxPages</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>initialQuery</span><span class='op'>$</span><span class='va'>response</span><span class='op'>$</span><span class='va'>meta</span><span class='op'>$</span><span class='va'>hits</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>/</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span> 
 
 <span class='va'>pages</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
@@ -2604,14 +2604,13 @@ bigger query</h3>
 <span class='op'>}</span>
 <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>nytSearch</span><span class='op'>)</span>
 
-<span class='va'>nytDat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/jsonlite/man/rbind_pages.html'>rbind_pages</a></span><span class='op'>(</span><span class='va'>pages</span><span class='op'>)</span>
-<span class='va'>nytDat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>nytDat</span><span class='op'>)</span>
+<span class='co'>#need to bind the pages and create a tibble from nytDa</span>
 </code></pre>
 </div>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nytDat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span><span class='op'>(</span><span class='st'>"nytDat.csv"</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nytDat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span><span class='op'>(</span><span class='st'>"nytDat.csv"</span><span class='op'>)</span> <span class='co'># obtained from </span>
 
 <span class='va'>nytDat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>response.docs.type_of_material</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
@@ -2771,7 +2770,7 @@ headlines variable (response.docs.headline.main). Compare the
 distributions of word frequencies between the first paragraph and
 headlines. Do you see any difference?</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre
+<div class="sourceCode" id="cb2"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
