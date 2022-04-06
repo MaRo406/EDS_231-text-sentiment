@@ -37,7 +37,7 @@ t <- t %>%
 class(t) #now what is it?
 dim(t) # how big is it?
 names(t) # what variables are we working with?
-#t <- readRDS("nytDat.rds") #in case of emergency :)
+#t <- readRDS("nytDat.rds") #in case of API emergency :)
 
 ```
 
@@ -56,7 +56,8 @@ tolower(x)
 str_split(x, ','); str_split(x, 't')
 str_replace(x, 'historic', 'without precedent')
 str_replace(x, ' ', '_') #first one
-str_replace_all(x, ' ', '_') #all of them
+#how do we replace all of them?
+
 str_detect(x, 't'); str_detect(x, 'tive') ### is pattern in the string? T/F
 str_locate(x, 't'); str_locate_all(x, 'as')
 ```
@@ -74,10 +75,11 @@ baseurl <- paste0("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=",t
                   "&facet_filter=true&api-key=","NTKBHbsb6XFEkGymGumAiba7n3uBvs8V", sep="")
 
 #examine our query url
-baseurl
+
 ```
 
 ```{r, eval=FALSE}
+#this code allows for obtaining multiple pages of query results 
  initialQuery <- fromJSON(baseurl)
 maxPages <- round((initialQuery$response$meta$hits[1] / 10)-1) 
 
@@ -90,13 +92,13 @@ for(i in 0:maxPages){
 }
 class(nytSearch)
 
-nytDat <- rbind_pages(pages)
-nytDat <- as_tibble(nytDat)
+#need to bind the pages and create a tibble from nytDa
+
 
 ```
 
 ```{r article-type}
-nytDat <- read.csv("nytDat.csv")
+nytDat <- read.csv("nytDat.csv") # obtained from 
 
 nytDat %>% 
   group_by(response.docs.type_of_material) %>%
