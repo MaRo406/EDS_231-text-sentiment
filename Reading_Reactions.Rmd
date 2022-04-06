@@ -1,0 +1,49 @@
+---
+title: "Reading Reactions"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Reading Response Assignments
+
+## Prompts
+
+A key part of this course is exploring the way the text analysis concepts and tools that we'll be learning about are being put to work in the field. Each week there will be an assigned paper from the academic literature. Your job is to read the paper and respond to the following prompts:
+
+1.  **Motivation** - What is the main question the authors are seeking to answer using text analysis?
+
+2.  **Methods** - Describe the data and text analysis methods used.
+
+3.  **Results** - What did the authors discover through their analysis?
+
+4.  **Critique** - What are the limitations of the authors approach? What could they have improved? Do any unanswered questions come to mind that further analysis could elucidate?
+
+Everyone will turn in their responses to these prompts by the end of the day on Tuesday on GauchoSpace via online text submission.
+
+## Lead Group
+
+You have been randomly assigned groups that will serve as both reading response teams as well as final presentation groups (more on that next week). When it is your group's week, you will coordinate as a group to present your answers to the 4 prompts above and facilitate a discussion with the rest of the class.
+
+## Weekly Schedule
+
+| Week | Lead Group |
+|------|------------|
+| 3    | A          |
+| 4    | B          |
+| 5    | C          |
+| 6    | D          |
+| 7    | E          |
+| 8    | F          |
+
+## Group Composition 
+
+| Group | Members                            |
+|-------|------------------------------------|
+| A     | Paloma, Allie, Wylie, Ben, Julia   |
+| B     | Steven, Joe, Connor, Shale, Grace  |
+| C     | Alex, Halina, Desik, Alexandra     |
+| D     | Juliet, Charles, Scout, Peter      |
+| E     | Clarissa, Jake, Daniel, Ryan, Ilia |
+| F     | Felicia, Mia, Cullen, Marie        |

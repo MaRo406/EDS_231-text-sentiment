@@ -10,24 +10,25 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-packages}
 library(jsonlite) #convert results from API queries into R-friendly formats 
 library(tidyverse)
+library(tidytext)
+library(ggplot2)
 ```
 
 ```{r api, eval = FALSE}
 #create an object called x with the results of our query ("haaland")
-#x <- fromJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V")
-x <- readRDS("initquery.rds")
 
 class(x) #what type of object is x?
 
 #flatten the JSON object, then convert to a data frame
-x <- fromJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V", flatten = TRUE) %>% 
+x <- fromJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V", flatten = TRUE) %>% #the string following "key=" is the 
   data.frame()
 
 #Inspect our data
 class(x) #now what is it?
 dim(x) # how big is it?
 names(x) # what variables are we working with?
-
+saveRDS(x, "initquery.RDS")
+x <- readRDS("nytDat.rds")
 #response.xxx.xxx... is legacy of the json nested hierarchy
 ```
 
@@ -47,8 +48,8 @@ baseurl
 ```
 
 ```{r, eval=FALSE}
- #initialQuery <- fromJSON(baseurl)
-#maxPages <- round((initialQuery$response$meta$hits[1] / 10)-1) 
+ initialQuery <- fromJSON(baseurl)
+maxPages <- round((initialQuery$response$meta$hits[1] / 10)-1) 
 
 pages <- list()
 for(i in 0:maxPages){
@@ -57,15 +58,16 @@ for(i in 0:maxPages){
   pages[[i+1]] <- nytSearch 
   Sys.sleep(1) 
 }
+class(nytSearch)
 
 nytDat <- rbind_pages(pages)
 nytDat <- as_tibble(nytDat)
-saveRDS(nytDat, "nytDat.rds")
-nytDat <- readRDS("nytDat.RDS")
+
 ```
 
 ```{r article-type}
-nytDat <- readRDS("nytDat.RDS")
+nytDat <- read.csv("nytDat.csv")
+
 nytDat %>% 
   group_by(response.docs.type_of_material) %>%
   summarize(count=n()) %>%
@@ -79,13 +81,68 @@ nytDat %>%
   mutate(pubDay=gsub("T.*","",response.docs.pub_date)) %>%
   group_by(pubDay) %>%
   summarise(count=n()) %>%
-  #filter(count >= 2) %>%
+  filter(count >= 2) %>%
   ggplot() +
   geom_bar(aes(x=reorder(pubDay, count), y=count), stat="identity") + coord_flip()
 ```
 
 ```{r}
 #The 6th column, "response.doc.lead_paragraph", is the one we want here
+names(nytDat)
+paragraph <- names(nytDat)[6]
+tokenized <- nytDat %>%
+  unnest_tokens(word, paragraph)
 
-dat <- nytDat[,6]
+tokenized %>%
+  count(word, sort = TRUE) %>%
+  filter(n > 50) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(n, word)) +
+  geom_col() +
+  labs(y = NULL)
+
+data(stop_words)
+
+tokenized <- tokenized %>%
+  anti_join(stop_words)
+
+tokenized %>%
+  count(word, sort = TRUE) %>%
+  filter(n > 5) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(n, word)) +
+  geom_col() +
+  labs(y = NULL)
 ```
+
+```{r cleaning}
+#inspect the list of tokens (words)
+tokenized$word
+
+clean_tokens <- str_replace_all(tokenized$word,"trib[a-z,A-Z]*","tribe") #stem tribe words
+clean_tokens <- str_remove_all(clean_tokens, "[:digit:]") #remove all numbers
+clean_tokens <- gsub("’s", '', clean_tokens)
+
+
+```
+1. Create a free New York Times account (https://developer.nytimes.com/get-started)
+
+2. Pick an interesting environmental key word(s) and use the jsonlite package to query the API.  Pick something high profile enough and over a large enough time frame that your query yields enough articles for an interesting examination.
+
+3. Recreate the publications per day and word frequency plots using the first paragraph
+ - Make some (at least 3) transformations to the corpus (add stopword(s), stem a key term and its variants, remove numbers)
+  
+4. 
+
+```{r assignment}
+
+
+
+```
+
+
+
+
+
+
+

@@ -87,20 +87,20 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>EDS 123: Topic 2: Text Data in R</title>
+  <title>EDS 231: Topic 2: Text Data in R</title>
 
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="EDS 123: Topic 2: Text Data in R"/>
+  <meta property="og:title" content="EDS 231: Topic 2: Text Data in R"/>
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:site_name" content="EDS 123"/>
+  <meta property="og:site_name" content="EDS 231"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="EDS 123: Topic 2: Text Data in R"/>
+  <meta property="twitter:title" content="EDS 231: Topic 2: Text Data in R"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
@@ -2471,7 +2471,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <header class="header header--fixed" role="banner">
 <nav class="distill-site-nav distill-site-header">
 <div class="nav-left">
-<a href="index.html" class="title">EDS 123</a>
+<a href="index.html" class="title">EDS 231</a>
 </div>
 <div class="nav-right">
 <a href="index.html">Home</a>
@@ -2486,9 +2486,7 @@ Topics
 </div>
 </div>
 <a href="resources.html">Resources</a>
-<a href="https://github.com/allisonhorst/meds-distill-template">
-<i class="fab fa-github" aria-hidden="true"></i>
-</a>
+<a href="Reading_Reactions.html">Reading Reactions</a>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>
@@ -2506,45 +2504,33 @@ Topics
 
 
 <div class="d-article">
-<div class="d-contents d-contents-float">
-<nav class="l-text toc figcaption" id="TOC">
-<h3>Contents</h3>
-<ul>
-<li><a
-href="#connect-to-the-new-york-times-api-and-send-a-query">Connect to
-the New York Times API and send a query</a></li>
-<li><a
-href="#ok-its-working-but-we-want-more-data.-lets-set-some-parameters">OK,
-it’s working but we want more data. Let’s set some parameters</a></li>
-</ul>
-</nav>
-</div>
 <h3 id="connect-to-the-new-york-times-api-and-send-a-query">Connect to
 the New York Times API and send a query</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://arxiv.org/abs/1403.2805'>jsonlite</a></span><span class='op'>)</span> <span class='co'>#convert results from API queries into R-friendly formats </span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/juliasilge/tidytext'>tidytext</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#create an object called x with the results of our query ("haaland")</span>
-<span class='co'>#x &lt;- fromJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&amp;api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V")</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='st'>"initquery.rds"</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='co'>#what type of object is x?</span>
 
 <span class='co'>#flatten the JSON object, then convert to a data frame</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>fromJSON</a></span><span class='op'>(</span><span class='st'>"http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&amp;api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V"</span>, flatten <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>fromJSON</a></span><span class='op'>(</span><span class='st'>"http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&amp;api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V"</span>, flatten <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'>#the string following "key=" is the </span>
   <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'>#Inspect our data</span>
 <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='co'>#now what is it?</span>
 <span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='co'># how big is it?</span>
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='co'># what variables are we working with?</span>
-
+<span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>saveRDS</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"initquery.RDS"</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='st'>"nytDat.rds"</span><span class='op'>)</span>
 <span class='co'>#response.xxx.xxx... is legacy of the json nested hierarchy</span>
 </code></pre>
 </div>
@@ -2570,8 +2556,8 @@ it’s working but we want more data. Let’s set some parameters</h3>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"> <span class='co'>#initialQuery &lt;- fromJSON(baseurl)</span>
-<span class='co'>#maxPages &lt;- round((initialQuery$response$meta$hits[1] / 10)-1) </span>
+<pre class="sourceCode r"><code class="sourceCode r"> <span class='va'>initialQuery</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>fromJSON</a></span><span class='op'>(</span><span class='va'>baseurl</span><span class='op'>)</span>
+<span class='va'>maxPages</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>initialQuery</span><span class='op'>$</span><span class='va'>response</span><span class='op'>$</span><span class='va'>meta</span><span class='op'>$</span><span class='va'>hits</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>/</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span> 
 
 <span class='va'>pages</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>0</span><span class='op'>:</span><span class='va'>maxPages</span><span class='op'>)</span><span class='op'>{</span>
@@ -2580,17 +2566,17 @@ it’s working but we want more data. Let’s set some parameters</h3>
   <span class='va'>pages</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>+</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>nytSearch</span> 
   <span class='fu'><a href='https://rdrr.io/r/base/Sys.sleep.html'>Sys.sleep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span> 
 <span class='op'>}</span>
+<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>nytSearch</span><span class='op'>)</span>
 
 <span class='va'>nytDat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/jsonlite/man/rbind_pages.html'>rbind_pages</a></span><span class='op'>(</span><span class='va'>pages</span><span class='op'>)</span>
 <span class='va'>nytDat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>nytDat</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>saveRDS</a></span><span class='op'>(</span><span class='va'>nytDat</span>, <span class='st'>"nytDat.rds"</span><span class='op'>)</span>
-<span class='va'>nytDat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='st'>"nytDat.RDS"</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nytDat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='st'>"nytDat.RDS"</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nytDat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span><span class='op'>(</span><span class='st'>"nytDat.csv"</span><span class='op'>)</span>
+
 <span class='va'>nytDat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>response.docs.type_of_material</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>count<span class='op'>=</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
@@ -2607,7 +2593,7 @@ it’s working but we want more data. Let’s set some parameters</h3>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>pubDay<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"T.*"</span>,<span class='st'>""</span>,<span class='va'>response.docs.pub_date</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>pubDay</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>count<span class='op'>=</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
-  <span class='co'>#filter(count &gt;= 2) %&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>count</span> <span class='op'>&gt;=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/reorder.factor.html'>reorder</a></span><span class='op'>(</span><span class='va'>pubDay</span>, <span class='va'>count</span><span class='op'>)</span>, y<span class='op'>=</span><span class='va'>count</span><span class='op'>)</span>, stat<span class='op'>=</span><span class='st'>"identity"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
@@ -2617,12 +2603,948 @@ it’s working but we want more data. Let’s set some parameters</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#The 6th column, "response.doc.lead_paragraph", is the one we want here</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>nytDat</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code> [1] &quot;status&quot;                               
+ [2] &quot;copyright&quot;                            
+ [3] &quot;response.docs.abstract&quot;               
+ [4] &quot;response.docs.web_url&quot;                
+ [5] &quot;response.docs.snippet&quot;                
+ [6] &quot;response.docs.lead_paragraph&quot;         
+ [7] &quot;response.docs.source&quot;                 
+ [8] &quot;response.docs.multimedia&quot;             
+ [9] &quot;response.docs.keywords&quot;               
+[10] &quot;response.docs.pub_date&quot;               
+[11] &quot;response.docs.document_type&quot;          
+[12] &quot;response.docs.news_desk&quot;              
+[13] &quot;response.docs.section_name&quot;           
+[14] &quot;response.docs.type_of_material&quot;       
+[15] &quot;response.docs._id&quot;                    
+[16] &quot;response.docs.word_count&quot;             
+[17] &quot;response.docs.uri&quot;                    
+[18] &quot;response.docs.print_section&quot;          
+[19] &quot;response.docs.print_page&quot;             
+[20] &quot;response.docs.subsection_name&quot;        
+[21] &quot;response.docs.headline.main&quot;          
+[22] &quot;response.docs.headline.kicker&quot;        
+[23] &quot;response.docs.headline.content_kicker&quot;
+[24] &quot;response.docs.headline.print_headline&quot;
+[25] &quot;response.docs.headline.name&quot;          
+[26] &quot;response.docs.headline.seo&quot;           
+[27] &quot;response.docs.headline.sub&quot;           
+[28] &quot;response.docs.byline.original&quot;        
+[29] &quot;response.docs.byline.person&quot;          
+[30] &quot;response.docs.byline.organization&quot;    
+[31] &quot;response.meta.hits&quot;                   
+[32] &quot;response.meta.offset&quot;                 
+[33] &quot;response.meta.time&quot;                   </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>paragraph</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>nytDat</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>6</span><span class='op'>]</span>
+<span class='va'>tokenized</span> <span class='op'>&lt;-</span> <span class='va'>nytDat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>paragraph</span><span class='op'>)</span>
 
-<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='va'>nytDat</span><span class='op'>[</span>,<span class='fl'>6</span><span class='op'>]</span>
+<span class='va'>tokenized</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>word</span>, sort <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>n</span> <span class='op'>&gt;</span> <span class='fl'>50</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>word <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/reorder.factor.html'>reorder</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>n</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>word</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="topic_2_files/figure-html5/unnamed-chunk-3-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>stop_words</span><span class='op'>)</span>
+
+<span class='va'>tokenized</span> <span class='op'>&lt;-</span> <span class='va'>tokenized</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>stop_words</span><span class='op'>)</span>
+
+<span class='va'>tokenized</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>word</span>, sort <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>n</span> <span class='op'>&gt;</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>word <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/reorder.factor.html'>reorder</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>n</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>word</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_2_files/figure-html5/unnamed-chunk-3-2.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#inspect the list of tokens (words)</span>
+<span class='va'>tokenized</span><span class='op'>$</span><span class='va'>word</span>
+</code></pre>
+</div>
+<pre><code>   [1] &quot;map&quot;               &quot;dots&quot;              &quot;resembling&quot;       
+   [4] &quot;scattergram&quot;       &quot;america&quot;           &quot;snow&quot;             
+   [7] &quot;covered&quot;           &quot;pinnacles&quot;         &quot;remote&quot;           
+  [10] &quot;islands&quot;           &quot;washington&quot;        &quot;united&quot;           
+  [13] &quot;government&quot;        &quot;netted&quot;            &quot;record&quot;           
+  [16] &quot;4.37&quot;              &quot;billion&quot;           &quot;friday&quot;           
+  [19] &quot;sale&quot;              &quot;offshore&quot;          &quot;wind&quot;             
+  [22] &quot;leases&quot;            &quot;coasts&quot;            &quot;york&quot;             
+  [25] &quot;jersey&quot;            &quot;major&quot;             &quot;step&quot;             
+  [28] &quot;biden&quot;             &quot;administration’s&quot;  &quot;goal&quot;             
+  [31] &quot;ushering&quot;          &quot;future&quot;            &quot;powered&quot;          
+  [34] &quot;renewable&quot;         &quot;energy&quot;            &quot;day&quot;              
+  [37] &quot;incoming&quot;          &quot;manager&quot;           &quot;club&quot;             
+  [40] &quot;overwhelming&quot;      &quot;entire&quot;            &quot;squad&quot;            
+  [43] &quot;players&quot;           &quot;meet&quot;              &quot;win&quot;              
+  [46] &quot;staff&quot;             &quot;nervous&quot;           &quot;intentions&quot;       
+  [49] &quot;fearful&quot;           &quot;future&quot;            &quot;hold&quot;             
+  [52] &quot;convince&quot;          &quot;command&quot;           &quot;washington&quot;       
+  [55] &quot;interior&quot;          &quot;department&quot;        &quot;friday&quot;           
+  [58] &quot;recommended&quot;       &quot;federal&quot;           &quot;government&quot;       
+  [61] &quot;raise&quot;             &quot;fees&quot;              &quot;oil&quot;              
+  [64] &quot;gas&quot;               &quot;companies&quot;         &quot;pay&quot;              
+  [67] &quot;drill&quot;             &quot;public&quot;            &quot;lands&quot;            
+  [70] &quot;increase&quot;          &quot;rent&quot;              &quot;royalty&quot;          
+  [73] &quot;rates&quot;             &quot;1920&quot;              &quot;washington&quot;       
+  [76] &quot;decision&quot;          &quot;trump&quot;             &quot;administration&quot;   
+  [79] &quot;move&quot;              &quot;headquarters&quot;      &quot;bureau&quot;           
+  [82] &quot;land&quot;              &quot;management&quot;        &quot;grand&quot;            
+  [85] &quot;junction&quot;          &quot;colo&quot;              &quot;washington&quot;       
+  [88] &quot;left&quot;              &quot;agency&quot;            &quot;vacancy&quot;          
+  [91] &quot;rates&quot;             &quot;veteran&quot;           &quot;employees&quot;        
+  [94] &quot;african&quot;           &quot;americans&quot;         &quot;quit&quot;             
+  [97] &quot;relocate&quot;          &quot;government&quot;        &quot;watchdog&quot;         
+ [100] &quot;report&quot;            &quot;issued&quot;            &quot;week&quot;             
+ [103] &quot;darkened&quot;          &quot;erling&quot;            &quot;haaland&quot;          
+ [106] &quot;watching&quot;          &quot;injury&quot;            &quot;meant&quot;            
+ [109] &quot;field&quot;             &quot;norway’s&quot;          &quot;significant&quot;      
+ [112] &quot;match&quot;             &quot;20&quot;                &quot;netherlands&quot;      
+ [115] &quot;return&quot;            &quot;partial&quot;           &quot;lockdown&quot;         
+ [118] &quot;weekend&quot;           &quot;meant&quot;             &quot;game&quot;             
+ [121] &quot;played&quot;            &quot;closed&quot;            &quot;doors&quot;            
+ [124] &quot;support&quot;           &quot;national&quot;          &quot;team&quot;             
+ [127] &quot;stands&quot;            &quot;washington&quot;        &quot;president&quot;        
+ [130] &quot;biden&quot;             &quot;announced&quot;         &quot;monday&quot;           
+ [133] &quot;administration&quot;    &quot;moving&quot;            &quot;block&quot;            
+ [136] &quot;federal&quot;           &quot;oil&quot;               &quot;gas&quot;              
+ [139] &quot;leasing&quot;           &quot;10&quot;                &quot;mile&quot;             
+ [142] &quot;radius&quot;            &quot;chaco&quot;             &quot;canyon&quot;           
+ [145] &quot;mexico&quot;            &quot;nation’s&quot;          &quot;culturally&quot;       
+ [148] &quot;significant&quot;       &quot;native&quot;            &quot;american&quot;         
+ [151] &quot;sites&quot;             &quot;deb&quot;               &quot;haaland&quot;          
+ [154] &quot;president&quot;         &quot;biden’s&quot;           &quot;secretary&quot;        
+ [157] &quot;interior&quot;          &quot;year’s&quot;            &quot;recognizable&quot;     
+ [160] &quot;amateur&quot;           &quot;runners&quot;           &quot;forget&quot;           
+ [163] &quot;pantsuit&quot;          &quot;nation&quot;            &quot;washington&quot;       
+ [166] &quot;dress&quot;             &quot;code&quot;              &quot;changing&quot;         
+ [169] &quot;swearing&quot;          &quot;time&quot;              &quot;washington&quot;       
+ [172] &quot;senator&quot;           &quot;joe&quot;               &quot;manchin&quot;          
+ [175] &quot;iii&quot;               &quot;west&quot;              &quot;virginia&quot;         
+ [178] &quot;democrat&quot;          &quot;heads&quot;             &quot;senate&quot;           
+ [181] &quot;energy&quot;            &quot;committee&quot;         &quot;announced&quot;        
+ [184] &quot;wednesday&quot;         &quot;vote&quot;              &quot;confirm&quot;          
+ [187] &quot;representative&quot;    &quot;deb&quot;               &quot;haaland&quot;          
+ [190] &quot;mexico&quot;            &quot;head&quot;              &quot;interior&quot;         
+ [193] &quot;department&quot;        &quot;ensuring&quot;          &quot;president&quot;        
+ [196] &quot;biden’s&quot;           &quot;embattled&quot;         &quot;cabinet&quot;          
+ [199] &quot;nominees&quot;          &quot;confirmed&quot;         &quot;office&quot;           
+ [202] &quot;escalating&quot;        &quot;opposition&quot;        &quot;republicans&quot;      
+ [205] &quot;senate&quot;            &quot;approved&quot;          &quot;representative&quot;   
+ [208] &quot;deb&quot;               &quot;haaland&quot;           &quot;mexico&quot;           
+ [211] &quot;lead&quot;              &quot;interior&quot;          &quot;department&quot;       
+ [214] &quot;native&quot;            &quot;american&quot;          &quot;lead&quot;             
+ [217] &quot;cabinet&quot;           &quot;agency&quot;            &quot;thursday&quot;         
+ [220] &quot;deb&quot;               &quot;haaland&quot;           &quot;history&quot;          
+ [223] &quot;job&quot;               &quot;secretary&quot;         &quot;interior&quot;         
+ [226] &quot;native&quot;            &quot;american&quot;          &quot;lead&quot;             
+ [229] &quot;cabinet&quot;           &quot;level&quot;             &quot;agency&quot;           
+ [232] &quot;washington&quot;        &quot;interior&quot;          &quot;secretary&quot;        
+ [235] &quot;deb&quot;               &quot;haaland&quot;           &quot;advised&quot;          
+ [238] &quot;president&quot;         &quot;biden&quot;             &quot;restore&quot;          
+ [241] &quot;sweeping&quot;          &quot;environmental&quot;     &quot;protections&quot;      
+ [244] &quot;major&quot;             &quot;national&quot;          &quot;monuments&quot;        
+ [247] &quot;stripped&quot;          &quot;president&quot;         &quot;donald&quot;           
+ [250] &quot;trump&quot;             &quot;weekend&quot;           &quot;listen&quot;           
+ [253] &quot;collection&quot;        &quot;narrated&quot;          &quot;articles&quot;         
+ [256] &quot;york&quot;              &quot;times&quot;             &quot;read&quot;             
+ [259] &quot;aloud&quot;             &quot;reporters&quot;         &quot;wrote&quot;            
+ [262] &quot;story&quot;             &quot;danger&quot;            &quot;bubbled&quot;          
+ [265] &quot;surface&quot;           &quot;audible&quot;           &quot;intake&quot;           
+ [268] &quot;breath&quot;            &quot;manchester&quot;        &quot;city’s&quot;           
+ [271] &quot;substitutes&quot;       &quot;passed&quot;            &quot;exchanged&quot;        
+ [274] &quot;glances&quot;           &quot;admiration&quot;        &quot;relief&quot;           
+ [277] &quot;murmur&quot;            &quot;appreciation&quot;      &quot;silence&quot;          
+ [280] &quot;stadium&quot;           &quot;hear&quot;              &quot;sounds&quot;           
+ [283] &quot;game&quot;              &quot;recognizing&quot;       &quot;game&quot;             
+ [286] &quot;washington&quot;        &quot;biden&quot;             &quot;administration&quot;   
+ [289] &quot;announced&quot;         &quot;wednesday&quot;         &quot;plan&quot;             
+ [292] &quot;develop&quot;           &quot;scale&quot;             &quot;wind&quot;             
+ [295] &quot;farms&quot;             &quot;entire&quot;            &quot;coastline&quot;        
+ [298] &quot;united&quot;            &quot;term&quot;              &quot;strategy&quot;         
+ [301] &quot;government&quot;        &quot;produce&quot;           &quot;electricity&quot;      
+ [304] &quot;offshore&quot;          &quot;turbines&quot;          &quot;representative&quot;   
+ [307] &quot;deb&quot;               &quot;haaland&quot;           &quot;mexico&quot;           
+ [310] &quot;president&quot;         &quot;biden’s&quot;           &quot;pick&quot;             
+ [313] &quot;head&quot;              &quot;interior&quot;          &quot;department&quot;       
+ [316] &quot;sought&quot;            &quot;tuesday&quot;           &quot;line&quot;             
+ [319] &quot;past&quot;              &quot;remarks&quot;           &quot;activist&quot;         
+ [322] &quot;opposing&quot;          &quot;fossil&quot;            &quot;fuel&quot;             
+ [325] &quot;industry&quot;          &quot;prospective&quot;       &quot;role&quot;             
+ [328] &quot;helm&quot;              &quot;agency&quot;            &quot;oversees&quot;         
+ [331] &quot;drilling&quot;          &quot;conservation&quot;      &quot;nation’s&quot;         
+ [334] &quot;500&quot;               &quot;million&quot;           &quot;acres&quot;            
+ [337] &quot;public&quot;            &quot;land&quot;              &quot;senate&quot;           
+ [340] &quot;committee&quot;         &quot;thursday&quot;          &quot;approved&quot;         
+ [343] &quot;deb&quot;               &quot;haaland&quot;           &quot;secretary&quot;        
+ [346] &quot;interior&quot;          &quot;support&quot;           &quot;senator&quot;          
+ [349] &quot;lisa&quot;              &quot;murkowski&quot;         &quot;alaska&quot;           
+ [352] &quot;key&quot;               &quot;republican&quot;        &quot;oil&quot;              
+ [355] &quot;producing&quot;         &quot;virtually&quot;         &quot;ensuring&quot;         
+ [358] &quot;confirmation&quot;      &quot;senate&quot;            &quot;month&quot;            
+ [361] &quot;senator&quot;           &quot;joe&quot;               &quot;manchin&quot;          
+ [364] &quot;iii&quot;               &quot;west&quot;              &quot;virginia&quot;         
+ [367] &quot;democrat&quot;          &quot;heads&quot;             &quot;senate&quot;           
+ [370] &quot;energy&quot;            &quot;committee&quot;         &quot;announced&quot;        
+ [373] &quot;wednesday&quot;         &quot;vote&quot;              &quot;confirm&quot;          
+ [376] &quot;representative&quot;    &quot;deb&quot;               &quot;haaland&quot;          
+ [379] &quot;mexico&quot;            &quot;head&quot;              &quot;interior&quot;         
+ [382] &quot;department&quot;        &quot;washington&quot;        &quot;president&quot;        
+ [385] &quot;biden&quot;             &quot;announced&quot;         &quot;friday&quot;           
+ [388] &quot;executive&quot;         &quot;authority&quot;         &quot;restore&quot;          
+ [391] &quot;sweeping&quot;          &quot;environmental&quot;     &quot;protections&quot;      
+ [394] &quot;major&quot;             &quot;national&quot;          &quot;monuments&quot;        
+ [397] &quot;stripped&quot;          &quot;president&quot;         &quot;donald&quot;           
+ [400] &quot;trump&quot;             &quot;washington&quot;        &quot;representative&quot;   
+ [403] &quot;deb&quot;               &quot;haaland&quot;           &quot;mexico&quot;           
+ [406] &quot;history&quot;           &quot;monday&quot;            &quot;senate&quot;           
+ [409] &quot;confirmed&quot;         &quot;president&quot;         &quot;biden’s&quot;          
+ [412] &quot;secretary&quot;         &quot;interior&quot;          &quot;native&quot;           
+ [415] &quot;american&quot;          &quot;lead&quot;              &quot;cabinet&quot;          
+ [418] &quot;agency&quot;            &quot;hear&quot;              &quot;audio&quot;            
+ [421] &quot;stories&quot;           &quot;publications&quot;      &quot;york&quot;             
+ [424] &quot;times&quot;             &quot;download&quot;          &quot;audm&quot;             
+ [427] &quot;iphone&quot;            &quot;android&quot;           &quot;washington&quot;       
+ [430] &quot;representative&quot;    &quot;deb&quot;               &quot;haaland&quot;          
+ [433] &quot;tapped&quot;            &quot;december&quot;          &quot;president&quot;        
+ [436] &quot;biden’s&quot;           &quot;interior&quot;          &quot;secretary&quot;        
+ [439] &quot;decision&quot;          &quot;hailed&quot;            &quot;historic&quot;         
+ [442] &quot;native&quot;            &quot;american&quot;          &quot;nominated&quot;        
+ [445] &quot;serve&quot;             &quot;cabinet&quot;           &quot;head&quot;             
+ [448] &quot;department&quot;        &quot;nation’s&quot;          &quot;history&quot;          
+ [451] &quot;mistreated&quot;        &quot;neglected&quot;         &quot;indigenous&quot;       
+ [454] &quot;americans&quot;         &quot;washington&quot;        &quot;biden&quot;            
+ [457] &quot;administration&quot;    &quot;wednesday&quot;         &quot;restored&quot;         
+ [460] &quot;protections&quot;       &quot;migratory&quot;         &quot;birds&quot;            
+ [463] &quot;loosened&quot;          &quot;president&quot;         &quot;donald&quot;           
+ [466] &quot;trump&quot;             &quot;move&quot;              &quot;celebrated&quot;       
+ [469] &quot;conservationists&quot;  &quot;expected&quot;          &quot;exacerbate&quot;       
+ [472] &quot;tensions&quot;          &quot;administration&quot;    &quot;oil&quot;              
+ [475] &quot;gas&quot;               &quot;industry&quot;          &quot;interior&quot;         
+ [478] &quot;secretary&quot;         &quot;deb&quot;               &quot;haaland&quot;          
+ [481] &quot;announced&quot;         &quot;friday&quot;            &quot;bureau&quot;           
+ [484] &quot;land&quot;              &quot;management&quot;        &quot;move&quot;             
+ [487] &quot;headquarters&quot;      &quot;washington&quot;        &quot;reversal&quot;         
+ [490] &quot;heavily&quot;           &quot;criticized&quot;        &quot;trump&quot;            
+ [493] &quot;administration&quot;    &quot;decision&quot;          &quot;relocate&quot;         
+ [496] &quot;public&quot;            &quot;lands&quot;             &quot;agency&quot;           
+ [499] &quot;grand&quot;             &quot;junction&quot;          &quot;colo&quot;             
+ [502] &quot;washington&quot;        &quot;peering&quot;           &quot;sea&quot;              
+ [505] &quot;white&quot;             &quot;flags&quot;             &quot;blanketing&quot;       
+ [508] &quot;national&quot;          &quot;mall&quot;              &quot;dr&quot;               
+ [511] &quot;laura&quot;             &quot;valleni&quot;           &quot;recalled&quot;         
+ [514] &quot;scores&quot;            &quot;pregnant&quot;          &quot;women&quot;            
+ [517] &quot;contracted&quot;        &quot;coronavirus&quot;       &quot;hospital&quot;         
+ [520] &quot;south&quot;             &quot;carolina&quot;          &quot;babies&quot;           
+ [523] &quot;born&quot;              &quot;prematurely&quot;       &quot;mothers&quot;          
+ [526] &quot;died&quot;              &quot;surge&quot;             &quot;children&quot;         
+ [529] &quot;overwhelmed&quot;       &quot;pediatric&quot;         &quot;unit&quot;             
+ [532] &quot;past&quot;              &quot;months&quot;            &quot;phoenix&quot;          
+ [535] &quot;politics&quot;          &quot;issues&quot;            &quot;true&quot;             
+ [538] &quot;importance&quot;        &quot;aren’t&quot;            &quot;consume&quot;          
+ [541] &quot;attention&quot;         &quot;candidate&quot;         &quot;underrated&quot;       
+ [544] &quot;public&quot;            &quot;concerns&quot;          &quot;treatment&quot;        
+ [547] &quot;animals&quot;           &quot;issue&quot;             &quot;revealing&quot;        
+ [550] &quot;character&quot;         &quot;sense&quot;             &quot;fairness&quot;         
+ [553] &quot;hard&quot;              &quot;evidence&quot;          &quot;track&quot;            
+ [556] &quot;moral&quot;             &quot;progress&quot;          &quot;humanity&quot;         
+ [559] &quot;watch&quot;             &quot;deal&quot;              &quot;creatures&quot;        
+ [562] &quot;defenseless&quot;       &quot;power&quot;             &quot;1990&quot;             
+ [565] &quot;congress&quot;          &quot;passed&quot;            &quot;law&quot;              
+ [568] &quot;set&quot;               &quot;criteria&quot;          &quot;federally&quot;        
+ [571] &quot;recognized&quot;        &quot;native&quot;            &quot;american&quot;         
+ [574] &quot;tribes&quot;            &quot;reclaim&quot;           &quot;ancient&quot;          
+ [577] &quot;burial&quot;            &quot;remains&quot;           &quot;sacred&quot;           
+ [580] &quot;objects&quot;           &quot;legislators&quot;       &quot;hoped&quot;            
+ [583] &quot;encourage&quot;         &quot;return&quot;            &quot;items&quot;            
+ [586] &quot;museums&quot;           &quot;institutions&quot;      &quot;decades&quot;          
+ [589] &quot;officials&quot;         &quot;acknowledge&quot;       &quot;law&quot;              
+ [592] &quot;native&quot;            &quot;american&quot;          &quot;graves&quot;           
+ [595] &quot;protection&quot;        &quot;repatriation&quot;      &quot;act&quot;              
+ [598] &quot;nagpra&quot;            &quot;effective&quot;         &quot;hoped&quot;            
+ [601] &quot;representative&quot;    &quot;deb&quot;               &quot;haaland&quot;          
+ [604] &quot;mexico&quot;            &quot;president&quot;         &quot;biden’s&quot;          
+ [607] &quot;pick&quot;              &quot;head&quot;              &quot;interior&quot;         
+ [610] &quot;department&quot;        &quot;questioned&quot;        &quot;past&quot;             
+ [613] &quot;remarks&quot;           &quot;activist&quot;          &quot;opposing&quot;         
+ [616] &quot;fossil&quot;            &quot;fuel&quot;              &quot;industry&quot;         
+ [619] &quot;united&quot;            &quot;search&quot;            &quot;federal&quot;          
+ [622] &quot;boarding&quot;          &quot;schools&quot;           &quot;burial&quot;           
+ [625] &quot;sites&quot;             &quot;native&quot;            &quot;american&quot;         
+ [628] &quot;children&quot;          &quot;hundreds&quot;          &quot;thousands&quot;        
+ [631] &quot;forcibly&quot;          &quot;communities&quot;       &quot;culturally&quot;       
+ [634] &quot;assimilated&quot;       &quot;schools&quot;           &quot;century&quot;          
+ [637] &quot;interior&quot;          &quot;secretary&quot;         &quot;announced&quot;        
+ [640] &quot;tuesday&quot;           &quot;white&quot;             &quot;house&quot;            
+ [643] &quot;directed&quot;          &quot;interior&quot;          &quot;department’s&quot;     
+ [646] &quot;chief&quot;             &quot;staff&quot;             &quot;jennifer&quot;         
+ [649] &quot;van&quot;               &quot;der&quot;               &quot;heide&quot;            
+ [652] &quot;step&quot;              &quot;position&quot;          &quot;plan&quot;             
+ [655] &quot;indoor&quot;            &quot;party&quot;             &quot;roughly&quot;          
+ [658] &quot;50&quot;                &quot;attendees&quot;         &quot;celebrate&quot;        
+ [661] &quot;confirmation&quot;      &quot;interior&quot;          &quot;secretary&quot;        
+ [664] &quot;deb&quot;               &quot;haaland&quot;           &quot;administration&quot;   
+ [667] &quot;official&quot;          &quot;knowledge&quot;         &quot;matter&quot;           
+ [670] &quot;results&quot;           &quot;maps&quot;              &quot;mexico&quot;           
+ [673] &quot;special&quot;           &quot;election&quot;          &quot;picture&quot;          
+ [676] &quot;predicament&quot;       &quot;climate&quot;           &quot;reporter&quot;         
+ [679] &quot;lisa&quot;              &quot;friedman&quot;          &quot;article&quot;          
+ [682] &quot;paradox&quot;           &quot;worthy&quot;            &quot;kafka&quot;            
+ [685] &quot;break&quot;             &quot;earth&quot;             &quot;tap&quot;              
+ [688] &quot;oil&quot;               &quot;national&quot;          &quot;petroleum&quot;        
+ [691] &quot;reserve&quot;           &quot;alaska&quot;            &quot;conocophillips&quot;   
+ [694] &quot;install&quot;           &quot;chillers&quot;          &quot;thawing&quot;          
+ [697] &quot;permafrost&quot;        &quot;washington&quot;        &quot;president&quot;        
+ [700] &quot;biden’s&quot;           &quot;cabinet&quot;           &quot;steps&quot;            
+ [703] &quot;belated&quot;           &quot;completion&quot;        &quot;tuesday&quot;          
+ [706] &quot;confirmation&quot;      &quot;united&quot;            &quot;nations&quot;          
+ [709] &quot;ambassador&quot;        &quot;agriculture&quot;       &quot;secretary&quot;        
+ [712] &quot;top&quot;               &quot;posts&quot;             &quot;remained&quot;         
+ [715] &quot;locked&quot;            &quot;partisan&quot;          &quot;confirmation&quot;     
+ [718] &quot;hearings&quot;          &quot;washington&quot;        &quot;federal&quot;          
+ [721] &quot;judge&quot;             &quot;louisiana&quot;         &quot;blocked&quot;          
+ [724] &quot;biden&quot;             &quot;administration’s&quot;  &quot;suspension&quot;       
+ [727] &quot;oil&quot;               &quot;gas&quot;               &quot;leases&quot;           
+ [730] &quot;federal&quot;           &quot;lands&quot;             &quot;waters&quot;           
+ [733] &quot;major&quot;             &quot;legal&quot;             &quot;roadblock&quot;        
+ [736] &quot;president&quot;         &quot;biden’s&quot;           &quot;quest&quot;            
+ [739] &quot;cut&quot;               &quot;fossil&quot;            &quot;fuel&quot;             
+ [742] &quot;pollution&quot;         &quot;conserve&quot;          &quot;public&quot;           
+ [745] &quot;lands&quot;             &quot;melanie&quot;           &quot;stansbury&quot;        
+ [748] &quot;democrat&quot;          &quot;won&quot;               &quot;landslide&quot;        
+ [751] &quot;victory&quot;           &quot;special&quot;           &quot;house&quot;            
+ [754] &quot;election&quot;          &quot;mexico&quot;            &quot;tuesday&quot;          
+ [757] &quot;claiming&quot;          &quot;seat&quot;              &quot;previously&quot;       
+ [760] &quot;held&quot;              &quot;interior&quot;          &quot;secretary&quot;        
+ [763] &quot;deb&quot;               &quot;haaland&quot;           &quot;easily&quot;           
+ [766] &quot;republican&quot;        &quot;effort&quot;            &quot;race&quot;             
+ [769] &quot;referendum&quot;        &quot;rising&quot;            &quot;crime&quot;            
+ [772] &quot;albuquerque&quot;       &quot;based&quot;             &quot;district&quot;         
+ [775] &quot;washington&quot;        &quot;interior&quot;          &quot;department&quot;       
+ [778] &quot;awaits&quot;            &quot;secretary&quot;         &quot;agency&quot;           
+ [781] &quot;moving&quot;            &quot;lock&quot;              &quot;key&quot;              
+ [784] &quot;president&quot;         &quot;biden’s&quot;           &quot;environmental&quot;    
+ [787] &quot;agenda&quot;            &quot;oil&quot;               &quot;gas&quot;              
+ [790] &quot;restrictions&quot;      &quot;laying&quot;            &quot;groundwork&quot;       
+ [793] &quot;fulfill&quot;           &quot;administration’s&quot;  &quot;consequential&quot;    
+ [796] &quot;climate&quot;           &quot;change&quot;            &quot;promises&quot;         
+ [799] &quot;manchester&quot;        &quot;england&quot;           &quot;borussia&quot;         
+ [802] &quot;dortmund&quot;          &quot;players&quot;           &quot;sprawled&quot;         
+ [805] &quot;turf&quot;              &quot;bodies&quot;            &quot;suddenly&quot;         
+ [808] &quot;exhausted&quot;         &quot;spirits&quot;           &quot;sunk&quot;             
+ [811] &quot;moment&quot;            &quot;manchester&quot;        &quot;city’s&quot;           
+ [814] &quot;substitutes&quot;       &quot;coaching&quot;          &quot;staff&quot;            
+ [817] &quot;greeted&quot;           &quot;goal&quot;              &quot;inflicted&quot;        
+ [820] &quot;damage&quot;            &quot;guttural&quot;          &quot;roars&quot;            
+ [823] &quot;leaping&quot;           &quot;seats&quot;             &quot;pumping&quot;          
+ [826] &quot;fists&quot;             &quot;air&quot;               &quot;washington&quot;       
+ [829] &quot;president&quot;         &quot;biden’s&quot;           &quot;pledge&quot;           
+ [832] &quot;aggressively&quot;      &quot;cut&quot;               &quot;pollution&quot;        
+ [835] &quot;fossil&quot;            &quot;fuels&quot;             &quot;driving&quot;          
+ [838] &quot;climate&quot;           &quot;change&quot;            &quot;administration&quot;   
+ [841] &quot;quietly&quot;           &quot;actions&quot;           &quot;month&quot;            
+ [844] &quot;guarantee&quot;         &quot;drilling&quot;          &quot;burning&quot;          
+ [847] &quot;oil&quot;               &quot;gas&quot;               &quot;decades&quot;          
+ [850] &quot;pressure&quot;          &quot;growing&quot;           &quot;biden&quot;            
+ [853] &quot;administration&quot;    &quot;native&quot;            &quot;american&quot;         
+ [856] &quot;tribes&quot;            &quot;oklahoma&quot;          &quot;agreed&quot;           
+ [859] &quot;reversing&quot;         &quot;policies&quot;          &quot;denying&quot;          
+ [862] &quot;citizenship&quot;       &quot;descendants&quot;       &quot;black&quot;            
+ [865] &quot;people&quot;            &quot;enslaved&quot;          &quot;civil&quot;            
+ [868] &quot;war&quot;               &quot;guides&quot;            &quot;financial&quot;        
+ [871] &quot;system&quot;            &quot;coronavirus&quot;       &quot;pandemic&quot;         
+ [874] &quot;jerome&quot;            &quot;powell&quot;            &quot;chair&quot;            
+ [877] &quot;federal&quot;           &quot;reserve&quot;           &quot;cash&quot;             
+ [880] &quot;flowing&quot;           &quot;economy&quot;           &quot;he’s&quot;             
+ [883] &quot;tamping&quot;           &quot;rates&quot;             &quot;speaking&quot;         
+ [886] &quot;degree&quot;            &quot;that’s&quot;            &quot;rare&quot;             
+ [889] &quot;fed&quot;               &quot;director&quot;          &quot;urge&quot;             
+ [892] &quot;legislative&quot;       &quot;action&quot;            &quot;behalf&quot;           
+ [895] &quot;workers&quot;           &quot;businesses&quot;        &quot;park&quot;             
+ [898] &quot;rapids&quot;            &quot;minn&quot;              &quot;protesters&quot;       
+ [901] &quot;gathered&quot;          &quot;boreal&quot;            &quot;forests&quot;          
+ [904] &quot;northern&quot;          &quot;minnesota&quot;         &quot;country&quot;          
+ [907] &quot;native&quot;            &quot;american&quot;          &quot;tribes&quot;           
+ [910] &quot;supporters&quot;        &quot;environmentalists&quot; &quot;religious&quot;        
+ [913] &quot;leaders&quot;           &quot;fight&quot;             &quot;expansion&quot;        
+ [916] &quot;line&quot;              &quot;3&quot;                 &quot;9&quot;                
+ [919] &quot;billion&quot;           &quot;pipeline&quot;          &quot;operated&quot;         
+ [922] &quot;canadian&quot;          &quot;company&quot;           &quot;enbridge&quot;         
+ [925] &quot;carry&quot;             &quot;hundreds&quot;          &quot;thousands&quot;        
+ [928] &quot;barrels&quot;           &quot;oil&quot;               &quot;minnesota’s&quot;      
+ [931] &quot;delicate&quot;          &quot;watersheds&quot;        &quot;tribal&quot;           
+ [934] &quot;lands&quot;             &quot;hear&quot;              &quot;audio&quot;            
+ [937] &quot;stories&quot;           &quot;publications&quot;      &quot;york&quot;             
+ [940] &quot;times&quot;             &quot;download&quot;          &quot;audm&quot;             
+ [943] &quot;iphone&quot;            &quot;android&quot;           &quot;interior&quot;         
+ [946] &quot;department&quot;        &quot;awaits&quot;            &quot;secretary&quot;        
+ [949] &quot;agency&quot;            &quot;moving&quot;            &quot;lock&quot;             
+ [952] &quot;key&quot;               &quot;president&quot;         &quot;biden’s&quot;          
+ [955] &quot;environmental&quot;     &quot;agenda&quot;            &quot;oil&quot;              
+ [958] &quot;gas&quot;               &quot;restrictions&quot;      &quot;laying&quot;           
+ [961] &quot;groundwork&quot;        &quot;fulfill&quot;           &quot;administration’s&quot; 
+ [964] &quot;consequential&quot;     &quot;promises&quot;          &quot;address&quot;          
+ [967] &quot;climate&quot;           &quot;change&quot;            &quot;extreme&quot;          
+ [970] &quot;weather&quot;           &quot;knocked&quot;           &quot;power&quot;            
+ [973] &quot;water&quot;             &quot;texas&quot;             &quot;week&quot;             
+ [976] &quot;represented&quot;       &quot;profound&quot;          &quot;warning&quot;          
+ [979] &quot;rest&quot;              &quot;country&quot;           &quot;nation’s&quot;         
+ [982] &quot;vital&quot;             &quot;infrastructure&quot;    &quot;remains&quot;          
+ [985] &quot;fundamentally&quot;     &quot;unprepared&quot;        &quot;shocks&quot;           
+ [988] &quot;climate&quot;           &quot;change&quot;            &quot;pandemic&quot;         
+ [991] &quot;people&quot;            &quot;appreciating&quot;      &quot;renewable&quot;        
+ [994] &quot;delights&quot;          &quot;ragged&quot;            &quot;tortured&quot;         
+ [997] &quot;planet&quot;            &quot;country&quot;           &quot;national&quot;         
+[1000] &quot;parks&quot;             &quot;record&quot;            &quot;crowds&quot;           
+[1003] &quot;2020&quot;              &quot;million&quot;           &quot;americans&quot;        
+[1006] &quot;hiking&quot;            &quot;washington&quot;        &quot;president&quot;        
+[1009] &quot;biden&quot;             &quot;introduced&quot;        &quot;representative&quot;   
+[1012] &quot;deb&quot;               &quot;haaland&quot;           &quot;mexico&quot;           
+[1015] &quot;pick&quot;              &quot;interior&quot;          &quot;secretary&quot;        
+[1018] &quot;native&quot;            &quot;american&quot;          &quot;selected&quot;         
+[1021] &quot;cabinet&quot;           &quot;position&quot;          &quot;acknowledged&quot;     
+[1024] &quot;country’s&quot;         &quot;history&quot;           &quot;failing&quot;          
+[1027] &quot;land’s&quot;            &quot;citizens&quot;          &quot;women&quot;            
+[1030] &quot;bears&quot;             &quot;ears&quot;              &quot;indigenous&quot;       
+[1033] &quot;women&quot;             &quot;support&quot;           &quot;families&quot;         
+[1036] &quot;communities&quot;       &quot;protections&quot;       &quot;ancestral&quot;        
+[1039] &quot;lands&quot;             &quot;diné&quot;              &quot;nuche&quot;            
+[1042] &quot;pueblo&quot;            &quot;allied&quot;            &quot;native&quot;           
+[1045] &quot;nations&quot;           &quot;southwestern&quot;      &quot;lands&quot;            
+[1048] &quot;twin&quot;              &quot;buttes&quot;            &quot;rise&quot;             
+[1051] &quot;bears&quot;             &quot;ears&quot;              &quot;public&quot;           
+[1054] &quot;outcry&quot;            &quot;legal&quot;             &quot;fight&quot;            
+[1057] &quot;indian&quot;            &quot;health&quot;            &quot;service&quot;          
+[1060] &quot;agreed&quot;            &quot;emergency&quot;         &quot;departments&quot;      
+[1063] &quot;inpatient&quot;         &quot;care&quot;              &quot;hospital&quot;         
+[1066] &quot;northwestern&quot;      &quot;mexico&quot;            &quot;serving&quot;          
+[1069] &quot;9,100&quot;             &quot;tribal&quot;            &quot;citizens&quot;         
+[1072] &quot;settling&quot;          &quot;temporarily&quot;       &quot;dispute&quot;          
+[1075] &quot;flash&quot;             &quot;tribal&quot;            &quot;communities&quot;      
+[1078] &quot;federal&quot;           &quot;government&quot;        &quot;quality&quot;          
+[1081] &quot;accessibility&quot;     &quot;health&quot;            &quot;care&quot;             
+[1084] &quot;albuquerque&quot;       &quot;theory&quot;            &quot;special&quot;          
+[1087] &quot;election&quot;          &quot;fill&quot;              &quot;interior&quot;         
+[1090] &quot;secretary&quot;         &quot;deb&quot;               &quot;haaland’s&quot;        
+[1093] &quot;seat&quot;              &quot;house&quot;             &quot;competitive&quot;      
+[1096] &quot;president&quot;         &quot;biden&quot;             &quot;carried&quot;          
+[1099] &quot;albuquerque&quot;       &quot;based&quot;             &quot;district&quot;         
+[1102] &quot;23&quot;                &quot;close&quot;             &quot;race&quot;             
+[1105] &quot;congress&quot;          &quot;george&quot;            &quot;bush&quot;             
+[1108] &quot;president&quot;         &quot;couple&quot;            &quot;weeks&quot;            
+[1111] &quot;ago&quot;               &quot;tweet&quot;             &quot;caught&quot;           
+[1114] &quot;eye&quot;               &quot;unexpectedly&quot;      &quot;reveal&quot;           
+[1117] &quot;continentwide&quot;     &quot;african&quot;           &quot;super&quot;            
+[1120] &quot;league&quot;            &quot;construction&quot;      &quot;cross&quot;            
+[1123] &quot;border&quot;            &quot;leagues&quot;           &quot;regular&quot;          
+[1126] &quot;readers&quot;           &quot;newsletter&quot;        &quot;supports&quot;         
+[1129] &quot;readily&quot;           &quot;addressing&quot;        &quot;soccer’s&quot;         
+[1132] &quot;chronic&quot;           &quot;financial&quot;         &quot;imbalance&quot;        
+[1135] &quot;washington&quot;        &quot;biden&quot;             &quot;administration&quot;   
+[1138] &quot;tuesday&quot;           &quot;suspended&quot;         &quot;oil&quot;              
+[1141] &quot;drilling&quot;          &quot;leases&quot;            &quot;arctic&quot;           
+[1144] &quot;national&quot;          &quot;wildlife&quot;          &quot;refuge&quot;           
+[1147] &quot;unspooling&quot;        &quot;signature&quot;         &quot;achievement&quot;      
+[1150] &quot;trump&quot;             &quot;presidency&quot;        &quot;delivering&quot;       
+[1153] &quot;promise&quot;           &quot;president&quot;         &quot;biden&quot;            
+[1156] &quot;protect&quot;           &quot;fragile&quot;           &quot;alaskan&quot;          
+[1159] &quot;tundra&quot;            &quot;fossil&quot;            &quot;fuel&quot;             
+[1162] &quot;extraction&quot;        &quot;president&quot;         &quot;biden&quot;            
+[1165] &quot;picked&quot;            &quot;neera&quot;             &quot;tanden&quot;           
+[1168] &quot;budget&quot;            &quot;director&quot;          &quot;prodding&quot;         
+[1171] &quot;top&quot;               &quot;adviser&quot;           &quot;ron&quot;              
+[1174] &quot;klain&quot;             &quot;white&quot;             &quot;house&quot;            
+[1177] &quot;girded&quot;            &quot;battle&quot;            &quot;comforted&quot;        
+[1180] &quot;likelihood&quot;        &quot;cabinet&quot;           &quot;confirmations&quot;    
+[1183] &quot;comparative&quot;       &quot;pillow&quot;            &quot;fights&quot;           
+[1186] &quot;follow&quot;            &quot;news&quot;              &quot;week&quot;             
+[1189] &quot;quiz&quot;              &quot;stack&quot;             &quot;times&quot;            
+[1192] &quot;readers&quot;           &quot;bald&quot;              &quot;eagle&quot;            
+[1195] &quot;population&quot;        &quot;lower&quot;             &quot;48&quot;               
+[1198] &quot;quadrupled&quot;        &quot;2009&quot;              &quot;researchers&quot;      
+[1201] &quot;week&quot;              &quot;underscoring&quot;      &quot;decades&quot;          
+[1204] &quot;efforts&quot;           &quot;protect&quot;           &quot;species&quot;          
+[1207] &quot;brink&quot;             &quot;extinction&quot;        &quot;muriel&quot;           
+[1210] &quot;lezak&quot;             &quot;neuropsychologist&quot; &quot;wrote&quot;            
+[1213] &quot;landmark&quot;          &quot;textbook&quot;          &quot;days&quot;             
+[1216] &quot;discipline&quot;        &quot;essential&quot;         &quot;guide&quot;            
+[1219] &quot;description&quot;       &quot;evaluation&quot;        &quot;brain&quot;            
+[1222] &quot;injuries&quot;          &quot;disorders&quot;         &quot;died&quot;             
+[1225] &quot;oct&quot;               &quot;6&quot;                 &quot;portland&quot;         
+[1228] &quot;ore&quot;               &quot;94&quot;                &quot;biden&quot;            
+[1231] &quot;administration&quot;    &quot;tuesday&quot;           &quot;announced&quot;        
+[1234] &quot;final&quot;             &quot;approval&quot;          &quot;nation’s&quot;         
+[1237] &quot;commercial&quot;        &quot;scale&quot;             &quot;offshore&quot;         
+[1240] &quot;wind&quot;              &quot;farm&quot;              &quot;major&quot;            
+[1243] &quot;step&quot;              &quot;president&quot;         &quot;biden’s&quot;          
+[1246] &quot;goal&quot;              &quot;expanding&quot;         &quot;renewable&quot;        
+[1249] &quot;energy&quot;            &quot;production&quot;        &quot;united&quot;           
+[1252] &quot;memorial&quot;          &quot;passengers&quot;        &quot;fought&quot;           
+[1255] &quot;terrorists&quot;        &quot;aboard&quot;            &quot;united&quot;           
+[1258] &quot;airlines&quot;          &quot;flight&quot;            &quot;93&quot;               
+[1261] &quot;vice&quot;              &quot;president&quot;         &quot;kamala&quot;           
+[1264] &quot;harris&quot;            &quot;warned&quot;            &quot;tragedy&quot;          
+[1267] &quot;sept&quot;              &quot;11&quot;                &quot;attacks&quot;          
+[1270] &quot;shown&quot;             &quot;fear&quot;              &quot;sow&quot;              
+[1273] &quot;division&quot;          &quot;stressed&quot;          &quot;america’s&quot;        
+[1276] &quot;diversity&quot;         &quot;asset&quot;             &quot;require&quot;          
+[1279] &quot;leap&quot;              &quot;imagination&quot;       &quot;envision&quot;         
+[1282] &quot;final&quot;             &quot;weeks&quot;             &quot;season&quot;           
+[1285] &quot;playing&quot;           &quot;provided&quot;          &quot;stark&quot;            
+[1288] &quot;evidence&quot;          &quot;racial&quot;            &quot;inequities&quot;       
+[1291] &quot;lack&quot;              &quot;federal&quot;           &quot;funding&quot;          
+[1294] &quot;left&quot;              &quot;tribal&quot;            &quot;communities&quot;      
+[1297] &quot;indigenous&quot;        &quot;people&quot;            &quot;vulnerable&quot;       
+[1300] &quot;crises&quot;            &quot;pandemic&quot;          &quot;president&quot;        
+[1303] &quot;biden&quot;             &quot;democrats&quot;         &quot;congress&quot;         
+[1306] &quot;seeking&quot;           &quot;address&quot;           &quot;longstanding&quot;     
+[1309] &quot;issues&quot;            &quot;huge&quot;              &quot;infusion&quot;         
+[1312] &quot;federal&quot;           &quot;aid&quot;               &quot;patrisse&quot;         
+[1315] &quot;cullors&quot;           &quot;founder&quot;           &quot;black&quot;            
+[1318] &quot;lives&quot;             &quot;matter&quot;            &quot;movement&quot;         
+[1321] &quot;women’s&quot;           &quot;history&quot;           &quot;month&quot;            
+[1324] &quot;signature&quot;         &quot;1.9&quot;               &quot;trillion&quot;         
+[1327] &quot;coronavirus&quot;       &quot;rescue&quot;            &quot;plan&quot;             
+[1330] &quot;enshrined&quot;         &quot;law&quot;               &quot;president&quot;        
+[1333] &quot;biden&quot;             &quot;congressional&quot;     &quot;democrats&quot;        
+[1336] &quot;shift&quot;             &quot;gears&quot;             &quot;week&quot;             
+[1339] &quot;sell&quot;              &quot;public&quot;            &quot;begin&quot;            
+[1342] &quot;tackling&quot;          &quot;thornier&quot;          &quot;pieces&quot;           
+[1345] &quot;policy&quot;            &quot;agenda&quot;            &quot;president&quot;        
+[1348] &quot;donald&quot;            &quot;trump&quot;             &quot;endorsed&quot;         
+[1351] &quot;kelly&quot;             &quot;tshibaka&quot;          &quot;friday&quot;           
+[1354] &quot;race&quot;              &quot;senator&quot;           &quot;lisa&quot;             
+[1357] &quot;murkowski&quot;         &quot;alaska&quot;            &quot;giving&quot;           
+[1360] &quot;support&quot;           &quot;outsider&quot;          &quot;candidate&quot;        
+[1363] &quot;promoted&quot;          &quot;false&quot;             &quot;claims&quot;           
+[1366] &quot;election&quot;          &quot;fraud&quot;             &quot;written&quot;          
+[1369] &quot;articles&quot;          &quot;support&quot;           &quot;gay&quot;              
+[1372] &quot;conversion&quot;        &quot;therapy&quot;           &quot;american&quot;         
+[1375] &quot;west&quot;              &quot;embraces&quot;          &quot;share&quot;            
+[1378] &quot;spectacular&quot;       &quot;landscapes&quot;        &quot;there’s&quot;          
+[1381] &quot;vast&quot;              &quot;swath&quot;             &quot;canyons&quot;          
+[1384] &quot;mesas&quot;             &quot;sandstone&quot;         &quot;spires&quot;           
+[1387] &quot;arches&quot;            &quot;stretches&quot;         &quot;80&quot;               
+[1390] &quot;miles&quot;             &quot;north&quot;             &quot;south&quot;            
+[1393] &quot;southeast&quot;         &quot;corner&quot;            &quot;utah&quot;             
+[1396] &quot;ranging&quot;           &quot;altitude&quot;          &quot;sagebrush&quot;        
+[1399] &quot;flats&quot;             &quot;pinyon&quot;            &quot;juniper&quot;          
+[1402] &quot;forests&quot;           &quot;growth&quot;            &quot;stands&quot;           
+[1405] &quot;ponderosa&quot;         &quot;pine&quot;              &quot;douglas&quot;          
+[1408] &quot;fir&quot;               &quot;livingston&quot;        &quot;mont&quot;             
+[1411] &quot;slaughter&quot;         &quot;wolves&quot;            &quot;underway&quot;         
+[1414] &quot;montana&quot;           &quot;idaho&quot;             &quot;wyoming&quot;          
+[1417] &quot;precedent&quot;         &quot;past&quot;              &quot;100&quot;              
+[1420] &quot;washington&quot;        &quot;centuries&quot;         &quot;land&quot;             
+[1423] &quot;loss&quot;              &quot;forced&quot;            &quot;relocation&quot;       
+[1426] &quot;left&quot;              &quot;native&quot;            &quot;americans&quot;        
+[1429] &quot;significantly&quot;     &quot;exposed&quot;           &quot;effects&quot;          
+[1432] &quot;climate&quot;           &quot;change&quot;            &quot;data&quot;             
+[1435] &quot;adding&quot;            &quot;debate&quot;            &quot;address&quot;          
+[1438] &quot;climate&quot;           &quot;change&quot;            &quot;racial&quot;           
+[1441] &quot;inequity&quot;          &quot;united&quot;            &quot;biden&quot;            
+[1444] &quot;administration&quot;    &quot;plans&quot;             &quot;restore&quot;          
+[1447] &quot;environmental&quot;     &quot;protections&quot;       &quot;tongass&quot;          
+[1450] &quot;national&quot;          &quot;forest&quot;            &quot;alaska&quot;           
+[1453] &quot;world’s&quot;           &quot;largest&quot;           &quot;intact&quot;           
+[1456] &quot;temperate&quot;         &quot;rain&quot;              &quot;forests&quot;          
+[1459] &quot;stripped&quot;          &quot;president&quot;         &quot;donald&quot;           
+[1462] &quot;trump&quot;             &quot;biden&quot;             &quot;administration&quot;   
+[1465] &quot;wednesday&quot;         &quot;canceled&quot;          &quot;mining&quot;           
+[1468] &quot;leases&quot;            &quot;allowed&quot;           &quot;copper&quot;           
+[1471] &quot;mine&quot;              &quot;built&quot;             &quot;pristine&quot;         
+[1474] &quot;wilderness&quot;        &quot;minnesota&quot;         &quot;busy&quot;             
+[1477] &quot;day&quot;               &quot;capitol&quot;           &quot;hill&quot;             
+[1480] &quot;washington&quot;        &quot;supreme&quot;           &quot;court&quot;            
+[1483] &quot;agreed&quot;            &quot;monday&quot;            &quot;hear&quot;             
+[1486] &quot;challenge&quot;         &quot;constitutionality&quot; &quot;indian&quot;           
+[1489] &quot;child&quot;             &quot;welfare&quot;           &quot;act&quot;              
+[1492] &quot;1978&quot;              &quot;makes&quot;             &quot;hard&quot;             
+[1495] &quot;remove&quot;            &quot;native&quot;            &quot;american&quot;         
+[1498] &quot;children&quot;          &quot;parents&quot;           &quot;tribes&quot;           
+[1501] &quot;heritage&quot;          &quot;washington&quot;        &quot;federal&quot;          
+[1504] &quot;judge&quot;             &quot;alaska&quot;            &quot;wednesday&quot;        
+[1507] &quot;blocked&quot;           &quot;construction&quot;      &quot;permits&quot;          
+[1510] &quot;expansive&quot;         &quot;oil&quot;               &quot;drilling&quot;         
+[1513] &quot;project&quot;           &quot;state’s&quot;           &quot;north&quot;            
+[1516] &quot;slope&quot;             &quot;designed&quot;          &quot;produce&quot;          
+[1519] &quot;100,000&quot;           &quot;barrels&quot;           &quot;oil&quot;              
+[1522] &quot;day&quot;               &quot;30&quot;                &quot;native&quot;           
+[1525] &quot;americans&quot;         &quot;systematically&quot;    &quot;dispossessed&quot;     
+[1528] &quot;ancestral&quot;         &quot;lands&quot;             &quot;century&quot;          
+[1531] &quot;federal&quot;           &quot;land&quot;              &quot;management&quot;       
+[1534] &quot;policies&quot;          &quot;spate&quot;             &quot;real&quot;             
+[1537] &quot;estate&quot;            &quot;projects&quot;          &quot;highlights&quot;       
+[1540] &quot;efforts&quot;           &quot;reclaim&quot;           &quot;territory&quot;        
+[1543] &quot;tribes&quot;            &quot;invest&quot;            &quot;land&quot;             
+[1546] &quot;development&quot;       &quot;effort&quot;            &quot;diversify&quot;        
+[1549] &quot;revenue&quot;           &quot;base&quot;              &quot;support&quot;          
+[1552] &quot;washington&quot;        &quot;democrats&quot;         &quot;preparing&quot;        
+[1555] &quot;muscle&quot;            &quot;nomination&quot;        &quot;tracy&quot;            
+[1558] &quot;stone&quot;             &quot;manning&quot;           &quot;head&quot;             
+[1561] &quot;bureau&quot;            &quot;land&quot;              &quot;management&quot;       
+[1564] &quot;united&quot;            &quot;opposition&quot;        &quot;republicans&quot;      
+[1567] &quot;branded&quot;           &quot;eco&quot;               &quot;terrorist&quot;        
+[1570] &quot;involvement&quot;       &quot;tree&quot;              &quot;spiking&quot;          
+[1573] &quot;episode&quot;           &quot;graduate&quot;          &quot;student&quot;          
+[1576] &quot;1980s&quot;             &quot;hard&quot;              &quot;overstate&quot;        
+[1579] &quot;joy&quot;               &quot;environmental&quot;     &quot;community&quot;        
+[1582] &quot;joe&quot;               &quot;biden&quot;             &quot;ascended&quot;         
+[1585] &quot;white&quot;             &quot;house&quot;             &quot;called&quot;           
+[1588] &quot;climate&quot;           &quot;change&quot;            &quot;hoax&quot;             
+[1591] &quot;global&quot;            &quot;warming&quot;           &quot;grave&quot;            
+[1594] &quot;threat&quot;            &quot;spoke&quot;             &quot;inaugural&quot;        
+[1597] &quot;world’s&quot;           &quot;duty&quot;              &quot;respond&quot;          
+[1600] &quot;cry&quot;               &quot;survival&quot;          &quot;planet&quot;           
+[1603] &quot;government&quot;        &quot;regulations&quot;       &quot;job&quot;              
+[1606] &quot;killers&quot;           &quot;levers&quot;            &quot;achieve&quot;          
+[1609] &quot;cleaner&quot;           &quot;air&quot;               &quot;water&quot;            
+[1612] &quot;viewed&quot;            &quot;public&quot;            &quot;lands&quot;            
+[1615] &quot;resource&quot;          &quot;exploited&quot;         &quot;commercial&quot;       
+[1618] &quot;nature’s&quot;          &quot;gift&quot;              &quot;future&quot;           
+[1621] &quot;generations&quot;       &quot;worthy&quot;            &quot;custodian&quot;        
+[1624] &quot;short&quot;             &quot;environmental&quot;     &quot;ethic&quot;            
+[1627] &quot;teddy&quot;             &quot;roosevelt&quot;         &quot;jimmy&quot;            
+[1630] &quot;carter&quot;            &quot;bill&quot;              &quot;clinton&quot;          
+[1633] &quot;spend&quot;             &quot;trillions&quot;         &quot;happen&quot;           
+[1636] &quot;paying&quot;            &quot;attention&quot;         &quot;news&quot;             
+[1639] &quot;recently&quot;          &quot;10&quot;                &quot;questions&quot;        
+[1642] &quot;washington&quot;        &quot;senator&quot;           &quot;lisa&quot;             
+[1645] &quot;murkowski&quot;         &quot;republican&quot;        &quot;alaska&quot;           
+[1648] &quot;announced&quot;         &quot;friday&quot;            &quot;seek&quot;             
+[1651] &quot;election&quot;          &quot;formally&quot;          &quot;entering&quot;         
+[1654] &quot;expected&quot;          &quot;expensive&quot;         &quot;challenging&quot;      
+[1657] &quot;race&quot;              &quot;political&quot;         &quot;career&quot;           
+[1660] &quot;voting&quot;            &quot;impeach&quot;           &quot;president&quot;        
+[1663] &quot;donald&quot;            &quot;trump&quot;             &quot;wednesday&quot;        
+[1666] &quot;night&quot;             &quot;ron&quot;               &quot;klain&quot;            
+[1669] &quot;white&quot;             &quot;house&quot;             &quot;chief&quot;            
+[1672] &quot;staff&quot;             &quot;television&quot;        &quot;proclaim&quot;         
+[1675] &quot;biden&quot;             &quot;administration&quot;    &quot;fighting&quot;         
+[1678] &quot;guts&quot;              &quot;neera&quot;             &quot;tanden&quot;           
+[1681] &quot;confirmed&quot;         &quot;head&quot;              &quot;office&quot;           
+[1684] &quot;management&quot;        &quot;budget&quot;            &quot;ago&quot;              
+[1687] &quot;maren&quot;             &quot;lundby&quot;            &quot;lock&quot;             
+[1690] &quot;gold&quot;              &quot;medal&quot;             &quot;2022&quot;             
+[1693] &quot;winter&quot;            &quot;olympics&quot;          &quot;lundby&quot;           
+[1696] &quot;27&quot;                &quot;ski&quot;               &quot;jumper&quot;           
+[1699] &quot;norway&quot;            &quot;won&quot;               &quot;gold&quot;             
+[1702] &quot;2018&quot;              &quot;games&quot;             &quot;pyeongchang&quot;      
+[1705] &quot;south&quot;             &quot;korea&quot;             &quot;straight&quot;         
+[1708] &quot;world&quot;             &quot;cup&quot;               &quot;titles&quot;           
+[1711] &quot;2018&quot;              &quot;2020&quot;              &quot;gold&quot;             
+[1714] &quot;medals&quot;            &quot;2019&quot;              &quot;2021&quot;             
+[1717] &quot;world&quot;             &quot;championships&quot;     &quot;washington&quot;       
+[1720] &quot;senate&quot;            &quot;narrowly&quot;          &quot;approved&quot;         
+[1723] &quot;tracy&quot;             &quot;stone&quot;             &quot;manning&quot;          
+[1726] &quot;thursday&quot;          &quot;lead&quot;              &quot;bureau&quot;           
+[1729] &quot;land&quot;              &quot;management&quot;        &quot;capping&quot;          
+[1732] &quot;months&quot;            &quot;efforts&quot;           &quot;republican&quot;       
+[1735] &quot;lawmakers&quot;         &quot;block&quot;             &quot;confirmation&quot;     
+[1738] &quot;connection&quot;        &quot;decades&quot;           &quot;tree&quot;             
+[1741] &quot;spiking&quot;           &quot;incident&quot;          &quot;gray&quot;             
+[1744] &quot;wolves&quot;            &quot;regain&quot;            &quot;federal&quot;          
+[1747] &quot;protection&quot;        &quot;lower&quot;             &quot;48&quot;               
+[1750] &quot;united&quot;            &quot;court&quot;             &quot;ruling&quot;           
+[1753] &quot;thursday&quot;          &quot;struck&quot;            &quot;trump&quot;            
+[1756] &quot;administration&quot;    &quot;decision&quot;          &quot;animals&quot;          
+[1759] &quot;endangered&quot;        &quot;species&quot;           &quot;list&quot;             
+[1762] &quot;congress&quot;          &quot;tuesday&quot;           &quot;threatened&quot;       
+[1765] &quot;withhold&quot;          &quot;tens&quot;              &quot;millions&quot;         
+[1768] &quot;dollars&quot;           &quot;federal&quot;           &quot;funding&quot;          
+[1771] &quot;native&quot;            &quot;american&quot;          &quot;tribes&quot;           
+[1774] &quot;oklahoma&quot;          &quot;adding&quot;            &quot;renewed&quot;          
+[1777] &quot;public&quot;            &quot;pressure&quot;          &quot;policies&quot;         
+[1780] &quot;discriminate&quot;      &quot;descendants&quot;       &quot;black&quot;            
+[1783] &quot;people&quot;            &quot;enslaved&quot;          &quot;tribes&quot;           
+[1786] &quot;civil&quot;             &quot;war&quot;               &quot;federal&quot;          
+[1789] &quot;board&quot;             &quot;thursday&quot;          &quot;approved&quot;         
+[1792] &quot;renaming&quot;          &quot;16&quot;                &quot;sites&quot;            
+[1795] &quot;texas&quot;             &quot;names&quot;             &quot;include&quot;          
+[1798] &quot;word&quot;              &quot;negro&quot;             &quot;change&quot;           
+[1801] &quot;sought&quot;            &quot;politicians&quot;       &quot;activists&quot;        
+[1804] &quot;affect&quot;            &quot;fraction&quot;          &quot;hundreds&quot;         
+[1807] &quot;racist&quot;            &quot;names&quot;             &quot;towns&quot;            
+[1810] &quot;geographical&quot;      &quot;features&quot;          &quot;remain&quot;           
+[1813] &quot;united&quot;            &quot;follow&quot;            &quot;news&quot;             
+[1816] &quot;week&quot;              &quot;quiz&quot;              &quot;stack&quot;            
+[1819] &quot;times&quot;             &quot;readers&quot;           &quot;kathryn&quot;          
+[1822] &quot;dunn&quot;              &quot;tenpas&quot;            &quot;senior&quot;           
+[1825] &quot;fellow&quot;            &quot;university&quot;        &quot;virginia’s&quot;       
+[1828] &quot;miller&quot;            &quot;center&quot;            &quot;washington&quot;       
+[1831] &quot;federal&quot;           &quot;judge&quot;             &quot;thursday&quot;         
+[1834] &quot;canceled&quot;          &quot;oil&quot;               &quot;gas&quot;              
+[1837] &quot;leases&quot;            &quot;80&quot;                &quot;million&quot;          
+[1840] &quot;acres&quot;             &quot;gulf&quot;              &quot;mexico&quot;           
+[1843] &quot;ruling&quot;            &quot;biden&quot;             &quot;administration&quot;   
+[1846] &quot;sufficiently&quot;      &quot;climate&quot;           &quot;change&quot;           
+[1849] &quot;account&quot;           &quot;auctioned&quot;         &quot;leases&quot;           
+[1852] &quot;late&quot;              &quot;washington&quot;        &quot;biden&quot;            
+[1855] &quot;administration&quot;    &quot;friday&quot;            &quot;announced&quot;        
+[1858] &quot;begin&quot;             &quot;formal&quot;            &quot;process&quot;          
+[1861] &quot;selling&quot;           &quot;leases&quot;            &quot;develop&quot;          
+[1864] &quot;offshore&quot;          &quot;wind&quot;              &quot;farms&quot;            
+[1867] &quot;shallow&quot;           &quot;waters&quot;            &quot;island&quot;           
+[1870] &quot;jersey&quot;            &quot;push&quot;              &quot;transition&quot;       
+[1873] &quot;nation&quot;            &quot;renewable&quot;         &quot;energy&quot;           
+[1876] &quot;sunday&quot;            &quot;puzzle&quot;            &quot;visually&quot;         
+[1879] &quot;unusual&quot;           &quot;challenge&quot;         &quot;excellent&quot;        
+[1882] &quot;constructors&quot;      &quot;matthew&quot;           &quot;stock&quot;            
+[1885] &quot;nediger&quot;           &quot;collaborating&quot;     &quot;time&quot;             
+[1888] &quot;york&quot;              &quot;times&quot;             &quot;puzzle’s&quot;         
+[1891] &quot;print&quot;             &quot;introduction&quot;      &quot;connected&quot;        
+[1894] &quot;online&quot;            &quot;developed&quot;         &quot;theme&quot;            
+[1897] &quot;conceived&quot;         &quot;stock&quot;             &quot;direct&quot;           
+[1900] &quot;messages&quot;          &quot;twitter&quot;           &quot;swapping&quot;         
+[1903] &quot;grids&quot;             &quot;happy&quot;             &quot;meet&quot;             
+[1906] &quot;video&quot;             &quot;pride&quot;             &quot;celebrations&quot;     
+[1909] &quot;june&quot;              &quot;marches&quot;           &quot;parades&quot;          
+[1912] &quot;parties&quot;           &quot;trace&quot;             &quot;histories&quot;        
+[1915] &quot;fiery&quot;             &quot;street&quot;            &quot;demonstration&quot;    
+[1918] &quot;1970&quot;              &quot;violent&quot;           &quot;uprising&quot;         
+[1921] &quot;stonewall&quot;         &quot;inn&quot;               &quot;manhattan&quot;        
+[1924] &quot;galvanized&quot;        &quot;modern&quot;            &quot;gay&quot;              
+[1927] &quot;rights&quot;            &quot;movement&quot;          &quot;european&quot;         
+[1930] &quot;championship&quot;      &quot;considered&quot;        &quot;biggest&quot;          
+[1933] &quot;soccer&quot;            &quot;tournament&quot;        &quot;world&quot;            
+[1936] &quot;cup&quot;               &quot;held&quot;              &quot;summer&quot;           
+[1939] &quot;year’s&quot;            &quot;delay&quot;             &quot;coronavirus&quot;      
+[1942] &quot;pandemic&quot;          &quot;here’s&quot;            &quot;rundown&quot;          
+[1945] &quot;teams&quot;             &quot;players&quot;           &quot;host&quot;             
+[1948] &quot;cities&quot;            &quot;called&quot;            &quot;euro&quot;             
+[1951] &quot;2020&quot;              &quot;ocean&quot;             &quot;rises&quot;            
+[1954] &quot;homeowners&quot;        &quot;avon&quot;              &quot;tiny&quot;             
+[1957] &quot;town&quot;              &quot;outer&quot;             &quot;banks&quot;            
+[1960] &quot;north&quot;             &quot;carolina&quot;          &quot;confronting&quot;      
+[1963] &quot;tax&quot;               &quot;increase&quot;          &quot;50&quot;               
+[1966] &quot;percent&quot;           &quot;defend&quot;            &quot;road&quot;             
+[1969] &quot;town&quot;              &quot;residents&quot;         &quot;pay&quot;              
+[1972] &quot;local&quot;             &quot;officials&quot;         &quot;they’re&quot;          
+[1975] &quot;decades&quot;           &quot;ago&quot;               &quot;zealand&quot;          
+[1978] &quot;highway&quot;           &quot;authority&quot;         &quot;planning&quot;         
+[1981] &quot;waikato&quot;           &quot;expressway&quot;        &quot;people&quot;           
+[1984] &quot;māori&quot;             &quot;tribe&quot;             &quot;ngāti&quot;            
+[1987] &quot;naho&quot;              &quot;objected&quot;          &quot;highway&quot;          
+[1990] &quot;encroach&quot;          &quot;māori&quot;             &quot;tradition&quot;        
+[1993] &quot;governed&quot;          &quot;water&quot;             &quot;dwelling&quot;         
+[1996] &quot;creature&quot;          &quot;taniwha&quot;           &quot;world&quot;            
+[1999] &quot;cup&quot;               &quot;draw&quot;              &quot;set&quot;              
+[2002] &quot;field&quot;             &quot;invitation&quot;        &quot;list&quot;             
+[2005] &quot;year’s&quot;            &quot;tournament&quot;        &quot;qatar&quot;            
+[2008] &quot;isn’t&quot;             &quot;complete&quot;          &quot;teams&quot;            
+[2011] &quot;play&quot;              &quot;plenty&quot;            &quot;questions&quot;        
+[2014] &quot;play&quot;              &quot;soccer’s&quot;          &quot;winter&quot;           
+[2017] &quot;world&quot;             &quot;cup&quot;               &quot;here’s&quot;           
+[2020] &quot;primer&quot;            &quot;world’s&quot;           &quot;sporting&quot;         
+[2023] &quot;spectacle&quot;         &quot;president&quot;         &quot;biden&quot;            
+[2026] &quot;proclaimed&quot;        &quot;monday&quot;            &quot;oct&quot;              
+[2029] &quot;11&quot;                &quot;indigenous&quot;        &quot;peoples&quot;          
+[2032] &quot;day&quot;               &quot;u.s&quot;               &quot;president&quot;        
+[2035] &quot;formally&quot;          &quot;recognize&quot;         &quot;day&quot;              
+[2038] &quot;biden&quot;             &quot;administration&quot;    &quot;defended&quot;         
+[2041] &quot;contentious&quot;       &quot;pipeline&quot;          &quot;project&quot;          
+[2044] &quot;carry&quot;             &quot;hundreds&quot;          &quot;thousands&quot;        
+[2047] &quot;barrels&quot;           &quot;oil&quot;               &quot;minnesota’s&quot;      
+[2050] &quot;delicate&quot;          &quot;watersheds&quot;        &quot;urging&quot;           
+[2053] &quot;court&quot;             &quot;challenge&quot;         &quot;brought&quot;          
+[2056] &quot;local&quot;             &quot;tribes&quot;            &quot;environmental&quot;    
+[2059] &quot;thrown&quot;            &quot;northern&quot;          &quot;branch&quot;           
+[2062] &quot;gulf&quot;              &quot;stream&quot;            &quot;vast&quot;             
+[2065] &quot;ocean&quot;             &quot;current&quot;           &quot;runs&quot;             
+[2068] &quot;west&quot;              &quot;africa&quot;            &quot;americas&quot;         
+[2071] &quot;east&quot;              &quot;coast&quot;             &quot;atlantic&quot;         
+[2074] &quot;british&quot;           &quot;isles&quot;             &quot;served&quot;           
+[2077] &quot;ages&quot;              &quot;planetary&quot;         &quot;heat&quot;             
+[2080] &quot;pump&quot;              &quot;helps&quot;             &quot;regulate&quot;         
+[2083] &quot;planet’s&quot;          &quot;climate&quot;           &quot;politics&quot;         
+[2086] &quot;wrap&quot;              &quot;week&quot;              &quot;national&quot;         
+[2089] &quot;politics&quot;          &quot;i’m&quot;               &quot;lisa&quot;             
+[2092] &quot;lerer&quot;             &quot;host&quot;              &quot;washington&quot;       
+[2095] &quot;president&quot;         &quot;biden&quot;             &quot;forced&quot;           
+[2098] &quot;hold&quot;              &quot;lease&quot;             &quot;sale&quot;             
+[2101] &quot;oil&quot;               &quot;drilling&quot;          &quot;pristine&quot;         
+[2104] &quot;arctic&quot;            &quot;national&quot;          &quot;wildlife&quot;         
+[2107] &quot;refuge&quot;            &quot;vows&quot;              &quot;slash&quot;            
+[2110] &quot;fossil&quot;            &quot;fuel&quot;              &quot;pollution&quot;        
+[2113] &quot;action&quot;            &quot;week&quot;              &quot;suspend&quot;          
+[2116] &quot;arctic&quot;            &quot;drilling&quot;          &quot;leases&quot;           
+[2119] &quot;awarded&quot;           &quot;final&quot;             &quot;days&quot;             
+[2122] &quot;trump&quot;             &quot;administration&quot;    &quot;construction&quot;     
+[2125] &quot;nation’s&quot;          &quot;commercial&quot;        &quot;scale&quot;            
+[2128] &quot;offshore&quot;          &quot;wind&quot;              &quot;farm&quot;             
+[2131] &quot;expected&quot;          &quot;begin&quot;             &quot;summer&quot;           
+[2134] &quot;biden&quot;             &quot;administration&quot;    &quot;final&quot;            
+[2137] &quot;approval&quot;          &quot;tuesday&quot;           &quot;project&quot;          
+[2140] &quot;hopes&quot;             &quot;herald&quot;            &quot;era&quot;              
+[2143] &quot;wind&quot;              &quot;energy&quot;            &quot;united&quot;           
+[2146] &quot;albuquerque&quot;       &quot;mexican&quot;           &quot;officials&quot;        
+[2149] &quot;message&quot;           &quot;farmers&quot;           &quot;depend&quot;           
+[2152] &quot;irrigation&quot;        &quot;water&quot;             &quot;rio&quot;              
+[2155] &quot;grande&quot;            &quot;rivers&quot;            &quot;absolutely&quot;       
+[2158] &quot;plant&quot;             &quot;don’t&quot;             &quot;morning&quot;          
+[2161] &quot;washington&quot;        &quot;biden&quot;             &quot;administration&quot;   
+[2164] &quot;defending&quot;         &quot;huge&quot;              &quot;trump&quot;            
+[2167] &quot;era&quot;               &quot;oil&quot;               &quot;gas&quot;              
+[2170] &quot;project&quot;           &quot;north&quot;             &quot;slope&quot;            
+[2173] &quot;alaska&quot;            &quot;designed&quot;          &quot;produce&quot;          
+[2176] &quot;100,000&quot;           &quot;barrels&quot;           &quot;oil&quot;              
+[2179] &quot;day&quot;               &quot;30&quot;                &quot;president&quot;        
+[2182] &quot;biden’s&quot;           &quot;pledge&quot;            &quot;pivot&quot;            
+[2185] &quot;country&quot;           &quot;fossil&quot;            &quot;fuels&quot;            
+[2188] &quot;public&quot;            &quot;figures&quot;           &quot;crept&quot;            
+[2191] &quot;spotlight&quot;         &quot;tiptoe&quot;            &quot;doors&quot;            
+[2194] &quot;presidential&quot;      &quot;inauguration&quot;      &quot;socially&quot;         
+[2197] &quot;distanced&quot;         &quot;red&quot;               &quot;carpet&quot;           
+[2200] &quot;oscars&quot;            &quot;throttle&quot;          &quot;ball&quot;             
+[2203] &quot;gowns&quot;             &quot;max&quot;               &quot;explosion&quot;        
+[2206] &quot;pent&quot;              &quot;dressing&quot;          &quot;cannes&quot;           
+[2209] &quot;film&quot;              &quot;festival&quot;          &quot;compensate&quot;       
+[2212] &quot;previous&quot;          &quot;enforced&quot;          &quot;isolation&quot;        
+[2215] &quot;newsletter&quot;        &quot;inbox&quot;             &quot;here’s&quot;           
+[2218] &quot;sign&quot;              &quot;month&quot;             &quot;ago&quot;              
+[2221] &quot;school&quot;            &quot;board&quot;             &quot;northern&quot;         
+[2224] &quot;jersey&quot;            &quot;suburb&quot;            &quot;lead&quot;             
+[2227] &quot;scores&quot;            &quot;municipalities&quot;    &quot;voted&quot;            
+[2230] &quot;unanimously&quot;       &quot;rename&quot;            &quot;columbus&quot;         
+[2233] &quot;day&quot;               &quot;indigenous&quot;        &quot;peoples&quot;          
+[2236] &quot;day&quot;               &quot;newsletter&quot;        &quot;inbox&quot;            
+[2239] &quot;here’s&quot;            &quot;sign&quot;              &quot;newsletter&quot;       
+[2242] &quot;inbox&quot;             &quot;here’s&quot;            &quot;sign&quot;             
+[2245] &quot;washington&quot;        &quot;notion&quot;            &quot;wind&quot;             
+[2248] &quot;farms&quot;             &quot;churning&quot;          &quot;pacific&quot;          
+[2251] &quot;ocean&quot;             &quot;creating&quot;          &quot;clean&quot;            
+[2254] &quot;energy&quot;            &quot;power&quot;             &quot;homes&quot;            
+[2257] &quot;businesses&quot;        &quot;dismissed&quot;         &quot;logistical&quot;       
+[2260] &quot;challenges&quot;        &quot;posed&quot;             &quot;deep&quot;             
+[2263] &quot;ocean&quot;             &quot;floor&quot;             &quot;opposition&quot;       
+[2266] &quot;military&quot;          &quot;prefers&quot;           &quot;obstacles&quot;        
+[2269] &quot;navy&quot;              &quot;ships&quot;             &quot;newsletter&quot;       
+[2272] &quot;inbox&quot;             &quot;here’s&quot;            &quot;sign&quot;             
+[2275] &quot;washington&quot;        &quot;president&quot;         &quot;biden&quot;            
+[2278] &quot;wednesday&quot;         &quot;draw&quot;              &quot;350&quot;              
+[2281] &quot;billion&quot;           &quot;federal&quot;           &quot;stimulus&quot;         
+[2284] &quot;money&quot;             &quot;shore&quot;             &quot;police&quot;           
+[2287] &quot;departments&quot;       &quot;vowed&quot;             &quot;crack&quot;            
+[2290] &quot;gun&quot;               &quot;dealers&quot;           &quot;fail&quot;             
+[2293] &quot;run&quot;               &quot;background&quot;        &quot;checks&quot;           
+[2296] &quot;white&quot;             &quot;house&quot;             &quot;seeks&quot;            
+[2299] &quot;combat&quot;            &quot;alarming&quot;          &quot;rise&quot;             
+[2302] &quot;homicide&quot;          &quot;rates&quot;             &quot;america’s&quot;        
+[2305] &quot;cities&quot;            &quot;washington&quot;        &quot;president&quot;        
+[2308] &quot;biden&quot;             &quot;nominated&quot;         &quot;judge&quot;            
+[2311] &quot;ketanji&quot;           &quot;brown&quot;             &quot;jackson&quot;          
+[2314] &quot;prestigious&quot;       &quot;appeals&quot;           &quot;court&quot;            
+[2317] &quot;senator&quot;           &quot;lisa&quot;              &quot;murkowski&quot;        
+[2320] &quot;alaska&quot;            &quot;centrist&quot;          &quot;willingness&quot;      
+[2323] &quot;break&quot;             &quot;party&quot;             &quot;republicans&quot;      
+[2326] &quot;vote&quot;              &quot;confirm&quot;           &quot;washington&quot;       
+[2329] &quot;president&quot;         &quot;biden’s&quot;           &quot;nominee&quot;          
+[2332] &quot;head&quot;              &quot;office&quot;            &quot;management&quot;       
+[2335] &quot;budget&quot;            &quot;continued&quot;         &quot;senate&quot;           
+[2338] &quot;opposition&quot;        &quot;thursday&quot;          &quot;narrowing&quot;        
+[2341] &quot;chances&quot;           &quot;confirmation&quot;      &quot;sending&quot;          
+[2344] &quot;white&quot;             &quot;house&quot;             &quot;officials&quot;        
+[2347] &quot;frantic&quot;           &quot;search&quot;            &quot;republican&quot;       
+[2350] &quot;vote&quot;              &quot;salvage&quot;           &quot;nomination&quot;       
+[2353] &quot;indian&quot;            &quot;health&quot;            &quot;service&quot;          
+[2356] &quot;announced&quot;         &quot;week&quot;              &quot;black&quot;            
+[2359] &quot;native&quot;            &quot;americans&quot;         &quot;seminole&quot;         
+[2362] &quot;nation&quot;            &quot;freedmen&quot;          &quot;eligible&quot;         
+[2365] &quot;health&quot;            &quot;care&quot;              &quot;federal&quot;          
+[2368] &quot;agency&quot;            &quot;previously&quot;        &quot;denied&quot;           
+[2371] &quot;coronavirus&quot;       &quot;vaccinations&quot;      &quot;care&quot;             
+[2374] &quot;washington&quot;        &quot;provided&quot;          &quot;stark&quot;            
+[2377] &quot;evidence&quot;          &quot;racial&quot;            &quot;inequities&quot;       
+[2380] &quot;lack&quot;              &quot;federal&quot;           &quot;funding&quot;          
+[2383] &quot;left&quot;              &quot;tribal&quot;            &quot;communities&quot;      
+[2386] &quot;indigenous&quot;        &quot;people&quot;            &quot;vulnerable&quot;       
+[2389] &quot;crises&quot;            &quot;pandemic&quot;          &quot;president&quot;        
+[2392] &quot;biden&quot;             &quot;democrats&quot;         &quot;congress&quot;         
+[2395] &quot;seeking&quot;           &quot;address&quot;           &quot;longstanding&quot;     
+[2398] &quot;issues&quot;            &quot;huge&quot;              &quot;infusion&quot;         
+[2401] &quot;federal&quot;           &quot;aid&quot;               &quot;selected&quot;         
+[2404] &quot;times&quot;             &quot;articles&quot;          &quot;published&quot;        
+[2407] &quot;feature&quot;           &quot;stories&quot;           &quot;native&quot;           
+[2410] &quot;americans&quot;         &quot;fighting&quot;          &quot;ensure&quot;           
+[2413] &quot;representation&quot;    &quot;repatriation&quot;      &quot;recognition&quot;      
+[2416] &quot;durango&quot;           &quot;colo&quot;              &quot;day&quot;              
+[2419] &quot;dzabahe&quot;           &quot;remembers&quot;         &quot;praying&quot;          
+[2422] &quot;ancestors&quot;         &quot;morning&quot;           &quot;1950s&quot;            
+[2425] &quot;boarding&quot;          &quot;school&quot;            &quot;don&quot;              
+[2428] &quot;alaska&quot;            &quot;congressman&quot;       &quot;secured&quot;          
+[2431] &quot;pork&quot;              &quot;barrel&quot;            &quot;billions&quot;         
+[2434] &quot;half&quot;              &quot;century&quot;           &quot;serving&quot;          
+[2437] &quot;republican&quot;        &quot;house&quot;             &quot;representatives&quot;  
+[2440] &quot;current&quot;           &quot;house&quot;             &quot;senate&quot;           
+[2443] &quot;died&quot;              &quot;friday&quot;            &quot;88&quot;               
+[2446] &quot;northern&quot;          &quot;cheyenne&quot;          &quot;reservation&quot;      
+[2449] &quot;mont&quot;              &quot;knock&quot;             &quot;door&quot;             
+[2452] &quot;3&quot;                 &quot;a.m&quot;               &quot;pauline&quot;          
+[2455] &quot;highwolf&quot;          &quot;police&quot;            &quot;officer&quot;          
+[2458] &quot;bureau&quot;            &quot;indian&quot;            &quot;affairs&quot;          
+[2461] &quot;don’t&quot;             &quot;8&quot;                 &quot;caught&quot;           
+[2464] &quot;eye&quot;               &quot;tall&quot;              &quot;languid&quot;          
+[2467] &quot;border&quot;            &quot;rangy&quot;             &quot;ungainly&quot;         
+[2470] &quot;moved&quot;             &quot;middle&quot;            &quot;bustle&quot;           
+[2473] &quot;hurry&quot;             &quot;unusually&quot;         &quot;sprint&quot;           
+[2476] &quot;dash&quot;              &quot;run&quot;               &quot;strolled&quot;         
+[2479] &quot;meandered&quot;         &quot;moseyed&quot;           &quot;sign&quot;             
+[2482] &quot;rory&quot;              &quot;smith’s&quot;           &quot;weekly&quot;           
+[2485] &quot;newsletter&quot;        &quot;world&quot;             &quot;soccer&quot;           
+[2488] &quot;delivered&quot;         &quot;friday&quot;            &quot;nytimes.com&quot;      
+[2491] &quot;rory&quot;              &quot;yellow&quot;            &quot;pine&quot;             
+[2494] &quot;idaho&quot;             &quot;net&quot;               &quot;hand&quot;             
+[2497] &quot;louis&quot;             &quot;reuben&quot;            &quot;waded&quot;            
+[2500] &quot;frigid&quot;            &quot;waters&quot;            &quot;ancestors&quot;        
+[2503] &quot;fished&quot;            &quot;idaho’s&quot;           &quot;rivers&quot;           
+[2506] &quot;dammed&quot;            &quot;contaminated&quot;      &quot;nez&quot;              
+[2509] &quot;perce&quot;             &quot;driven&quot;            &quot;land&quot;             
+[2512] &quot;white&quot;             &quot;miners&quot;            &quot;struck&quot;           
+[2515] &quot;gold&quot;             </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>clean_tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_replace.html'>str_replace_all</a></span><span class='op'>(</span><span class='va'>tokenized</span><span class='op'>$</span><span class='va'>word</span>,<span class='st'>"trib[a-z,A-Z]*"</span>,<span class='st'>"tribe"</span><span class='op'>)</span> <span class='co'>#stem tribe words</span>
+<span class='va'>clean_tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_remove.html'>str_remove_all</a></span><span class='op'>(</span><span class='va'>clean_tokens</span>, <span class='st'>"[:digit:]"</span><span class='op'>)</span> <span class='co'>#remove all numbers</span>
+<span class='va'>clean_tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"’s"</span>, <span class='st'>''</span>, <span class='va'>clean_tokens</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
-<div class="sourceCode" id="cb2"><pre
+<ol type="1">
+<li><p>Create a free New York Times account (<a
+href="https://developer.nytimes.com/get-started"
+class="uri">https://developer.nytimes.com/get-started</a>)</p></li>
+<li><p>Pick an interesting environmental key word(s) and use the
+jsonlite package to query the API. Pick something high profile enough
+and over a large enough time frame that your query yields enough
+articles for an interesting examination.</p></li>
+<li><p>Recreate the publications per day and word frequency plots using
+the first paragraph</p></li>
+</ol>
+<ul>
+<li>Make some (at least 3) transformations to the corpus (add
+stopword(s), stem a key term and its variants, remove numbers)</li>
+</ul>
+<ol start="4" type="1">
+<li></li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<div class="sourceCode" id="cb4"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

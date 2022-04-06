@@ -1,7 +1,7 @@
-name: "meds-distill-template"
-title: "EDS 123"
+name: "eds-231-website"
+title: "EDS 231"
 description: |
-  MEDS Courses distill template
+  EDS course website
 output_dir: "docs"
 navbar:
   right:
@@ -33,12 +33,14 @@ navbar:
     #   href: assignments.html
     - text: "Resources"
       href: resources.html
-    - icon: fab fa-github
-      href: https://github.com/allisonhorst/meds-distill-template
+    - text:  "Reading Reactions"
+      href: Reading_Reactions.html
+    # - icon: fab fa-github
+      # href: https://github.com/allisonhorst/meds-distill-template
 output:
   distill::distill_article:
-    toc: true
-    toc_float: true
+    toc: false
+    toc_float: false
 theme: theme.css
 
 # To remove table of contents on each page, set toc: and toc_float: lines to false
