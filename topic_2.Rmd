@@ -8,6 +8,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Today we will be grabbing some data from the New York Times database via their API, then running some basic string manipulations, trying out the tidytext format, and creating some basic plots.
 
+\#<https://developer.nytimes.com/>
+
 ### Connect to the New York Times API and send a query
 
 ```{r load-packages}
@@ -27,16 +29,20 @@ We have to decide which New York Times articles we are interested in examining. 
 # the from JSON flatten the JSON object, then convert to a data frame
 t <- fromJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=haaland&api-key=NTKBHbsb6XFEkGymGumAiba7n3uBvs8V", flatten = TRUE) #the string following "key=" is your API key 
 
-class(t) #what type of object is x?
+class(t) #what type of object is t?
 
 t <- t %>% 
   data.frame()
 
 
 #Inspect our data
-class(t) #now what is it?
-dim(t) # how big is it?
-names(t) # what variables are we working with?
+#now what class is it?
+# how big is it?
+dim(t)
+# what variables are we working with?
+names(t)
+
+
 #t <- readRDS("nytDat.rds") #in case of API emergency :)
 
 ```
@@ -57,7 +63,7 @@ str_split(x, ','); str_split(x, 't')
 str_replace(x, 'historic', 'without precedent')
 str_replace(x, ' ', '_') #first one
 #how do we replace all of them?
-
+str_replace_all(x,' ', '_')
 str_detect(x, 't'); str_detect(x, 'tive') ### is pattern in the string? T/F
 str_locate(x, 't'); str_locate_all(x, 'as')
 ```
@@ -75,7 +81,7 @@ baseurl <- paste0("http://api.nytimes.com/svc/search/v2/articlesearch.json?q=",t
                   "&facet_filter=true&api-key=","NTKBHbsb6XFEkGymGumAiba7n3uBvs8V", sep="")
 
 #examine our query url
-
+baseurl
 ```
 
 ```{r, eval=FALSE}
@@ -88,17 +94,18 @@ for(i in 0:maxPages){
   nytSearch <- fromJSON(paste0(baseurl, "&page=", i), flatten = TRUE) %>% data.frame() 
   message("Retrieving page ", i)
   pages[[i+1]] <- nytSearch 
-  Sys.sleep(1) 
+  Sys.sleep(6) 
 }
 class(nytSearch)
 
 #need to bind the pages and create a tibble from nytDa
-
+nytDat <- rbind(pages)
 
 ```
 
 ```{r article-type}
 nytDat <- read.csv("nytDat.csv") # obtained from 
+dim(nytDat)
 
 nytDat %>% 
   group_by(response.docs.type_of_material) %>%
@@ -127,9 +134,11 @@ paragraph <- names(nytDat)[6] #The 6th column, "response.doc.lead_paragraph", is
 tokenized <- nytDat %>%
   unnest_tokens(word, paragraph)
 
+tokenized[,34]
+
 tokenized %>%
   count(word, sort = TRUE) %>%
-  filter(n > 5) %>% #illegible with all the words displayed
+  filter(n > 10) %>% #illegible with all the words displayed
   mutate(word = reorder(word, n)) %>%
   ggplot(aes(n, word)) +
   geom_col() +
@@ -141,6 +150,7 @@ Uh oh, who knows what we need to do here?
 ```{r}
 
 data(stop_words)
+stop_words
 
 tokenized <- tokenized %>%
   anti_join(stop_words)
@@ -163,14 +173,14 @@ tokenized$word
 
 clean_tokens <- str_replace_all(tokenized$word,"land[a-z,A-Z]*","land") #stem tribe words
 clean_tokens <- str_remove_all(clean_tokens, "[:digit:]") #remove all numbers
-clean_tokens <- str_remove_all(clean_tokens, "washington")
+
 clean_tokens <- gsub("’s", '', clean_tokens)
 
 tokenized$clean <- clean_tokens
 
 tokenized %>%
   count(clean, sort = TRUE) %>%
-  filter(n > 10) %>% #illegible with all the words displayed
+ #illegible with all the words displayed
   mutate(clean = reorder(clean, n)) %>%
   ggplot(aes(n, clean)) +
   geom_col() +
@@ -185,7 +195,7 @@ tokenized <- tib
 #try again
 tokenized %>%
   count(clean, sort = TRUE) %>%
-  filter(n > 10) %>% #illegible with all the words displayed
+  filter(n > 10) %>% 
   mutate(clean = reorder(clean, n)) %>%
   ggplot(aes(n, clean)) +
   geom_col() +

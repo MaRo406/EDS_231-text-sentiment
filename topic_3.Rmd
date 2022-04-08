@@ -5,57 +5,86 @@ title: "Topic 3: Adding images"
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+  
+pdftools::pdf_text
 
-<p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_3.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p>
+#Overview
+Sentiment analysis is a tool for assessing the mood of a piece of text. For example, we can use sentiment analysis to understand public perceptions of topics in environmental policy like energy, climate, and conservation.
 
-## Where should I save my images?
-
-Drop images you want to include on your site into the existing `img` folder within your R Project (or make your own folder for images, set up a subfolder structure, etc.) - as long as you can easily point to them within your project. 
-
-## How do I make images show up on my site? 
-
-There are a bunch of ways to add images in an R Markdown document (see more examples from the R Markdown Cookbook [here](https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html)). 
-
-I recommend using `knitr::include_graphics("path_to_image")`. 
-
-For example, if there is an image saved as `cool_dogs.jpg` in the `img` folder, then you can add this to your R Markdown document by adding (within a code chunk): 
-
-````md
-
-```{r, echo = FALSE}`r ''`
-  knitr::include_graphics("img/cool_dogs.jpg")
-```
-
-````
-
-You can also update the size of the image, add a caption, etc. by updating the code chunk header, e.g.:
-
-````md
-
-```{r, echo = FALSE, out.width = "50%", fig.cap = "Some cool dogs!"}`r ''`
-  knitr::include_graphics("img/cool_dogs.jpg")
-```
-
-````
-
-For example, the image `usgs_sat.jpeg` is in the `img` folder of this template. I can have it show up here by include a code chunk that looks like this: 
-
-````md
-
-```{r, echo = FALSE, out.width = "80%", fig.cap = "USGS image of Mississippi River."}`r ''`
-  knitr::include_graphics("img/usgs_sat.jpeg")
-```
-
-````
-
-Which creates: 
-
-```{r, echo = FALSE, out.width = "80%", fig.cap = "USGS image of Mississippi River."}
-
-knitr::include_graphics("img/usgs_sat.jpeg")
-
+```{r}
+library(tidyr) #text analysis in R
+library(lubridate) #working wtih date data
+library(scales) #?
+library(pdftools) #read in the pdfs
+library(tidyverse)
+library(tidytext)
+library(here)
 ```
 
 
+##Intro sentiment analysis example
+```{r toy_data}
+
+over <- pdf_text('dat/overstory_exerpt.pdf')
+over_df <- data.frame(text = over) %>% #create 1-column df with 'text' variable
+  mutate(page = 1:n()) #add a page number variable, 'page'
+
+over_main <- over_df %>%
+  filter(page %in% 8:41)%>%
+  mutate(text = str_split(text, '\n')) %>%
+  unnest(text)
+
+```
+
+```{r}
+
+to_write <- over_main %>% mutate(lower = str_to_lower(text))
+
+write_csv(to_write, "dat/over_text.csv")
+
+bing_sent <- get_sentiments('bing') #grab the bing sentiment lexicon from tidytext
+
+# The steps here:
+#
+# * Break the entire text into individual words
+# * Eliminate stop words (using `dplyr::anti_join` is handy here)
+# * Attach sentiment scores by word (using `dplyr::inner_join` is handy here)
+
+# ```{r}
+# over_text <- read_csv('dat/over_text.csv')
+#
+# #unnest to word-level tokens, remove stop words, and join sentiment words
+# text_words <- over_text  %>%
+#   unnest_tokens(output = word, input = text, token = 'words') %>%
+#   anti_join(stop_words, by = 'word') %>%
+#   inner_join(bing_sent, by = 'word')
+#
+# ```
+
+#
+# ```{r apply-sent-scores, eval=FALSE}
+# text_scores <- text_words %>%
+#   count(sentiment, page) %>%
+#   spread(sentiment, page) %>%
+#   mutate(raw_score    = positive - negative,
+#          offset       = mean(positive - negative),
+#          offset_score = (positive - negative) - offset) %>%
+#   arrange(desc(raw_score)) %>%
+#   mutate(ch = fct_inorder())
+# ```
 
 
+## IPCC Tweets
+# What is the IPCC report?
+# https://www.bbc.com/news/science-environment-60987614
+```
+
+<!-- Here is the query I used for gathering Twitter data -->
+<!-- Post-report data -->
+
+```{r inspect_tweets_data}
+
+```
+
+<!-- Pre-report data -->
+<!-- Comparison -->

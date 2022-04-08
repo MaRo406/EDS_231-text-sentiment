@@ -2504,54 +2504,89 @@ Topics
 
 
 <div class="d-article">
-<p style="color: #ba5e00">
-<b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_3.Rmd</b> file,
-in the project root, to delete this placeholder text and customize with
-your own!
-</p>
-<h2 id="where-should-i-save-my-images">Where should I save my
-images?</h2>
-<p>Drop images you want to include on your site into the existing
-<code>img</code> folder within your R Project (or make your own folder
-for images, set up a subfolder structure, etc.) - as long as you can
-easily point to them within your project.</p>
-<h2 id="how-do-i-make-images-show-up-on-my-site">How do I make images
-show up on my site?</h2>
-<p>There are a bunch of ways to add images in an R Markdown document
-(see more examples from the R Markdown Cookbook <a
-href="https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html">here</a>).</p>
-<p>I recommend using
-<code>knitr::include_graphics("path_to_image")</code>.</p>
-<p>For example, if there is an image saved as <code>cool_dogs.jpg</code>
-in the <code>img</code> folder, then you can add this to your R Markdown
-document by adding (within a code chunk):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE}</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="in">  knitr::include_graphics(&quot;img/cool_dogs.jpg&quot;)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
-<p>You can also update the size of the image, add a caption, etc. by
-updating the code chunk header, e.g.:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE, out.width = &quot;50%&quot;, fig.cap = &quot;Some cool dogs!&quot;}</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="in">  knitr::include_graphics(&quot;img/cool_dogs.jpg&quot;)</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
-<p>For example, the image <code>usgs_sat.jpeg</code> is in the
-<code>img</code> folder of this template. I can have it show up here by
-include a code chunk that looks like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE, out.width = &quot;80%&quot;, fig.cap = &quot;USGS image of Mississippi River.&quot;}</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="in">  knitr::include_graphics(&quot;img/usgs_sat.jpeg&quot;)</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
-<p>Which creates:</p>
+<p>pdftools::pdf_text</p>
+<p>#Overview Sentiment analysis is a tool for assessing the mood of a
+piece of text. For example, we can use sentiment analysis to understand
+public perceptions of topics in environmental policy like energy,
+climate, and conservation.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
-<img src="img/usgs_sat.jpeg" alt="USGS image of Mississippi River." width="80%" />
-<p class="caption">
-Figure 1: USGS image of Mississippi River.
-</p>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyr.tidyverse.org'>tidyr</a></span><span class='op'>)</span> <span class='co'>#text analysis in R</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lubridate.tidyverse.org'>lubridate</a></span><span class='op'>)</span> <span class='co'>#working wtih date data</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://scales.r-lib.org'>scales</a></span><span class='op'>)</span> <span class='co'>#?</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/pdftools/'>pdftools</a></span><span class='op'>)</span> <span class='co'>#read in the pdfs</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/juliasilge/tidytext'>tidytext</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span>
+</code></pre>
 </div>
 </div>
-<div class="sourceCode" id="cb4"><pre
+##Intro sentiment analysis example
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>over</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://docs.ropensci.org/pdftools/reference/pdftools.html'>pdf_text</a></span><span class='op'>(</span><span class='st'>'dat/overstory_exerpt.pdf'</span><span class='op'>)</span>
+<span class='va'>over_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='va'>over</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'>#create 1-column df with 'text' variable</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>page <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='co'>#add a page number variable, 'page'</span>
+
+<span class='va'>over_main</span> <span class='op'>&lt;-</span> <span class='va'>over_df</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>page</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fl'>8</span><span class='op'>:</span><span class='fl'>41</span><span class='op'>)</span><span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_split.html'>str_split</a></span><span class='op'>(</span><span class='va'>text</span>, <span class='st'>'\n'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span><span class='op'>(</span><span class='va'>text</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>to_write</span> <span class='op'>&lt;-</span> <span class='va'>over_main</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>lower <span class='op'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/case.html'>str_to_lower</a></span><span class='op'>(</span><span class='va'>text</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://readr.tidyverse.org/reference/write_delim.html'>write_csv</a></span><span class='op'>(</span><span class='va'>to_write</span>, <span class='st'>"dat/over_text.csv"</span><span class='op'>)</span>
+
+<span class='va'>bing_sent</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>'bing'</span><span class='op'>)</span> <span class='co'>#grab the bing sentiment lexicon from tidytext</span>
+
+<span class='co'># The steps here:</span>
+<span class='co'>#</span>
+<span class='co'># * Break the entire text into individual words</span>
+<span class='co'># * Eliminate stop words (using `dplyr::anti_join` is handy here)</span>
+<span class='co'># * Attach sentiment scores by word (using `dplyr::inner_join` is handy here)</span>
+
+<span class='co'># ```{r}</span>
+<span class='co'># over_text &lt;- read_csv('dat/over_text.csv')</span>
+<span class='co'>#</span>
+<span class='co'># #unnest to word-level tokens, remove stop words, and join sentiment words</span>
+<span class='co'># text_words &lt;- over_text  %&gt;%</span>
+<span class='co'>#   unnest_tokens(output = word, input = text, token = 'words') %&gt;%</span>
+<span class='co'>#   anti_join(stop_words, by = 'word') %&gt;%</span>
+<span class='co'>#   inner_join(bing_sent, by = 'word')</span>
+<span class='co'>#</span>
+<span class='co'># ```</span>
+
+<span class='co'>#</span>
+<span class='co'># ```{r apply-sent-scores, eval=FALSE}</span>
+<span class='co'># text_scores &lt;- text_words %&gt;%</span>
+<span class='co'>#   count(sentiment, page) %&gt;%</span>
+<span class='co'>#   spread(sentiment, page) %&gt;%</span>
+<span class='co'>#   mutate(raw_score    = positive - negative,</span>
+<span class='co'>#          offset       = mean(positive - negative),</span>
+<span class='co'>#          offset_score = (positive - negative) - offset) %&gt;%</span>
+<span class='co'>#   arrange(desc(raw_score)) %&gt;%</span>
+<span class='co'>#   mutate(ch = fct_inorder())</span>
+<span class='co'># ```</span>
+
+
+<span class='co'>## IPCC Tweets</span>
+<span class='co'># What is the IPCC report?</span>
+<span class='co'># https://www.bbc.com/news/science-environment-60987614</span>
+</code></pre>
+</div>
+</div>
+<!-- Here is the query I used for gathering Twitter data -->
+<!-- Post-report data -->
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<!-- Pre-report data -->
+<!-- Comparison -->
+<div class="sourceCode" id="cb1"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
