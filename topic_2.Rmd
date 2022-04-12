@@ -14,8 +14,7 @@ Today we will be grabbing some data from the New York Times database via their A
 
 ```{r load-packages}
 library(jsonlite) #convert results from API queries into R-friendly formats 
-library(tidyverse) 
-library(tidytext) #text data management and analysis
+ <- <- <- <- library(tidytext) #text data management and analysis
 library(ggplot2) #plot word frequencies and publication dates
 ```
 
@@ -171,7 +170,7 @@ OK, but look at the most common words. Does one stick out?
 #inspect the list of tokens (words)
 tokenized$word
 
-clean_tokens <- str_replace_all(tokenized$word,"land[a-z,A-Z]*","land") #stem tribe words
+clean_tokens <- str_replace_all(tokenized$word,"land[a-z,A-Z]*","land") #stem land* words
 clean_tokens <- str_remove_all(clean_tokens, "[:digit:]") #remove all numbers
 
 clean_tokens <- gsub("’s", '', clean_tokens)
