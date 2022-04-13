@@ -2483,6 +2483,7 @@ Topics
 </button>
 <div class="nav-dropdown-content">
 <a href="topic_2.html">Topic 2: Text Data in R</a>
+<a href="topic_3.html">Topic 3: Sentiment Analysis I</a>
 </div>
 </div>
 <a href="resources.html">Resources</a>
@@ -2514,7 +2515,6 @@ the New York Times API and send a query</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://arxiv.org/abs/1403.2805'>jsonlite</a></span><span class='op'>)</span> <span class='co'>#convert results from API queries into R-friendly formats </span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span> 
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/juliasilge/tidytext'>tidytext</a></span><span class='op'>)</span> <span class='co'>#text data management and analysis</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span> <span class='co'>#plot word frequencies and publication dates</span>
 </code></pre>
@@ -4366,7 +4366,7 @@ through the API. But we can use the first paragraph of each article.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#inspect the list of tokens (words)</span>
 <span class='va'>tokenized</span><span class='op'>$</span><span class='va'>word</span>
 
-<span class='va'>clean_tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_replace.html'>str_replace_all</a></span><span class='op'>(</span><span class='va'>tokenized</span><span class='op'>$</span><span class='va'>word</span>,<span class='st'>"land[a-z,A-Z]*"</span>,<span class='st'>"land"</span><span class='op'>)</span> <span class='co'>#stem tribe words</span>
+<span class='va'>clean_tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_replace.html'>str_replace_all</a></span><span class='op'>(</span><span class='va'>tokenized</span><span class='op'>$</span><span class='va'>word</span>,<span class='st'>"land[a-z,A-Z]*"</span>,<span class='st'>"land"</span><span class='op'>)</span> <span class='co'>#stem land* words</span>
 <span class='va'>clean_tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_remove.html'>str_remove_all</a></span><span class='op'>(</span><span class='va'>clean_tokens</span>, <span class='st'>"[:digit:]"</span><span class='op'>)</span> <span class='co'>#remove all numbers</span>
 
 <span class='va'>clean_tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"’s"</span>, <span class='st'>''</span>, <span class='va'>clean_tokens</span><span class='op'>)</span>

@@ -14,7 +14,7 @@ Today we will be grabbing some data from the New York Times database via their A
 
 ```{r load-packages}
 library(jsonlite) #convert results from API queries into R-friendly formats 
- <- <- <- <- library(tidytext) #text data management and analysis
+library(tidytext) #text data management and analysis
 library(ggplot2) #plot word frequencies and publication dates
 ```
 
@@ -201,6 +201,8 @@ tokenized %>%
   labs(y = NULL)
 
 ```
+
+
 
 ## Assignment (Due by Week 3)
 

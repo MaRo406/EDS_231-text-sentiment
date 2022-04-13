@@ -9,20 +9,34 @@ knitr::opts_chunk$set(echo = TRUE)
 <!-- <p style="color: #ba5e00"><b>Useful data sources</b> Open and edit the <b>resources.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p> -->
 
 ## Data sources
-### UCSB Library 
-- [All library text mining resources](https://guides.library.ucsb.edu/c.php?g=1095771)
-- [Scholarly Journals](https://guides.library.ucsb.edu/c.php?g=1059769&p=8319664)
-- [Twitter data](https://guides.library.ucsb.edu/c.php?g=1095771)
 
-### Kaggle  
-- [#NLP](https://www.kaggle.com/datasets?tags=13204-NLP)
+### UCSB Library
+
+-   [All library text mining resources](https://guides.library.ucsb.edu/c.php?g=1095771)
+-   [Scholarly Journals](https://guides.library.ucsb.edu/c.php?g=1059769&p=8319664)
+-   [Twitter data](https://guides.library.ucsb.edu/c.php?g=1095771)
+
+### Kaggle
+
+-   [#NLP](https://www.kaggle.com/datasets?tags=13204-NLP)
 
 ### APIs
-- [New York Times](https://developer.nytimes.com/)
+
+-   [New York Times](https://developer.nytimes.com/)
 
 ### Google
-- [Google Trends](https://googletrends.github.io/data/)
 
-### Government 
-- [Department of Transportation Pipeline Incident Reports](https://www.phmsa.dot.gov/data-and-statistics/pipeline/pipeline-incident-20-year-trends)
+-   [Google Trends](https://googletrends.github.io/data/)
 
+### Government Sources
+
+-   [Regulations.gov Public Comments](https://www.regulations.gov/)
+
+```{=html}
+<!-- -->
+```
+-   [Department of Transportation Pipeline Incident Reports](https://www.phmsa.dot.gov/data-and-statistics/pipeline/pipeline-incident-20-year-trends)
+
+## Research Projects
+
+-   [Jaime's SB Twitter Tourism Analysis](https://www.jamiecmontgomery.com/post/santa-barbara-twitter/)

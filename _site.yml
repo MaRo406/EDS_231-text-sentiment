@@ -14,8 +14,8 @@ navbar:
         #   href: topic_1.html
         - text: "Topic 2: Text Data in R"
           href: topic_2.html
-        # - text: "Topic 3: Add images"
-        #   href: topic_3.html
+        - text: "Topic 3: Sentiment Analysis I"
+          href: topic_3.html
         # - text: "Topic 4: Change the theme"
         #   href: topic_4.html
         # - text: "Topic 5: Basic formatting"
