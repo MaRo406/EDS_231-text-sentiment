@@ -2658,6 +2658,7 @@ Amazon’s Mechanical Turk website, paying 4 cents for each set of
 properly answered questions.</p>
 <p>The result is a comprehensive word-emotion lexicon for over 10,000
 words.”</p>
+Let’s take a look at the most common sentiment words in the data set
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nrc_sent</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>'nrc'</span><span class='op'>)</span> <span class='co'>#requires downloading a large dataset via prompt</span>
@@ -2665,7 +2666,7 @@ words.”</p>
 <span class='va'>nrc_fear</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>"nrc"</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>sentiment</span> <span class='op'>==</span> <span class='st'>"fear"</span><span class='op'>)</span>
 
-<span class='co'>#most common </span>
+<span class='co'>#most common words by sentiment</span>
 <span class='va'>fear_words</span> <span class='op'>&lt;-</span> <span class='va'>over_text</span>  <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='op'>(</span>output <span class='op'>=</span> <span class='va'>word</span>, input <span class='op'>=</span> <span class='va'>text</span>, token <span class='op'>=</span> <span class='st'>'words'</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>nrc_fear</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
@@ -2682,6 +2683,8 @@ words.”</p>
 </code></pre>
 </div>
 </div>
+Let’s break it out and plot the contributions by particular words
+different sentiment categories
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>book_sent_counts</span> <span class='op'>&lt;-</span> <span class='va'>text_words</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
@@ -2706,13 +2709,15 @@ words.”</p>
        y <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 </code></pre>
 </div>
-<p><img src="topic_3_files/figure-html5/sent_by_page-1.png" width="624" /></p>
+<p><img src="topic_3_files/figure-html5/sent_counts-1.png" width="624" /></p>
 </div>
 <h3 id="introduction-to-the-nexis-uni-data-source">Introduction to the
 Nexis Uni data source</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='st'>"/Users/mateorobbins/Desktop/Git/test/nexis_dat"</span><span class='op'>)</span>
+<span class='co'>#to follow along with this example, download this .docx to your working directory: </span>
+<span class='co'>#https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/nexis_dat/Nexis_IPCC_Results.docx</span>
 <span class='va'>my_files</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='op'>(</span>pattern <span class='op'>=</span> <span class='st'>".docx"</span>, path <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='op'>(</span><span class='op'>)</span>,
                        full.names <span class='op'>=</span> <span class='cn'>TRUE</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span>, ignore.case <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
@@ -2723,7 +2728,12 @@ Nexis Uni data source</h3>
 <span class='va'>articles_df</span> <span class='op'>&lt;-</span> <span class='va'>dat</span><span class='op'>@</span><span class='va'>articles</span>
 <span class='va'>paragraphs_df</span> <span class='op'>&lt;-</span> <span class='va'>dat</span><span class='op'>@</span><span class='va'>paragraphs</span>
 
-<span class='va'>dat2</span><span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/deprecated.html'>data_frame</a></span><span class='op'>(</span>element_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>meta_df</span><span class='op'>$</span><span class='va'>Headline</span><span class='op'>)</span><span class='op'>)</span>, Date <span class='op'>=</span> <span class='va'>meta_df</span><span class='op'>$</span><span class='va'>Date</span>, Headline <span class='op'>=</span> <span class='va'>meta_df</span><span class='op'>$</span><span class='va'>Headline</span><span class='op'>)</span><span class='co'>#, Article = articles_df@articles) #issue here with the articles column</span>
+<span class='va'>dat2</span><span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/deprecated.html'>data_frame</a></span><span class='op'>(</span>element_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>meta_df</span><span class='op'>$</span><span class='va'>Headline</span><span class='op'>)</span><span class='op'>)</span>, Date <span class='op'>=</span> <span class='va'>meta_df</span><span class='op'>$</span><span class='va'>Date</span>, Headline <span class='op'>=</span> <span class='va'>meta_df</span><span class='op'>$</span><span class='va'>Headline</span><span class='op'>)</span>
+
+<span class='co'>#May be of use for assignment: using the full text from the articles</span>
+<span class='co'># paragraphs_dat &lt;- data_frame(element_id = paragraphs_df$Art_ID, Text  = paragraphs_df$Paragraph)</span>
+<span class='co'># </span>
+<span class='co'># dat3 &lt;- inner_join(dat2,paragraphs_dat, by = "element_id")</span>
 </code></pre>
 </div>
 </div>
@@ -2771,9 +2781,24 @@ href="https://www.library.ucsb.edu/research/db/211"
 class="uri">https://www.library.ucsb.edu/research/db/211</a></p></li>
 <li><p>Choose a key search term or terms to define a set of
 articles.</p></li>
-<li><p>Use your search term along with appropriate filers to obtain and
-download a batch of full text search results (.docx)</p></li>
-<li><p>Read your Nexis article document into RStudio</p></li>
+<li><p>Use your search term along with appropriate filters to obtain and
+download a batch of at least 100 full text search results
+(.docx).</p></li>
+<li><p>Read your Nexis article document into RStudio and parse with
+pdftools.</p></li>
+<li><p>This time use the full text of the articles for the analysis.
+First clean any artifacts of the data collection process (hint: this
+type of thing should be removed: “Apr 04, 2022( Biofuels Digest: <a
+href="http://www.biofuelsdigest.com/"
+class="uri">http://www.biofuelsdigest.com/</a> Delivered by
+Newstex”))</p></li>
+<li><p>Explore your data a bit and try to replicate some of the analyses
+above presented in class if you’d like (not necessary).</p></li>
+<li><p>Plot the amount of emotion words (the 8 from nrc) as a percentage
+of all the emotion words used each day (aggregate text from articles
+published on the same day). How does the distribution of emotion words
+change over time? Can you think of any reason this would be the
+case?</p></li>
 </ol>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>

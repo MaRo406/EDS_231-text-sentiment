@@ -3,7 +3,8 @@ title: "Topic 3: Sentiment Analysis I"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+
 ```
 
 ### Overview
@@ -103,6 +104,7 @@ They then asked these questions to over 2000 people, or Turkers, on Amazon's Mec
 
 The result is a comprehensive word-emotion lexicon for over 10,000 words."
 
+Let's take a look at the most common sentiment words in the data set
 ```{r nrc_sentiment}
 
 nrc_sent <- get_sentiments('nrc') #requires downloading a large dataset via prompt
@@ -110,7 +112,7 @@ nrc_sent <- get_sentiments('nrc') #requires downloading a large dataset via prom
 nrc_fear <- get_sentiments("nrc") %>% 
   filter(sentiment == "fear")
 
-#most common 
+#most common words by sentiment
 fear_words <- over_text  %>%
   unnest_tokens(output = word, input = text, token = 'words') %>%
   inner_join(nrc_fear) %>%
@@ -124,7 +126,9 @@ nrc_word_counts <- text_words %>%
   ungroup()
 ```
 
-```{r sent_by_page}
+
+Let's break it out and plot the contributions by particular words different sentiment categories
+```{r sent_counts}
 book_sent_counts <- text_words %>%
         group_by(page) %>%
         # mutate(page_num = 1:n(),
@@ -149,8 +153,10 @@ book_sent_counts %>%
 
 ### Introduction to the Nexis Uni data source
 
-```{r nexis_data}
+```{r nexis_data, message=FALSE}
 setwd("/Users/mateorobbins/Desktop/Git/test/nexis_dat")
+#to follow along with this example, download this .docx to your working directory: 
+#https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/nexis_dat/Nexis_IPCC_Results.docx
 my_files <- list.files(pattern = ".docx", path = getwd(),
                        full.names = TRUE, recursive = TRUE, ignore.case = TRUE)
 
@@ -161,19 +167,23 @@ meta_df <- dat@meta
 articles_df <- dat@articles
 paragraphs_df <- dat@paragraphs
 
-dat2<- data_frame(element_id = seq(1:length(meta_df$Headline)), Date = meta_df$Date, Headline = meta_df$Headline)#, Article = articles_df@articles) #issue here with the articles column
+dat2<- data_frame(element_id = seq(1:length(meta_df$Headline)), Date = meta_df$Date, Headline = meta_df$Headline)
 
+#May be of use for assignment: using the full text from the articles
+# paragraphs_dat <- data_frame(element_id = paragraphs_df$Art_ID, Text  = paragraphs_df$Paragraph)
+# 
+# dat3 <- inner_join(dat2,paragraphs_dat, by = "element_id")
 
 ```
 
 ```{r}
+#can we create a similar graph to Figure 3A from Froelich et al.? 
 mytext <- get_sentences(dat2$Headline)
 sent <- sentiment(mytext)
 
 sent_df <- inner_join(dat2, sent, by = "element_id")
 
 sentiment <- sentiment_by(sent_df$Headline)
-
 
 sent_df %>%
   arrange(sentiment)
@@ -186,12 +196,21 @@ custom_stop_words <- bind_rows(tibble(word = c("your_word"),
                                stop_words)
 ```
 
+
+
 ## Assignment (Due 4/19 by 5PM)
 
 1.  Access the Nexis Uni database through the UCSB library: <https://www.library.ucsb.edu/research/db/211>
 
-2.  Choose a key search term or terms to define a set of articles.
+2.  Choose a key search term or terms to define a set of articles. 
 
-3.  Use your search term along with appropriate filers to obtain and download a batch of full text search results (.docx)
+3.  Use your search term along with appropriate filters to obtain and download a batch of at least 100 full text search results (.docx).  
 
-4.  Read your Nexis article document into RStudio
+4.  Read your Nexis article document into RStudio and parse with pdftools.
+
+5.  This time use the full text of the articles for the analysis.  First clean any artifacts of the data collection process (hint: this type of thing should be removed: "Apr 04, 2022( Biofuels Digest: http://www.biofuelsdigest.com/ Delivered by Newstex"))
+
+6.  Explore your data a bit and try to replicate some of the analyses above presented in class if you'd like (not necessary).  
+
+7. Plot the amount of emotion words (the 8 from nrc) as a percentage of all the emotion words used each day (aggregate text from articles published on the same day).  How does the distribution of emotion words change over time?  Can you think of any reason this would be the case?
+
