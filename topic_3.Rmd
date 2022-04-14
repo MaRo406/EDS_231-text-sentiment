@@ -90,7 +90,7 @@ ggplot(sent_scores, aes(x = page)) +
   geom_bar(aes(y = raw_score), stat = 'identity', fill = 'slateblue3') +
   geom_bar(aes(y = offset_score), stat = 'identity', fill = 'red4') +
   geom_hline(yintercept = sent_scores$offset[1], linetype = 'dashed', size = .5) +
-  coord_flip() +
+  #coord_flip() +
   theme(axis.title.y = element_blank()) +
   labs(title = 'Sentiment analysis: The Overstory',
        y = 'Sentiment score')
@@ -105,6 +105,7 @@ They then asked these questions to over 2000 people, or Turkers, on Amazon's Mec
 The result is a comprehensive word-emotion lexicon for over 10,000 words."
 
 Let's take a look at the most common sentiment words in the data set
+
 ```{r nrc_sentiment}
 
 nrc_sent <- get_sentiments('nrc') #requires downloading a large dataset via prompt
@@ -126,8 +127,8 @@ nrc_word_counts <- text_words %>%
   ungroup()
 ```
 
+Let's break it out and plot the contributions by particular sentiment categories
 
-Let's break it out and plot the contributions by particular words different sentiment categories
 ```{r sent_counts}
 book_sent_counts <- text_words %>%
         group_by(page) %>%
@@ -177,7 +178,7 @@ dat2<- data_frame(element_id = seq(1:length(meta_df$Headline)), Date = meta_df$D
 ```
 
 ```{r}
-#can we create a similar graph to Figure 3A from Froelich et al.? 
+#can we create a similar graph to Figure 1A from Froelich et al.? 
 mytext <- get_sentences(dat2$Headline)
 sent <- sentiment(mytext)
 
@@ -188,7 +189,11 @@ sentiment <- sentiment_by(sent_df$Headline)
 sent_df %>%
   arrange(sentiment)
 
+sent_df$polarity <- ifelse(sent_df$sentiment <0, -1, ifelse(sent_df$sentiment > 0, 1, 0))
+
 ```
+
+Pseudo code for Froelich et al plot: mean sentiment by day, summarize plot x = day, y = sentiment
 
 ```{r custom_stop_words}
 custom_stop_words <- bind_rows(tibble(word = c("your_word"),  
@@ -197,20 +202,22 @@ custom_stop_words <- bind_rows(tibble(word = c("your_word"),
 ```
 
 
-
 ## Assignment (Due 4/19 by 5PM)
+
+0.  Using the "IPCC" Nexis Uni data set from the class presentation and the pseudo code we discussed, recreate Figure 1A from Froelich et al. (Date x \# of 1) positive, 2) negative, 3) neutral headlines):
+
+    ![Newspaper 'aquaculture' media sentiment. Sentiment over time based on the frequency of newspaper Fig. 1. Headlines with negative (red), positive (blue), and neutral (gray) titles](img/Froelich_Fig3A.png){width="386"}
 
 1.  Access the Nexis Uni database through the UCSB library: <https://www.library.ucsb.edu/research/db/211>
 
-2.  Choose a key search term or terms to define a set of articles. 
+2.  Choose a key search term or terms to define a set of articles.
 
-3.  Use your search term along with appropriate filters to obtain and download a batch of at least 100 full text search results (.docx).  
+3.  Use your search term along with appropriate filters to obtain and download a batch of at least 100 full text search results (.docx).
 
-4.  Read your Nexis article document into RStudio and parse with pdftools.
+4.  Read your Nexis article document into RStudio.
 
-5.  This time use the full text of the articles for the analysis.  First clean any artifacts of the data collection process (hint: this type of thing should be removed: "Apr 04, 2022( Biofuels Digest: http://www.biofuelsdigest.com/ Delivered by Newstex"))
+5.  This time use the full text of the articles for the analysis. First clean any artifacts of the data collection process (hint: this type of thing should be removed: "Apr 04, 2022( Biofuels Digest: <http://www.biofuelsdigest.com/> Delivered by Newstex"))
 
-6.  Explore your data a bit and try to replicate some of the analyses above presented in class if you'd like (not necessary).  
+6.  Explore your data a bit and try to replicate some of the analyses above presented in class if you'd like (not necessary).
 
-7. Plot the amount of emotion words (the 8 from nrc) as a percentage of all the emotion words used each day (aggregate text from articles published on the same day).  How does the distribution of emotion words change over time?  Can you think of any reason this would be the case?
-
+7.  Plot the amount of emotion words (the 8 from nrc) as a percentage of all the emotion words used each day (aggregate text from articles published on the same day). How does the distribution of emotion words change over time? Can you think of any reason this would be the case?

@@ -2640,7 +2640,7 @@ book.</p>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>raw_score</span><span class='op'>)</span>, stat <span class='op'>=</span> <span class='st'>'identity'</span>, fill <span class='op'>=</span> <span class='st'>'slateblue3'</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>offset_score</span><span class='op'>)</span>, stat <span class='op'>=</span> <span class='st'>'identity'</span>, fill <span class='op'>=</span> <span class='st'>'red4'</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_hline</a></span><span class='op'>(</span>yintercept <span class='op'>=</span> <span class='va'>sent_scores</span><span class='op'>$</span><span class='va'>offset</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, linetype <span class='op'>=</span> <span class='st'>'dashed'</span>, size <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='co'>#coord_flip() +</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>axis.title.y <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_blank</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>'Sentiment analysis: The Overstory'</span>,
        y <span class='op'>=</span> <span class='st'>'Sentiment score'</span><span class='op'>)</span>
@@ -2658,7 +2658,8 @@ Amazon’s Mechanical Turk website, paying 4 cents for each set of
 properly answered questions.</p>
 <p>The result is a comprehensive word-emotion lexicon for over 10,000
 words.”</p>
-Let’s take a look at the most common sentiment words in the data set
+<p>Let’s take a look at the most common sentiment words in the data
+set</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nrc_sent</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>'nrc'</span><span class='op'>)</span> <span class='co'>#requires downloading a large dataset via prompt</span>
@@ -2683,8 +2684,8 @@ Let’s take a look at the most common sentiment words in the data set
 </code></pre>
 </div>
 </div>
-Let’s break it out and plot the contributions by particular words
-different sentiment categories
+<p>Let’s break it out and plot the contributions by particular sentiment
+categories</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>book_sent_counts</span> <span class='op'>&lt;-</span> <span class='va'>text_words</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
@@ -2739,13 +2740,13 @@ Nexis Uni data source</h3>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mytext</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sentimentr/man/get_sentences.html'>get_sentences</a></span><span class='op'>(</span><span class='va'>dat2</span><span class='op'>$</span><span class='va'>Headline</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#can we create a similar graph to Figure 1A from Froelich et al.? </span>
+<span class='va'>mytext</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sentimentr/man/get_sentences.html'>get_sentences</a></span><span class='op'>(</span><span class='va'>dat2</span><span class='op'>$</span><span class='va'>Headline</span><span class='op'>)</span>
 <span class='va'>sent</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sentimentr/man/sentiment.html'>sentiment</a></span><span class='op'>(</span><span class='va'>mytext</span><span class='op'>)</span>
 
 <span class='va'>sent_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>dat2</span>, <span class='va'>sent</span>, by <span class='op'>=</span> <span class='st'>"element_id"</span><span class='op'>)</span>
 
 <span class='va'>sentiment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sentimentr/man/sentiment_by.html'>sentiment_by</a></span><span class='op'>(</span><span class='va'>sent_df</span><span class='op'>$</span><span class='va'>Headline</span><span class='op'>)</span>
-
 
 <span class='va'>sent_df</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>sentiment</span><span class='op'>)</span>
@@ -2765,7 +2766,13 @@ Nexis Uni data source</h3>
  9         62 2022-04-06 Governor Yo…           1         11    -0.377
 10          7 2022-04-05 Narrow path…           1          8    -0.354
 # … with 99 more rows</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sent_df</span><span class='op'>$</span><span class='va'>polarity</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>sent_df</span><span class='op'>$</span><span class='va'>sentiment</span> <span class='op'>&lt;</span><span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>sent_df</span><span class='op'>$</span><span class='va'>sentiment</span> <span class='op'>&gt;</span> <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
 </div>
+</div>
+<p>Pseudo code for Froelich et al plot: mean sentiment by day, summarize
+plot x = day, y = sentiment</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>custom_stop_words</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_rows</a></span><span class='op'>(</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>word <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"your_word"</span><span class='op'>)</span>,  
@@ -2775,7 +2782,18 @@ Nexis Uni data source</h3>
 </div>
 </div>
 <h2 id="assignment-due-419-by-5pm">Assignment (Due 4/19 by 5PM)</h2>
-<ol type="1">
+<ol start="0" type="1">
+<li><p>Using the “IPCC” Nexis Uni data set from the class presentation
+and the pseudo code we discussed, recreate Figure 1A from Froelich et
+al. (Date x # of 1) positive, 2) negative, 3) neutral headlines):</p>
+<figure>
+<img src="img/Froelich_Fig3A.png" width="386"
+alt="Newspaper ‘aquaculture’ media sentiment. Sentiment over time based on the frequency of newspaper Fig. 1. Headlines with negative (red), positive (blue), and neutral (gray) titles" />
+<figcaption aria-hidden="true">Newspaper ‘aquaculture’ media sentiment.
+Sentiment over time based on the frequency of newspaper Fig. 1.
+Headlines with negative (red), positive (blue), and neutral (gray)
+titles</figcaption>
+</figure></li>
 <li><p>Access the Nexis Uni database through the UCSB library: <a
 href="https://www.library.ucsb.edu/research/db/211"
 class="uri">https://www.library.ucsb.edu/research/db/211</a></p></li>
@@ -2784,8 +2802,7 @@ articles.</p></li>
 <li><p>Use your search term along with appropriate filters to obtain and
 download a batch of at least 100 full text search results
 (.docx).</p></li>
-<li><p>Read your Nexis article document into RStudio and parse with
-pdftools.</p></li>
+<li><p>Read your Nexis article document into RStudio.</p></li>
 <li><p>This time use the full text of the articles for the analysis.
 First clean any artifacts of the data collection process (hint: this
 type of thing should be removed: “Apr 04, 2022( Biofuels Digest: <a
