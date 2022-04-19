@@ -202,7 +202,7 @@ custom_stop_words <- bind_rows(tibble(word = c("your_word"),
 ```
 
 
-## Assignment (Due 4/19 by 5PM)
+## Assignment (Due 4/19 by 11:59 PM)
 
 0.  Using the "IPCC" Nexis Uni data set from the class presentation and the pseudo code we discussed, recreate Figure 1A from Froelich et al. (Date x \# of 1) positive, 2) negative, 3) neutral headlines):
 

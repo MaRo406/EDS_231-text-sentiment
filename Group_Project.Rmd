@@ -1,0 +1,54 @@
+---
+title: "Group Project"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Final Group Text Analysis Project
+
+**Goal**: The goal of this project is to use text analysis to explore an environmental data science question of interest to your group. You will consult background literature, formulate a research question, identify and collect relevant data, carry out appropriate text analyses and create data visuals that will facilitate a final presentation to the rest of class.
+
+***Important dates***
+
+***May 6th, 2022: Project proposal due***
+
+***June 1st, 2022: Final report & presentation due***
+
+#### Project Proposal - Due at the end of Week 6 (5/6 by 5:00 PM). Email me your proposal at [mateorobbins\@gmail.com](mailto:mateorobbins@gmail.com){.email} by 5pm on May 6th, 2022.
+
+The purpose of the project proposal is to ensure that you have a feasible project to continue to move forward with during the rest of the quarter. You can adjust your project plan (check in with me) if you'd like to include analyses that we cover in class after Week 6 or as you begin working with your data.
+
+In your proposal you will describe these four components:
+
+-   **Background and Research question** - Why is this question important? Does it fill gaps in our knowledge? To which audience(s) would it be of interest? (2-3 paragraphs) Include at least 1-2 citations to existing literature.
+
+-   **Data collection plan** - Where will you access your data? How was this data created and by whom? How big will your data set be (number of reports, tweets, comments, articles, etc.). (2-3 paragraphs) Make sure to verify that you are able to access and download the data you are proposing to use.
+
+-   **Analysis plan** - What is your analysis plan? Why did you choose this analysis, given your data and question? What are the limitations? (2-3 paragraphs, at least 1 citation to an example in the literature where your methods were used)
+
+-   **Results** - What are your anticipated findings? What visual methods will you use to present your findings? (2-3 paragraphs)
+
+#### Project write-up: Due Before Class Week 10 ( May 31 by 5:00 PM) 
+
+For the final presentation/submission, you will revisit and update the four components from the proposal (see above) and add an additional section (the 'Avenues for further research' section). The Results section in particular will be different and more developed:
+
+-   **Results (updated)** - Show us your results using diagrams, figures and/or tables. Describe in the text (and orally during the presentation) what you found, and how these results either do or do not help you answer your question. Discuss some implications of your findings.
+
+-   **Avenues for further research** - Based on your results and experience with this project, what further research would you recommend? What additional data or analyses would help you answer this question better?
+
+#### Final Presentation: Due Week 10 (Presented in class on June 1)
+
+Your in-class presentation will last 5-7 minutes, with a few additional minutes (3 minutes) to field questions from the other students. You can use whichever visual tools you think best convey your project (Google Slides, R Markdown, R Shiny etc.)
+
+### Group Composition
+
+| Group | Members                            |
+|-------|------------------------------------|
+| A     | Paloma, Allie, Wylie, Ben, Julia   |
+| B     | Steven, Joe, Connor, Shale, Grace  |
+| C     | Alex, Halina, Desik, Alexandra     |
+| D     | Juliet, Charles, Scout, Peter      |
+| E     | Clarissa, Jake, Daniel, Ryan, Ilia |
+| F     | Felicia, Mia, Cullen, Marie        |

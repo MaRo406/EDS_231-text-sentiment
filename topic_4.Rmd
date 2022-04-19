@@ -1,11 +1,94 @@
 ---
-title: "Topic 4: Change the theme"
+title: "Topic 4: Sentiment Analysis II"
 ---
 
-<p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_4.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
-The bells and whistles of this MEDS template (colors, fonts, spacing, etc.) are customized in the `theme.css` file in your Project root. 
+IPCC Report
+Twitter Data
 
-If you love css or want to make changes, you're encouraged to customize your site! There is minor annotation in the css file, but honestly this will probably just take quite a bit of Inspect Element to figure out what to change. 
+library("quanteda", warn.conflicts = FALSE, verbose = FALSE)
+library("quanteda.sentiment", warn.conflicts = FALSE, verbose = FALSE)
 
-**Fonts:** If you specifically want to know how to change the site fonts, see [here](module_9.html).
+print(data_dictionary_LSD2015, max_nval = 5)
+lengths(data_dictionary_LSD2015)
+
+```{r packages}
+library(pdftools)
+library(quanteda)
+library(tidyverse)
+
+```
+
+
+Last week we used the tidytext approach to sentiment analysis.  This week we are using a package called "quanteda" which is full of tools 
+```{r}
+over <- pdf_text('dat/overstory_exerpt.pdf')
+over_df <- data.frame(text = over) %>% #create 1-column df with 'text' variable
+  mutate(page = 1:n()) #add a page number variable, 'page'
+
+over_text <- over_df %>%
+  filter(page %in% 8:41)%>%
+  unnest(text)
+  #mutate(text = str_split(text, '\n')) #this splits by line.
+  
+corpus <- corpus(over_text$text)
+summary(corpus)
+
+```
+“Types” is the number of one-of-a-kind tokens a text contains. While “tokens” counts the number of words in a text–every “and” or “the” is another token–types only counts each unique word one time, no matter how often it appears.
+
+
+quanteda has its own built in functions for cleaning text data.  Let's take a look at some.  First we have to
+```{r quanteda_cleaning}
+tokens <- tokens(corpus) #tokenize the text so each doc (page, in this case) is a list of tokens (words)
+
+tokens <- tokens(tokens, remove_punct = TRUE, 
+                     remove_numbers = TRUE)
+
+tokens <- tokens_select(tokens, stopwords('english'),selection='remove') #stopwords lexicon built in to quanteda
+
+tokens <- tokens_wordstem(tokens) #stem words down to their base form for comparisons across tense and quantity
+
+tokens <- tokens_tolower(tokens)
+
+```
+
+
+we can use the kwic function (keywords-in-context) to briefly examine the context in which certain words appear. 
+```{r initial_analysis}
+head(kwic(tokens, "tree", window = 3))
+
+```
+
+```{r}
+ dfm <- dfm(tokens)
+ 
+ topfeatures(dfm, 5)
+```
+
+
+
+
+
+
+```{r wordcloud}
+library(wordcloud)
+
+tidy_books %>%
+  anti_join(stop_words) %>%
+  count(word) %>%
+  with(wordcloud(word, n, max.words = 100))
+
+library(reshape2)
+
+tidy_books %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  acast(word ~ sentiment, value.var = "n", fill = 0) %>%
+  comparison.cloud(colors = c("gray20", "gray80"),
+                   max.words = 100)
+```
+

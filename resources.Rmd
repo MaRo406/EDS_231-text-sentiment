@@ -32,9 +32,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 -   [Regulations.gov Public Comments](https://www.regulations.gov/)
 
-```{=html}
 <!-- -->
-```
+
 -   [Department of Transportation Pipeline Incident Reports](https://www.phmsa.dot.gov/data-and-statistics/pipeline/pipeline-incident-20-year-trends)
 
 ## Research Projects

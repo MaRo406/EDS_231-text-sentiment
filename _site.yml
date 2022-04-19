@@ -1,5 +1,5 @@
 name: "eds-231-website"
-title: "EDS 231"
+title: ""
 description: |
   EDS course website
 output_dir: "docs"
@@ -16,7 +16,7 @@ navbar:
           href: topic_2.html
         - text: "Topic 3: Sentiment Analysis I"
           href: topic_3.html
-        # - text: "Topic 4: Change the theme"
+        # - text: "Topic 4: Sentiment Analysis II"
         #   href: topic_4.html
         # - text: "Topic 5: Basic formatting"
         #   href: topic_5.html
@@ -34,8 +34,8 @@ navbar:
     #   href: assignments.html
     - text: "Resources"
       href: resources.html
-    - text:  "Reading Responses"
-      href: Reading_Reactions.html
+    - text:  "Group Project"
+      href: Group_Project.html
     # - icon: fab fa-github
       # href: https://github.com/allisonhorst/meds-distill-template
 output:
