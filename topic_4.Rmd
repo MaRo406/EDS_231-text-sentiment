@@ -2,11 +2,13 @@
 title: "Topic 4: Sentiment Analysis II"
 ---
 
+This .Rmd available here: <https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/topic_4.Rmd>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## IPCC Report Twitter 
+#### IPCC Report Twitter
 
 ```{r packages, results='hide', message=FALSE, warning=FALSE}
 library(quanteda)
@@ -19,54 +21,65 @@ library(wordcloud) #visualization of common words in the data set
 library(reshape2)
 ```
 
-Last week we used the tidytext approach to sentiment analysis for Nexis Uni .pdf data on coverage of the recent IPCC report. This week we will look at the conversation on Twitter about the same report.
+Last week we used the tidytext approach to sentiment analysis for Nexis Uni .pdf data on coverage of the recent IPCC report. This week we will look at the conversation on Twitter about the same report. We'll start with the familiar tidy approach, and then introduce the quanteda package later.
 
 ```{r tweet_data}
- 
-read <- read_csv("dat/IPCC_tweets_April1-10_sample.csv")
-tweets<- read[,7] # Extract Date and Title fields (what about emotion and sentiment for assignment)
-tweets$Date <- as.Date(read$Date,'%m/%d/%y')
-names(tweets) <- c("text", "date")
-tweets$id <- seq(1:length(tweets$text))
 
-write.csv(tweets, "tweets.csv")
+raw_tweets <- read.csv("https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/dat/IPCC_tweets_April1-10_sample.csv", header=TRUE)
 
-tweets$text <- gsub("http[^[:space:]]*", "",tweets$text)
+dat<- raw_tweets[,c(5,7)] # Extract Date and Title fields
+
+tweets <- tibble(text = dat$Title,
+                  id = seq(1:length(dat$Title)),
+                 date = as.Date(dat$Date,'%m/%d/%y'))
 
 
-# corpus <- corpus(tweets$Title) #enter quanteda
-# summary(corpus) 
+head(tweets$text, n = 10)
+
+#simple plot of tweets per day
+tweets %>%
+  count(date) %>%
+  ggplot(aes(x = date, y = n))+
+  geom_line()
 
 ```
 
-```{r}
+```{r cleaning_tweets}
+
+#let's clean up the URLs from the tweets
+tweets$text <- gsub("http[^[:space:]]*", "",tweets$text)
+tweets$text <- str_to_lower(tweets$text)
+
+#load sentiment lexicon
 bing_sent <- get_sentiments('bing')
 
 #tokenize tweets to individual words
-words <- tweets %>% 
-  select(id, date, text) %>% 
-  unnest_tokens(output = word, input = text, token = "words") %>% 
-  anti_join(stop_words, by = "word") %>% 
-  left_join(bing_sent, by = "word") %>% 
+words <- tweets %>%
+  select(id, date, text) %>%
+  unnest_tokens(output = word, input = text, token = "words") %>%
+  anti_join(stop_words, by = "word") %>%
+  left_join(bing_sent, by = "word") %>%
   left_join(
     tribble(
       ~sentiment, ~sent_score,
       "positive", 1,
       "negative", -1),
     by = "sentiment")
+```
 
+```{r sentiment_calculations}
 #take average sentiment score by tweet
-tweets <- tweets %>% 
+tweets_sent <- tweets %>%
   left_join(
-    words %>% 
-      group_by(id) %>% 
+    words %>%
+      group_by(id) %>%
       summarize(
         sent_score = mean(sent_score, na.rm = T)),
     by = "id")
 
-neutral <- length(which(tweets$sent_score == 0))
-positive <- length(which(tweets$sent_score > 0))
-negative <- length(which(tweets$sent_score < 0))
+neutral <- length(which(tweets_sent$sent_score == 0))
+positive <- length(which(tweets_sent$sent_score > 0))
+negative <- length(which(tweets_sent$sent_score < 0))
 
 Sentiment <- c("Positive","Neutral","Negative")
 Count <- c(positive,neutral,negative)
@@ -76,62 +89,34 @@ ggplot(output, aes(x=Sentiment,y=Count))+
   geom_bar(stat = "identity", aes(fill = Sentiment))+
   scale_fill_manual("legend", values = c("Positive" = "green", "Neutral" = "black", "Negative" = "red"))+
   ggtitle("Barplot of Sentiment in IPCC tweets")
+```
 
-
+```{r plot_sentiment_by_day}
 # tally sentiment score per day
-daily_sent <- tweets %>% 
-  group_by(date) %>% 
+daily_sent <- tweets_sent %>%
+  group_by(date) %>%
   summarize(sent_score = mean(sent_score, na.rm = T))
 
-p <- daily_sent %>%
-  ggplot(
-    aes(x = date, y = sent_score)) +
-  geom_line()
+daily_sent %>%
+  ggplot( aes(x = date, y = sent_score)) +
+  geom_line() +
+    labs(x = "Date",
+    y = "Avg Sentiment Score",
+    title = "Daily Tweet Sentiment",
+    subtitle = "IPCC Tweets")
 
 ```
 
-are using a package called "quanteda" which is full of useful tools. We'll be working today with simplified tweet data (just the date and text fields).
-
-#dfm.sentiment \<- dfm(corpus, dictionary = bing)
-
-"Types" is the number of one-of-a-kind tokens a text contains. While "tokens" counts the number of words in a text--every "and" or "the" is another token--types only counts each unique word one time, no matter how often it appears.
-
-quanteda has its own built in functions for cleaning text data. Let's take a look at some. First we have to clean the messy tweet data:
-
-```{r quanteda_cleaning}
-# tokens <- tokens(corpus) #tokenize the text so each doc (page, in this case) is a list of tokens (words)
-# 
-# tokens <- tokens(tokens, remove_punct = TRUE, 
-#                      remove_numbers = TRUE)
-# 
-# tokens <- tokens_select(tokens, stopwords('english'),selection='remove') #stopwords lexicon built in to quanteda
-# 
-# tokens <- tokens_wordstem(tokens) #stem words down to their base form for comparisons across tense and quantity
-# 
-# tokens <- tokens_tolower(tokens)
-
-
-```
-
-we can use the kwic function (keywords-in-context) to briefly examine the context in which certain words appear.
-
-```{r initial_analysis}
-#head(kwic(tokens, "climate", window = 10))
-
-```
-
-```{r}
- # dfm <- dfm(tokens)
- # 
- # topfeatures(dfm, 12)
-```
+Now let's try a new type of text visualization: the wordcloud.
 
 ```{r wordcloud}
-
- words %>%
+words %>%
    anti_join(stop_words) %>%
    count(word) %>%
    with(wordcloud(word, n, max.words = 200))
+```
+
+```{r wordcloud_comp}
 
 words %>%
 inner_join(get_sentiments("bing")) %>%
@@ -141,10 +126,61 @@ comparison.cloud(colors = c("gray20", "gray80"),
                    max.words = 100)
 ```
 
-Assignment
+#### The quanteda package
 
-1.  Time for some further cleaning of the twitter data set. Let's assume that the mentions of twitter accounts is not useful to us. Remove them from the text field.
+quanteda is a package (actually a family of packages) full of tools for conducting text analysis. quanteda.sentiment (not yet on CRAN, download from github) is the quanteda modular package for conducting sentiment analysis.
 
-2.  Create a plot
+quanteda has its own built in functions for cleaning text data. Let's take a look at some. First we have to clean the messy tweet data:
 
-X. Create a wordcloud of the
+```{r create_corpus}
+corpus <- corpus(dat$Title) #enter quanteda
+summary(corpus)
+```
+
+```{r quanteda_cleaning}
+tokens <- tokens(corpus) #tokenize the text so each doc (page, in this case) is a list of tokens (words)
+
+#examine the uncleaned version
+tokens
+
+#clean it up
+tokens <- tokens(tokens, remove_punct = TRUE,
+                      remove_numbers = TRUE)
+
+tokens <- tokens_select(tokens, stopwords('english'),selection='remove') #stopwords lexicon built in to quanteda
+
+#tokens <- tokens_wordstem(tokens) #stem words down to their base form for comparisons across tense and quantity
+
+tokens <- tokens_tolower(tokens)
+
+```
+
+we can use the kwic function (keywords-in-context) to briefly examine the context in which certain words appear.
+
+```{r initial_analysis}
+head(kwic(tokens, "climate", window = 3))
+
+```
+
+```{r}
+
+dfm <- dfm(tokens)
+
+topfeatures(dfm, 12)
+
+dfm.sentiment <- dfm_lookup(dfm, dictionary = data_dictionary_LSD2015)
+
+head(textstat_polarity(tokens, data_dictionary_LSD2015))
+
+
+```
+
+### Assignment
+
+You will use the tweet data from class today for each part of the following assignment.
+
+1.  Think about how to further clean a twitter data set. Let's assume that the mentions of twitter accounts is not useful to us. Remove them from the text field.
+
+2.  Create a [grouped barplot](https://www.statology.org/grouped-barplot-in-r/#:~:text=A%20grouped%20barplot%20is%20a,the%20data%20visualization%20library%20ggplot2.) that plots the number of positive, negative and neutral tweets per day.
+
+3.  Adjust the wordcloud in the "wordcloud" chunk by coloring the positive and negative words so they are identifiable.

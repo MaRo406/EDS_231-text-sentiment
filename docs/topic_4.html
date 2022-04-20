@@ -2484,6 +2484,7 @@ Topics
 <div class="nav-dropdown-content">
 <a href="topic_2.html">Topic 2: Text Data in R</a>
 <a href="topic_3.html">Topic 3: Sentiment Analysis I</a>
+<a href="topic_4.html">Topic 4: Sentiment Analysis II</a>
 </div>
 </div>
 <a href="resources.html">Resources</a>
@@ -2505,7 +2506,10 @@ Topics
 
 
 <div class="d-article">
-<h2 id="ipcc-report-twitter">IPCC Report Twitter</h2>
+<p>This .Rmd available here: <a
+href="https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/topic_4.Rmd"
+class="uri">https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/topic_4.Rmd</a></p>
+<h4 id="ipcc-report-twitter">IPCC Report Twitter</h4>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://quanteda.io'>quanteda</a></span><span class='op'>)</span>
@@ -2521,54 +2525,81 @@ Topics
 </div>
 <p>Last week we used the tidytext approach to sentiment analysis for
 Nexis Uni .pdf data on coverage of the recent IPCC report. This week we
-will look at the conversation on Twitter about the same report.</p>
+will look at the conversation on Twitter about the same report. We’ll
+start with the familiar tidy approach, and then introduce the quanteda
+package later.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>read</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"dat/IPCC_tweets_April1-10_sample.csv"</span><span class='op'>)</span>
-<span class='va'>tweets</span><span class='op'>&lt;-</span> <span class='va'>read</span><span class='op'>[</span>,<span class='fl'>7</span><span class='op'>]</span> <span class='co'># Extract Date and Title fields (what about emotion and sentiment for assignment)</span>
-<span class='va'>tweets</span><span class='op'>$</span><span class='va'>Date</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>read</span><span class='op'>$</span><span class='va'>Date</span>,<span class='st'>'%m/%d/%y'</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"text"</span>, <span class='st'>"date"</span><span class='op'>)</span>
-<span class='va'>tweets</span><span class='op'>$</span><span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>raw_tweets</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span><span class='op'>(</span><span class='st'>"https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/dat/IPCC_tweets_April1-10_sample.csv"</span>, header<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/utils/write.table.html'>write.csv</a></span><span class='op'>(</span><span class='va'>tweets</span>, <span class='st'>"tweets.csv"</span><span class='op'>)</span>
+<span class='va'>dat</span><span class='op'>&lt;-</span> <span class='va'>raw_tweets</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>7</span><span class='op'>)</span><span class='op'>]</span> <span class='co'># Extract Date and Title fields</span>
 
-<span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"http[^[:space:]]*"</span>, <span class='st'>""</span>,<span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span><span class='op'>)</span>
+<span class='va'>tweets</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='va'>dat</span><span class='op'>$</span><span class='va'>Title</span>,
+                  id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>Title</span><span class='op'>)</span><span class='op'>)</span>,
+                 date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>Date</span>,<span class='st'>'%m/%d/%y'</span><span class='op'>)</span><span class='op'>)</span>
 
 
-<span class='co'># corpus &lt;- corpus(tweets$Title) #enter quanteda</span>
-<span class='co'># summary(corpus) </span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span>, n <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
 </code></pre>
 </div>
+<pre><code> [1] &quot;thank you, followers, for the great photo suggestions for our upcoming IPCC report - on Monday you will find the lucky one selected for our cover from among your submissions!\n\nwe now need a good picture on #biofuels . any suggestions please for which we can get copyrights fast?&quot;        
+ [2] &quot;Greenpeace: The real solution to the climate crisis will require a rapid transition away from fossil fuels. \n\nWhat else we expect from the upcoming #IPCC report on climate solutions, set for publication on Monday, 4 April ⬇️  https://t.co/EC6a25S7tY&quot;                                      
+ [3] &quot;Governments have a responsibility to ensure that #IPCCReport is grounded in rapid phaseout of fossil fuel use and production — not #FalseClimateSolutions. \n\nRead more in our open letter: https://t.co/4larBPgeba https://t.co/Fv1OphPmac&quot;                                                    
+ [4] &quot;Next week, the IPCC will publish a new report detailing their new models and policy pathways. \n\nWant to study up before the headlines? Read @bertrandhb&#39;s second long read on CCS, explaining how and why IPCC models use so much saviour tech.\n\nhttps://t.co/6yBf0j7UWA&quot;                    
+ [5] &quot;Live stream of virtual IPCC press conference releasing the report on mitigation of climate change, 9 a.m. GMT o... https://t.co/IqRCvvQxyX&quot;                                                                                                                                                      
+ [6] &quot;Attention journalists: The deadline for embargoed materials for the upcoming @IPCC_CH report on climate mitigation has been extended to TODAY at 5:59 pm EDT. Register here: https://t.co/fLc4eHcOmm https://t.co/0eIlPb21kz&quot;                                                                    
+ [7] &quot;The IPCC Report and “The Physics of Climate Change” https://t.co/xnxP3fup2a&quot;                                                                                                                                                                                                                     
+ [8] &quot;With time running short and most of the Summary for Policymakers yet to be approved, #IPCC Working Group III added a fourth plenary to Thursday’s packed schedule in an attempt to make headway.\n\nMore ➡️ https://t.co/CRKNFzykYE\n\n#ClimateChange #AR6 #ClimateReport https://t.co/EoaasmOEZf&quot;
+ [9] &quot;A helpful perspective on how to talk about the scenarios discussed in the forthcoming IPCC report https://t.co/Kpiim9NgNw&quot;                                                                                                                                                                       
+[10] &quot;The private sector is an integral component of the water cycle and has much to lose as critical climate and water risks grow. \n\nThis presents an opportunity for collective action, writes Kirsten James of the sustainability nonprofit @CeresNews.  \n\nhttps://t.co/pC3kiJ6R1t&quot;             </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#simple plot of tweets per day</span>
+<span class='va'>tweets</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>date</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_4_files/figure-html5/tweet_data-1.png" width="624" /></p>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>bing_sent</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>'bing'</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#let's clean up the URLs from the tweets</span>
+<span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"http[^[:space:]]*"</span>, <span class='st'>""</span>,<span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span><span class='op'>)</span>
+<span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/case.html'>str_to_lower</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span><span class='op'>)</span>
+
+<span class='co'>#load sentiment lexicon</span>
+<span class='va'>bing_sent</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>'bing'</span><span class='op'>)</span>
 
 <span class='co'>#tokenize tweets to individual words</span>
-<span class='va'>words</span> <span class='op'>&lt;-</span> <span class='va'>tweets</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>date</span>, <span class='va'>text</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='op'>(</span>output <span class='op'>=</span> <span class='va'>word</span>, input <span class='op'>=</span> <span class='va'>text</span>, token <span class='op'>=</span> <span class='st'>"words"</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>stop_words</span>, by <span class='op'>=</span> <span class='st'>"word"</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>bing_sent</span>, by <span class='op'>=</span> <span class='st'>"word"</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+<span class='va'>words</span> <span class='op'>&lt;-</span> <span class='va'>tweets</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>date</span>, <span class='va'>text</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='op'>(</span>output <span class='op'>=</span> <span class='va'>word</span>, input <span class='op'>=</span> <span class='va'>text</span>, token <span class='op'>=</span> <span class='st'>"words"</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>stop_words</span>, by <span class='op'>=</span> <span class='st'>"word"</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>bing_sent</span>, by <span class='op'>=</span> <span class='st'>"word"</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span>
     <span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span><span class='op'>(</span>
       <span class='op'>~</span><span class='va'>sentiment</span>, <span class='op'>~</span><span class='va'>sent_score</span>,
       <span class='st'>"positive"</span>, <span class='fl'>1</span>,
       <span class='st'>"negative"</span>, <span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>,
     by <span class='op'>=</span> <span class='st'>"sentiment"</span><span class='op'>)</span>
-
-<span class='co'>#take average sentiment score by tweet</span>
-<span class='va'>tweets</span> <span class='op'>&lt;-</span> <span class='va'>tweets</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#take average sentiment score by tweet</span>
+<span class='va'>tweets_sent</span> <span class='op'>&lt;-</span> <span class='va'>tweets</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span>
-    <span class='va'>words</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
-      <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='va'>words</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+      <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
       <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>
         sent_score <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>sent_score</span>, na.rm <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span><span class='op'>)</span>,
     by <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
 
-<span class='va'>neutral</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>sent_score</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>positive</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>sent_score</span> <span class='op'>&gt;</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>negative</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>sent_score</span> <span class='op'>&lt;</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>neutral</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>tweets_sent</span><span class='op'>$</span><span class='va'>sent_score</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>positive</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>tweets_sent</span><span class='op'>$</span><span class='va'>sent_score</span> <span class='op'>&gt;</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>negative</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>tweets_sent</span><span class='op'>$</span><span class='va'>sent_score</span> <span class='op'>&lt;</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>Sentiment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Positive"</span>,<span class='st'>"Neutral"</span>,<span class='st'>"Negative"</span><span class='op'>)</span>
 <span class='va'>Count</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>positive</span>,<span class='va'>neutral</span>,<span class='va'>negative</span><span class='op'>)</span>
@@ -2580,70 +2611,38 @@ will look at the conversation on Twitter about the same report.</p>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Barplot of Sentiment in IPCC tweets"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="topic_4_files/figure-html5/unnamed-chunk-1-1.png" width="624" />
+<p><img src="topic_4_files/figure-html5/sentiment_calculations-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># tally sentiment score per day</span>
-<span class='va'>daily_sent</span> <span class='op'>&lt;-</span> <span class='va'>tweets</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>date</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+<span class='va'>daily_sent</span> <span class='op'>&lt;-</span> <span class='va'>tweets_sent</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>date</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>sent_score <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>sent_score</span>, na.rm <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>daily_sent</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>sent_score</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>daily_sent</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>sent_score</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Date"</span>,
+    y <span class='op'>=</span> <span class='st'>"Avg Sentiment Score"</span>,
+    title <span class='op'>=</span> <span class='st'>"Daily Tweet Sentiment"</span>,
+    subtitle <span class='op'>=</span> <span class='st'>"IPCC Tweets"</span><span class='op'>)</span>
 </code></pre>
 </div>
+<p><img src="topic_4_files/figure-html5/plot_sentiment_by_day-1.png" width="624" /></p>
 </div>
-<p>are using a package called “quanteda” which is full of useful tools.
-We’ll be working today with simplified tweet data (just the date and
-text fields).</p>
-<p>#dfm.sentiment &lt;- dfm(corpus, dictionary = bing)</p>
-<p>“Types” is the number of one-of-a-kind tokens a text contains. While
-“tokens” counts the number of words in a text–every “and” or “the” is
-another token–types only counts each unique word one time, no matter how
-often it appears.</p>
-<p>quanteda has its own built in functions for cleaning text data. Let’s
-take a look at some. First we have to clean the messy tweet data:</p>
+<p>Now let’s try a new type of text visualization: the wordcloud.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># tokens &lt;- tokens(corpus) #tokenize the text so each doc (page, in this case) is a list of tokens (words)</span>
-<span class='co'># </span>
-<span class='co'># tokens &lt;- tokens(tokens, remove_punct = TRUE, </span>
-<span class='co'>#                      remove_numbers = TRUE)</span>
-<span class='co'># </span>
-<span class='co'># tokens &lt;- tokens_select(tokens, stopwords('english'),selection='remove') #stopwords lexicon built in to quanteda</span>
-<span class='co'># </span>
-<span class='co'># tokens &lt;- tokens_wordstem(tokens) #stem words down to their base form for comparisons across tense and quantity</span>
-<span class='co'># </span>
-<span class='co'># tokens &lt;- tokens_tolower(tokens)</span>
-</code></pre>
-</div>
-</div>
-<p>we can use the kwic function (keywords-in-context) to briefly examine
-the context in which certain words appear.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#head(kwic(tokens, "climate", window = 10))</span>
-</code></pre>
-</div>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"> <span class='co'># dfm &lt;- dfm(tokens)</span>
- <span class='co'># </span>
- <span class='co'># topfeatures(dfm, 12)</span>
-</code></pre>
-</div>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"> <span class='va'>words</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>words</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>stop_words</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>word</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
    <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/wordcloud/man/wordcloud.html'>wordcloud</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>n</span>, max.words <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="topic_4_files/figure-html5/wordcloud-1.png" width="624" />
+<p><img src="topic_4_files/figure-html5/wordcloud-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>words</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
 <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>"bing"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
@@ -2653,17 +2652,247 @@ the context in which certain words appear.</p>
                    max.words <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
 </code></pre>
 </div>
-<p><img src="topic_4_files/figure-html5/wordcloud-2.png" width="624" /></p>
+<p><img src="topic_4_files/figure-html5/wordcloud_comp-1.png" width="624" /></p>
 </div>
-<p>Assignment</p>
+<h4 id="the-quanteda-package">The quanteda package</h4>
+<p>quanteda is a package (actually a family of packages) full of tools
+for conducting text analysis. quanteda.sentiment (not yet on CRAN,
+download from github) is the quanteda modular package for conducting
+sentiment analysis.</p>
+<p>quanteda has its own built in functions for cleaning text data. Let’s
+take a look at some. First we have to clean the messy tweet data:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>corpus</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/corpus.html'>corpus</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>Title</span><span class='op'>)</span> <span class='co'>#enter quanteda</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>corpus</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Corpus consisting of 2411 documents, showing 100 documents:
+
+    Text Types Tokens Sentences
+   text1    43     53         2
+   text2    37     42         2
+   text3    31     32         2
+   text4    42     49         3
+   text5    21     25         2
+   text6    30     33         1
+   text7    10     12         1
+   text8    40     42         2
+   text9    16     17         1
+  text10    36     42         2
+  text11    16     16         1
+  text12    34     44         6
+  text13    35     46         3
+  text14    46     52         2
+  text15    42     51         1
+  text16     7      7         1
+  text17    42     48         2
+  text18    17     17         2
+  text19    43     60         1
+  text20    27     34         3
+  text21    40     43         3
+  text22    44     50         3
+  text23    28     30         2
+  text24    35     38         3
+  text25    36     41         3
+  text26    37     43         4
+  text27    21     23         1
+  text28    29     31         1
+  text29    12     13         1
+  text30    45     47         2
+  text31    38     42         1
+  text32    31     36         1
+  text33    14     14         1
+  text34    41     49         1
+  text35     7      7         1
+  text36    44     54         2
+  text37    26     28         1
+  text38    13     13         1
+  text39    13     13         1
+  text40    31     37         2
+  text41    47     54         3
+  text42    38     46         1
+  text43    42     46         2
+  text44    22     24         2
+  text45    38     46         1
+  text46    16     16         1
+  text47    30     32         1
+  text48    17     17         1
+  text49    13     13         1
+  text50    23     23         1
+  text51    23     25         1
+  text52    25     27         1
+  text53    13     13         1
+  text54    34     35         3
+  text55    38     46         1
+  text56    38     46         1
+  text57    38     46         1
+  text58    38     46         1
+  text59    38     46         1
+  text60    38     46         1
+  text61    19     19         2
+  text62    17     18         1
+  text63    11     11         1
+  text64    13     13         1
+  text65    14     16         1
+  text66    12     12         2
+  text67    18     18         1
+  text68    38     46         1
+  text69    15     16         1
+  text70    12     13         1
+  text71    30     35         2
+  text72    22     23         1
+  text73    38     46         1
+  text74    39     46         1
+  text75    13     13         1
+  text76    32     35         1
+  text77    38     46         1
+  text78    39     45         2
+  text79    38     46         1
+  text80    36     41         1
+  text81    33     33         2
+  text82    18     19         1
+  text83    38     46         1
+  text84    38     46         1
+  text85    38     46         1
+  text86    39     43         2
+  text87    13     13         1
+  text88    13     13         1
+  text89    38     46         1
+  text90    38     46         1
+  text91    38     46         1
+  text92    40     43         1
+  text93    11     11         1
+  text94    41     49         1
+  text95    38     46         1
+  text96    15     15         1
+  text97    29     31         1
+  text98    11     11         1
+  text99    13     13         1
+ text100    38     46         1</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens.html'>tokens</a></span><span class='op'>(</span><span class='va'>corpus</span><span class='op'>)</span> <span class='co'>#tokenize the text so each doc (page, in this case) is a list of tokens (words)</span>
+
+<span class='co'>#examine the uncleaned version</span>
+<span class='va'>tokens</span>
+</code></pre>
+</div>
+<pre><code>Tokens consisting of 2,411 documents.
+text1 :
+ [1] &quot;thank&quot;       &quot;you&quot;         &quot;,&quot;           &quot;followers&quot;  
+ [5] &quot;,&quot;           &quot;for&quot;         &quot;the&quot;         &quot;great&quot;      
+ [9] &quot;photo&quot;       &quot;suggestions&quot; &quot;for&quot;         &quot;our&quot;        
+[ ... and 41 more ]
+
+text2 :
+ [1] &quot;Greenpeace&quot; &quot;:&quot;          &quot;The&quot;        &quot;real&quot;       &quot;solution&quot;  
+ [6] &quot;to&quot;         &quot;the&quot;        &quot;climate&quot;    &quot;crisis&quot;     &quot;will&quot;      
+[11] &quot;require&quot;    &quot;a&quot;         
+[ ... and 30 more ]
+
+text3 :
+ [1] &quot;Governments&quot;    &quot;have&quot;           &quot;a&quot;             
+ [4] &quot;responsibility&quot; &quot;to&quot;             &quot;ensure&quot;        
+ [7] &quot;that&quot;           &quot;#IPCCReport&quot;    &quot;is&quot;            
+[10] &quot;grounded&quot;       &quot;in&quot;             &quot;rapid&quot;         
+[ ... and 20 more ]
+
+text4 :
+ [1] &quot;Next&quot;      &quot;week&quot;      &quot;,&quot;         &quot;the&quot;       &quot;IPCC&quot;     
+ [6] &quot;will&quot;      &quot;publish&quot;   &quot;a&quot;         &quot;new&quot;       &quot;report&quot;   
+[11] &quot;detailing&quot; &quot;their&quot;    
+[ ... and 37 more ]
+
+text5 :
+ [1] &quot;Live&quot;       &quot;stream&quot;     &quot;of&quot;         &quot;virtual&quot;    &quot;IPCC&quot;      
+ [6] &quot;press&quot;      &quot;conference&quot; &quot;releasing&quot;  &quot;the&quot;        &quot;report&quot;    
+[11] &quot;on&quot;         &quot;mitigation&quot;
+[ ... and 13 more ]
+
+text6 :
+ [1] &quot;Attention&quot;   &quot;journalists&quot; &quot;:&quot;           &quot;The&quot;        
+ [5] &quot;deadline&quot;    &quot;for&quot;         &quot;embargoed&quot;   &quot;materials&quot;  
+ [9] &quot;for&quot;         &quot;the&quot;         &quot;upcoming&quot;    &quot;@IPCC_CH&quot;   
+[ ... and 21 more ]
+
+[ reached max_ndoc ... 2,405 more documents ]</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#clean it up</span>
+<span class='va'>tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens.html'>tokens</a></span><span class='op'>(</span><span class='va'>tokens</span>, remove_punct <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                      remove_numbers <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='va'>tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens_select.html'>tokens_select</a></span><span class='op'>(</span><span class='va'>tokens</span>, <span class='fu'><a href='https://rdrr.io/pkg/stopwords/man/stopwords.html'>stopwords</a></span><span class='op'>(</span><span class='st'>'english'</span><span class='op'>)</span>,selection<span class='op'>=</span><span class='st'>'remove'</span><span class='op'>)</span> <span class='co'>#stopwords lexicon built in to quanteda</span>
+
+<span class='co'>#tokens &lt;- tokens_wordstem(tokens) #stem words down to their base form for comparisons across tense and quantity</span>
+
+<span class='va'>tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens_tolower.html'>tokens_tolower</a></span><span class='op'>(</span><span class='va'>tokens</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>we can use the kwic function (keywords-in-context) to briefly examine
+the context in which certain words appear.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://quanteda.io/reference/kwic.html'>kwic</a></span><span class='op'>(</span><span class='va'>tokens</span>, <span class='st'>"climate"</span>, window <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Keyword-in-context with 6 matches.                                                     
+   [text2, 4]    greenpeace real solution | climate |
+  [text2, 17]        upcoming#ipcc report | climate |
+  [text5, 10] releasing report mitigation | climate |
+   [text6, 9]     upcoming@ipcc_ch report | climate |
+   [text7, 4]         ipcc report physics | climate |
+ [text10, 10]          much lose critical | climate |
+                               
+ crisis require rapid          
+ solutions set publication     
+ change a.m gmt                
+ mitigation extended today     
+ change https://t.co/xnxp3fup2a
+ water risks grow              </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dfm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm.html'>dfm</a></span><span class='op'>(</span><span class='va'>tokens</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://quanteda.io/reference/topfeatures.html'>topfeatures</a></span><span class='op'>(</span><span class='va'>dfm</span>, <span class='fl'>12</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>   climate       ipcc     report     change        now      #ipcc 
+      1396       1243       1225        651        505        464 
+     world  emissions      never        new     latest scientists 
+       346        333        291        279        279        274 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dfm.sentiment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm_lookup.html'>dfm_lookup</a></span><span class='op'>(</span><span class='va'>dfm</span>, dictionary <span class='op'>=</span> <span class='va'>data_dictionary_LSD2015</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/quanteda.sentiment/man/textstat_polarity.html'>textstat_polarity</a></span><span class='op'>(</span><span class='va'>tokens</span>, <span class='va'>data_dictionary_LSD2015</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  doc_id sentiment
+1  text1  2.197225
+2  text2 -1.098612
+3  text3  1.945910
+4  text4  0.000000
+5  text5  1.098612
+6  text6  1.098612</code></pre>
+</div>
+<h3 id="assignment">Assignment</h3>
+<p>You will use the tweet data from class today for each part of the
+following assignment.</p>
 <ol type="1">
-<li><p>Time for some further cleaning of the twitter data set. Let’s
-assume that the mentions of twitter accounts is not useful to us. Remove
-them from the text field.</p></li>
-<li><p>Create a plot</p></li>
+<li><p>Think about how to further clean a twitter data set. Let’s assume
+that the mentions of twitter accounts is not useful to us. Remove them
+from the text field.</p></li>
+<li><p>Create a <a
+href="https://www.statology.org/grouped-barplot-in-r/#:~:text=A%20grouped%20barplot%20is%20a,the%20data%20visualization%20library%20ggplot2.">grouped
+barplot</a> that plots the number of positive, negative and neutral
+tweets per day.</p></li>
+<li><p>Adjust the wordcloud in the “wordcloud” chunk by coloring the
+positive and negative words so they are identifiable.</p></li>
 </ol>
-<p>X. Create a wordcloud of the</p>
-<div class="sourceCode" id="cb1"><pre
+<div class="sourceCode" id="cb7"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
