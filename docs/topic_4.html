@@ -87,20 +87,20 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>: Topic 4: Sentiment Analysis II</title>
+  <title>EDS 231: Topic 4: Sentiment Analysis II</title>
 
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content=": Topic 4: Sentiment Analysis II"/>
+  <meta property="og:title" content="EDS 231: Topic 4: Sentiment Analysis II"/>
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:site_name" content=""/>
+  <meta property="og:site_name" content="EDS 231"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content=": Topic 4: Sentiment Analysis II"/>
+  <meta property="twitter:title" content="EDS 231: Topic 4: Sentiment Analysis II"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
@@ -2471,7 +2471,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <header class="header header--fixed" role="banner">
 <nav class="distill-site-nav distill-site-header">
 <div class="nav-left">
-<a href="index.html" class="title"></a>
+<a href="index.html" class="title">EDS 231</a>
 </div>
 <div class="nav-right">
 <a href="index.html">Home</a>
@@ -2513,11 +2513,12 @@ class="uri">https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/mai
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://quanteda.io'>quanteda</a></span><span class='op'>)</span>
+<span class='co'>#devtools::install_github("quanteda/quanteda.sentiment") #not available currently through CRAN</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>quanteda.sentiment</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://quanteda.io'>quanteda.textstats</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/juliasilge/tidytext'>tidytext</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lubridate.tidyverse.org'>lubridate</a></span><span class='op'>)</span>
-<span class='co'>#devtools::install_github("quanteda/quanteda.sentiment") #not available currently through CRAN</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>quanteda.sentiment</span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://blog.fellstat.com/?cat=11'>wordcloud</a></span><span class='op'>)</span> <span class='co'>#visualization of common words in the data set</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/hadley/reshape'>reshape2</a></span><span class='op'>)</span>
 </code></pre>
@@ -2568,8 +2569,9 @@ package later.</p>
 <span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"http[^[:space:]]*"</span>, <span class='st'>""</span>,<span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span><span class='op'>)</span>
 <span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/case.html'>str_to_lower</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span><span class='op'>)</span>
 
-<span class='co'>#load sentiment lexicon</span>
+<span class='co'>#load sentiment lexicons</span>
 <span class='va'>bing_sent</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>'bing'</span><span class='op'>)</span>
+<span class='va'>nrc_sent</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>'nrc'</span><span class='op'>)</span>
 
 <span class='co'>#tokenize tweets to individual words</span>
 <span class='va'>words</span> <span class='op'>&lt;-</span> <span class='va'>tweets</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
@@ -2637,7 +2639,7 @@ package later.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>words</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>stop_words</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>word</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
-   <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/wordcloud/man/wordcloud.html'>wordcloud</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>n</span>, max.words <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/wordcloud/man/wordcloud.html'>wordcloud</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>n</span>, max.words <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <p><img src="topic_4_files/figure-html5/wordcloud-1.png" width="624" /></p>
@@ -2831,11 +2833,11 @@ text6 :
 </code></pre>
 </div>
 </div>
-<p>we can use the kwic function (keywords-in-context) to briefly examine
-the context in which certain words appear.</p>
+<p>We can use the kwic function (keywords-in-context) to briefly examine
+the context in which certain words or patterns appear.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://quanteda.io/reference/kwic.html'>kwic</a></span><span class='op'>(</span><span class='va'>tokens</span>, <span class='st'>"climate"</span>, window <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://quanteda.io/reference/kwic.html'>kwic</a></span><span class='op'>(</span><span class='va'>tokens</span>, pattern <span class='op'>=</span> <span class='st'>"climate"</span>, window <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code>Keyword-in-context with 6 matches.                                                     
@@ -2852,7 +2854,62 @@ the context in which certain words appear.</p>
  mitigation extended today     
  change https://t.co/xnxp3fup2a
  water risks grow              </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://quanteda.io/reference/kwic.html'>kwic</a></span><span class='op'>(</span><span class='va'>tokens</span>, pattern <span class='op'>=</span> <span class='fu'><a href='https://quanteda.io/reference/phrase.html'>phrase</a></span><span class='op'>(</span><span class='st'>"climate change"</span><span class='op'>)</span>, window <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
 </div>
+<pre><code>Keyword-in-context with 6 matches.                                                               
+  [text5, 10:11] releasing report mitigation | climate change |
+    [text7, 4:5]         ipcc report physics | climate change |
+ [text14, 15:16]         avert worst effects | climate change |
+ [text15, 10:11]   s#climatereport emissions | climate change |
+   [text20, 1:2]                             | climate change |
+   [text24, 6:7]      report revealed threat | climate change |
+                                
+ a.m gmt o                      
+ https://t.co/xnxp3fup2a        
+ anyone think revolution        
+ meenakshi raman@sahabatalammsia
+ want learn 100s                
+ team weighed findings          </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hash_tweets</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens.html'>tokens</a></span><span class='op'>(</span><span class='va'>corpus</span>, remove_punct <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+               <span class='fu'><a href='https://quanteda.io/reference/tokens_select.html'>tokens_keep</a></span><span class='op'>(</span>pattern <span class='op'>=</span> <span class='st'>"#*"</span><span class='op'>)</span>
+
+<span class='va'>dfm_hash</span><span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm.html'>dfm</a></span><span class='op'>(</span><span class='va'>hash_tweets</span><span class='op'>)</span>
+
+<span class='va'>tstat_freq</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/textstat_frequency.html'>textstat_frequency</a></span><span class='op'>(</span><span class='va'>dfm_hash</span>, n <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>tstat_freq</span>, <span class='fl'>10</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>             feature frequency rank docfreq group
+1              #ipcc       464    1     460   all
+2     #climatechange       137    2     135   all
+3     #climatecrisis       118    3     117   all
+4     #climatereport        97    4      97   all
+5        #ipccreport        87    5      87   all
+6           #climate        68    6      67   all
+7  #climateemergency        45    7      45   all
+8     #climateaction        44    8      44   all
+9     #globalwarming        24    9      24   all
+10 #climateactionnow        23   10      23   all</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#tidytext gives us tools to convert to tidy from non-tidy formats</span>
+<span class='va'>hash_tib</span><span class='op'>&lt;-</span> <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>dfm_hash</span><span class='op'>)</span>
+
+<span class='va'>hash_tib</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>term</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+   <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/wordcloud/man/wordcloud.html'>wordcloud</a></span><span class='op'>(</span><span class='va'>term</span>, <span class='va'>n</span>, max.words <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_4_files/figure-html5/explore_hashtags-1.png" width="624" /></p>
+</div>
+<p>Create the sparse matrix representation known as the document-feature
+matrix. quanteda’s textstat_polarity function has multiple ways to
+combine polarity to a single score. The sent_logit value to fun argument
+is the log of (pos/neg) counts.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dfm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm.html'>dfm</a></span><span class='op'>(</span><span class='va'>tokens</span><span class='op'>)</span>
@@ -2867,7 +2924,7 @@ the context in which certain words appear.</p>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dfm.sentiment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm_lookup.html'>dfm_lookup</a></span><span class='op'>(</span><span class='va'>dfm</span>, dictionary <span class='op'>=</span> <span class='va'>data_dictionary_LSD2015</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/quanteda.sentiment/man/textstat_polarity.html'>textstat_polarity</a></span><span class='op'>(</span><span class='va'>tokens</span>, <span class='va'>data_dictionary_LSD2015</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/quanteda.sentiment/man/textstat_polarity.html'>textstat_polarity</a></span><span class='op'>(</span><span class='va'>tokens</span>, <span class='va'>data_dictionary_LSD2015</span>, fun <span class='op'>=</span> <span class='va'>sent_logit</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code>  doc_id sentiment
@@ -2884,15 +2941,22 @@ following assignment.</p>
 <ol type="1">
 <li><p>Think about how to further clean a twitter data set. Let’s assume
 that the mentions of twitter accounts is not useful to us. Remove them
-from the text field.</p></li>
-<li><p>Create a <a
-href="https://www.statology.org/grouped-barplot-in-r/#:~:text=A%20grouped%20barplot%20is%20a,the%20data%20visualization%20library%20ggplot2.">grouped
-barplot</a> that plots the number of positive, negative and neutral
-tweets per day.</p></li>
+from the text field of the tweets tibble.</p></li>
+<li><p>Compare the ten most common terms in the tweets per day. Do you
+notice anything interesting?</p></li>
 <li><p>Adjust the wordcloud in the “wordcloud” chunk by coloring the
 positive and negative words so they are identifiable.</p></li>
+<li><p>Let’s say we are interested in the most prominent entities in the
+Twitter discussion. Which are the top 10 most tagged accounts in the
+data set. Hint: the “explore_hashtags” chunk is a good starting
+point.</p></li>
+<li><p>The Twitter data download comes with a variable called
+“Sentiment” that must be calculated by Brandwatch. Use your own method
+to assign each tweet a polarity score (Positive, Negative, Neutral) and
+compare your classification to Brandwatch’s (hint: you’ll need to
+revisit the “raw_tweets” data frame).</p></li>
 </ol>
-<div class="sourceCode" id="cb7"><pre
+<div class="sourceCode" id="cb9"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

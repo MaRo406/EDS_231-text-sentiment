@@ -12,11 +12,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r packages, results='hide', message=FALSE, warning=FALSE}
 library(quanteda)
+#devtools::install_github("quanteda/quanteda.sentiment") #not available currently through CRAN
+library(quanteda.sentiment)
+library(quanteda.textstats)
 library(tidyverse)
 library(tidytext)
 library(lubridate)
-#devtools::install_github("quanteda/quanteda.sentiment") #not available currently through CRAN
-library(quanteda.sentiment)
 library(wordcloud) #visualization of common words in the data set
 library(reshape2)
 ```
@@ -50,8 +51,9 @@ tweets %>%
 tweets$text <- gsub("http[^[:space:]]*", "",tweets$text)
 tweets$text <- str_to_lower(tweets$text)
 
-#load sentiment lexicon
+#load sentiment lexicons
 bing_sent <- get_sentiments('bing')
+nrc_sent <- get_sentiments('nrc')
 
 #tokenize tweets to individual words
 words <- tweets %>%
@@ -113,7 +115,9 @@ Now let's try a new type of text visualization: the wordcloud.
 words %>%
    anti_join(stop_words) %>%
    count(word) %>%
-   with(wordcloud(word, n, max.words = 200))
+   with(wordcloud(word, n, max.words = 100))
+
+
 ```
 
 ```{r wordcloud_comp}
@@ -155,12 +159,38 @@ tokens <- tokens_tolower(tokens)
 
 ```
 
-we can use the kwic function (keywords-in-context) to briefly examine the context in which certain words appear.
+We can use the kwic function (keywords-in-context) to briefly examine the context in which certain words or patterns appear.
 
 ```{r initial_analysis}
-head(kwic(tokens, "climate", window = 3))
+head(kwic(tokens, pattern = "climate", window = 3))
+
+head(kwic(tokens, pattern = phrase("climate change"), window = 3))
+
 
 ```
+
+
+```{r explore_hashtags}
+hash_tweets <- tokens(corpus, remove_punct = TRUE) %>% 
+               tokens_keep(pattern = "#*")
+
+dfm_hash<- dfm(hash_tweets)
+
+tstat_freq <- textstat_frequency(dfm_hash, n = 100)
+head(tstat_freq, 10)
+
+#tidytext gives us tools to convert to tidy from non-tidy formats
+hash_tib<- tidy(dfm_hash)
+
+hash_tib %>%
+   count(term) %>%
+   with(wordcloud(term, n, max.words = 100))
+
+
+```
+
+
+Create the sparse matrix representation known as the document-feature matrix. quanteda's textstat_polarity function has multiple ways to combine polarity to a single score. The sent_logit value to fun argument is the log of (pos/neg) counts.
 
 ```{r}
 
@@ -170,7 +200,7 @@ topfeatures(dfm, 12)
 
 dfm.sentiment <- dfm_lookup(dfm, dictionary = data_dictionary_LSD2015)
 
-head(textstat_polarity(tokens, data_dictionary_LSD2015))
+head(textstat_polarity(tokens, data_dictionary_LSD2015, fun = sent_logit))
 
 
 ```
@@ -179,8 +209,13 @@ head(textstat_polarity(tokens, data_dictionary_LSD2015))
 
 You will use the tweet data from class today for each part of the following assignment.
 
-1.  Think about how to further clean a twitter data set. Let's assume that the mentions of twitter accounts is not useful to us. Remove them from the text field.
+1.  Think about how to further clean a twitter data set. Let's assume that the mentions of twitter accounts is not useful to us. Remove them from the text field of the tweets tibble.
 
-2.  Create a [grouped barplot](https://www.statology.org/grouped-barplot-in-r/#:~:text=A%20grouped%20barplot%20is%20a,the%20data%20visualization%20library%20ggplot2.) that plots the number of positive, negative and neutral tweets per day.
+2.  Compare the ten most common terms in the tweets per day.  Do you notice anything interesting?
 
 3.  Adjust the wordcloud in the "wordcloud" chunk by coloring the positive and negative words so they are identifiable.
+
+4. Let's say we are interested in the most prominent entities in the Twitter discussion.  Which are the top 10 most tagged accounts in the data set. Hint: the "explore_hashtags" chunk is a good starting point.
+
+5. The Twitter data download comes with a variable called "Sentiment" that must be calculated by Brandwatch.  Use your own method to assign each tweet a polarity score (Positive, Negative, Neutral) and compare your classification to Brandwatch's (hint: you'll need to revisit the "raw_tweets" data frame).   
+
