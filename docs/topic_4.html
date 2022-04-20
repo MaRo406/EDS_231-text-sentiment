@@ -87,26 +87,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>EDS 231: Topic 4: Change the theme</title>
+  <title>: Topic 4: Sentiment Analysis II</title>
 
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="EDS 231: Topic 4: Change the theme"/>
+  <meta property="og:title" content=": Topic 4: Sentiment Analysis II"/>
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:site_name" content="EDS 231"/>
+  <meta property="og:site_name" content=""/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="EDS 231: Topic 4: Change the theme"/>
+  <meta property="twitter:title" content=": Topic 4: Sentiment Analysis II"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["Topic 4: Change the theme"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["Topic 4: Sentiment Analysis II"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2463,7 +2463,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Topic 4: Change the theme","authors":[]}
+{"title":"Topic 4: Sentiment Analysis II","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2471,7 +2471,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <header class="header header--fixed" role="banner">
 <nav class="distill-site-nav distill-site-header">
 <div class="nav-left">
-<a href="index.html" class="title">EDS 231</a>
+<a href="index.html" class="title"></a>
 </div>
 <div class="nav-right">
 <a href="index.html">Home</a>
@@ -2487,7 +2487,7 @@ Topics
 </div>
 </div>
 <a href="resources.html">Resources</a>
-<a href="Reading_Reactions.html">Reading Responses</a>
+<a href="Group_Project.html">Group Project</a>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>
@@ -2497,7 +2497,7 @@ Topics
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Topic 4: Change the theme</h1>
+<h1>Topic 4: Sentiment Analysis II</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
 
@@ -2505,20 +2505,164 @@ Topics
 
 
 <div class="d-article">
-<p style="color: #ba5e00">
-<b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_4.Rmd</b> file,
-in the project root, to delete this placeholder text and customize with
-your own!
-</p>
-<p>The bells and whistles of this MEDS template (colors, fonts, spacing,
-etc.) are customized in the <code>theme.css</code> file in your Project
-root.</p>
-<p>If you love css or want to make changes, you’re encouraged to
-customize your site! There is minor annotation in the css file, but
-honestly this will probably just take quite a bit of Inspect Element to
-figure out what to change.</p>
-<p><strong>Fonts:</strong> If you specifically want to know how to
-change the site fonts, see <a href="module_9.html">here</a>.</p>
+<h2 id="ipcc-report-twitter">IPCC Report Twitter</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://quanteda.io'>quanteda</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/juliasilge/tidytext'>tidytext</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lubridate.tidyverse.org'>lubridate</a></span><span class='op'>)</span>
+<span class='co'>#devtools::install_github("quanteda/quanteda.sentiment") #not available currently through CRAN</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>quanteda.sentiment</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://blog.fellstat.com/?cat=11'>wordcloud</a></span><span class='op'>)</span> <span class='co'>#visualization of common words in the data set</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/hadley/reshape'>reshape2</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Last week we used the tidytext approach to sentiment analysis for
+Nexis Uni .pdf data on coverage of the recent IPCC report. This week we
+will look at the conversation on Twitter about the same report.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>read</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"dat/IPCC_tweets_April1-10_sample.csv"</span><span class='op'>)</span>
+<span class='va'>tweets</span><span class='op'>&lt;-</span> <span class='va'>read</span><span class='op'>[</span>,<span class='fl'>7</span><span class='op'>]</span> <span class='co'># Extract Date and Title fields (what about emotion and sentiment for assignment)</span>
+<span class='va'>tweets</span><span class='op'>$</span><span class='va'>Date</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>read</span><span class='op'>$</span><span class='va'>Date</span>,<span class='st'>'%m/%d/%y'</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"text"</span>, <span class='st'>"date"</span><span class='op'>)</span>
+<span class='va'>tweets</span><span class='op'>$</span><span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/write.table.html'>write.csv</a></span><span class='op'>(</span><span class='va'>tweets</span>, <span class='st'>"tweets.csv"</span><span class='op'>)</span>
+
+<span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"http[^[:space:]]*"</span>, <span class='st'>""</span>,<span class='va'>tweets</span><span class='op'>$</span><span class='va'>text</span><span class='op'>)</span>
+
+
+<span class='co'># corpus &lt;- corpus(tweets$Title) #enter quanteda</span>
+<span class='co'># summary(corpus) </span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>bing_sent</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>'bing'</span><span class='op'>)</span>
+
+<span class='co'>#tokenize tweets to individual words</span>
+<span class='va'>words</span> <span class='op'>&lt;-</span> <span class='va'>tweets</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>date</span>, <span class='va'>text</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='op'>(</span>output <span class='op'>=</span> <span class='va'>word</span>, input <span class='op'>=</span> <span class='va'>text</span>, token <span class='op'>=</span> <span class='st'>"words"</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>stop_words</span>, by <span class='op'>=</span> <span class='st'>"word"</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>bing_sent</span>, by <span class='op'>=</span> <span class='st'>"word"</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span><span class='op'>(</span>
+      <span class='op'>~</span><span class='va'>sentiment</span>, <span class='op'>~</span><span class='va'>sent_score</span>,
+      <span class='st'>"positive"</span>, <span class='fl'>1</span>,
+      <span class='st'>"negative"</span>, <span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>,
+    by <span class='op'>=</span> <span class='st'>"sentiment"</span><span class='op'>)</span>
+
+<span class='co'>#take average sentiment score by tweet</span>
+<span class='va'>tweets</span> <span class='op'>&lt;-</span> <span class='va'>tweets</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span>
+    <span class='va'>words</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+      <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+      <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>
+        sent_score <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>sent_score</span>, na.rm <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span><span class='op'>)</span>,
+    by <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
+
+<span class='va'>neutral</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>sent_score</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>positive</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>sent_score</span> <span class='op'>&gt;</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>negative</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>tweets</span><span class='op'>$</span><span class='va'>sent_score</span> <span class='op'>&lt;</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>Sentiment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Positive"</span>,<span class='st'>"Neutral"</span>,<span class='st'>"Negative"</span><span class='op'>)</span>
+<span class='va'>Count</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>positive</span>,<span class='va'>neutral</span>,<span class='va'>negative</span><span class='op'>)</span>
+<span class='va'>output</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>Sentiment</span>,<span class='va'>Count</span><span class='op'>)</span>
+<span class='va'>output</span><span class='op'>$</span><span class='va'>Sentiment</span><span class='op'>&lt;-</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>output</span><span class='op'>$</span><span class='va'>Sentiment</span>,levels<span class='op'>=</span><span class='va'>Sentiment</span><span class='op'>)</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>output</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>Sentiment</span>,y<span class='op'>=</span><span class='va'>Count</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"identity"</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>Sentiment</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_manual.html'>scale_fill_manual</a></span><span class='op'>(</span><span class='st'>"legend"</span>, values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Positive"</span> <span class='op'>=</span> <span class='st'>"green"</span>, <span class='st'>"Neutral"</span> <span class='op'>=</span> <span class='st'>"black"</span>, <span class='st'>"Negative"</span> <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>"Barplot of Sentiment in IPCC tweets"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="topic_4_files/figure-html5/unnamed-chunk-1-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># tally sentiment score per day</span>
+<span class='va'>daily_sent</span> <span class='op'>&lt;-</span> <span class='va'>tweets</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>date</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>sent_score <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>sent_score</span>, na.rm <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>daily_sent</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>sent_score</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>are using a package called “quanteda” which is full of useful tools.
+We’ll be working today with simplified tweet data (just the date and
+text fields).</p>
+<p>#dfm.sentiment &lt;- dfm(corpus, dictionary = bing)</p>
+<p>“Types” is the number of one-of-a-kind tokens a text contains. While
+“tokens” counts the number of words in a text–every “and” or “the” is
+another token–types only counts each unique word one time, no matter how
+often it appears.</p>
+<p>quanteda has its own built in functions for cleaning text data. Let’s
+take a look at some. First we have to clean the messy tweet data:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># tokens &lt;- tokens(corpus) #tokenize the text so each doc (page, in this case) is a list of tokens (words)</span>
+<span class='co'># </span>
+<span class='co'># tokens &lt;- tokens(tokens, remove_punct = TRUE, </span>
+<span class='co'>#                      remove_numbers = TRUE)</span>
+<span class='co'># </span>
+<span class='co'># tokens &lt;- tokens_select(tokens, stopwords('english'),selection='remove') #stopwords lexicon built in to quanteda</span>
+<span class='co'># </span>
+<span class='co'># tokens &lt;- tokens_wordstem(tokens) #stem words down to their base form for comparisons across tense and quantity</span>
+<span class='co'># </span>
+<span class='co'># tokens &lt;- tokens_tolower(tokens)</span>
+</code></pre>
+</div>
+</div>
+<p>we can use the kwic function (keywords-in-context) to briefly examine
+the context in which certain words appear.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#head(kwic(tokens, "climate", window = 10))</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"> <span class='co'># dfm &lt;- dfm(tokens)</span>
+ <span class='co'># </span>
+ <span class='co'># topfeatures(dfm, 12)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"> <span class='va'>words</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>stop_words</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>word</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+   <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/wordcloud/man/wordcloud.html'>wordcloud</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>n</span>, max.words <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="topic_4_files/figure-html5/wordcloud-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>words</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/get_sentiments.html'>get_sentiments</a></span><span class='op'>(</span><span class='st'>"bing"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>sentiment</span>, sort <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+<span class='fu'><a href='https://rdrr.io/pkg/reshape2/man/cast.html'>acast</a></span><span class='op'>(</span><span class='va'>word</span> <span class='op'>~</span> <span class='va'>sentiment</span>, value.var <span class='op'>=</span> <span class='st'>"n"</span>, fill <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+<span class='fu'><a href='https://rdrr.io/pkg/wordcloud/man/comparison.cloud.html'>comparison.cloud</a></span><span class='op'>(</span>colors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gray20"</span>, <span class='st'>"gray80"</span><span class='op'>)</span>,
+                   max.words <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_4_files/figure-html5/wordcloud-2.png" width="624" /></p>
+</div>
+<p>Assignment</p>
+<ol type="1">
+<li><p>Time for some further cleaning of the twitter data set. Let’s
+assume that the mentions of twitter accounts is not useful to us. Remove
+them from the text field.</p></li>
+<li><p>Create a plot</p></li>
+</ol>
+<p>X. Create a wordcloud of the</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->

@@ -6,89 +6,145 @@ title: "Topic 4: Sentiment Analysis II"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-IPCC Report
-Twitter Data
+## IPCC Report Twitter 
 
-library("quanteda", warn.conflicts = FALSE, verbose = FALSE)
-library("quanteda.sentiment", warn.conflicts = FALSE, verbose = FALSE)
-
-print(data_dictionary_LSD2015, max_nval = 5)
-lengths(data_dictionary_LSD2015)
-
-```{r packages}
-library(pdftools)
+```{r packages, results='hide', message=FALSE, warning=FALSE}
 library(quanteda)
 library(tidyverse)
-
+library(tidytext)
+library(lubridate)
+#devtools::install_github("quanteda/quanteda.sentiment") #not available currently through CRAN
+library(quanteda.sentiment)
+library(wordcloud) #visualization of common words in the data set
+library(reshape2)
 ```
 
+Last week we used the tidytext approach to sentiment analysis for Nexis Uni .pdf data on coverage of the recent IPCC report. This week we will look at the conversation on Twitter about the same report.
 
-Last week we used the tidytext approach to sentiment analysis.  This week we are using a package called "quanteda" which is full of tools 
-```{r}
-over <- pdf_text('dat/overstory_exerpt.pdf')
-over_df <- data.frame(text = over) %>% #create 1-column df with 'text' variable
-  mutate(page = 1:n()) #add a page number variable, 'page'
-
-over_text <- over_df %>%
-  filter(page %in% 8:41)%>%
-  unnest(text)
-  #mutate(text = str_split(text, '\n')) #this splits by line.
-  
-corpus <- corpus(over_text$text)
-summary(corpus)
-
-```
-“Types” is the number of one-of-a-kind tokens a text contains. While “tokens” counts the number of words in a text–every “and” or “the” is another token–types only counts each unique word one time, no matter how often it appears.
-
-
-quanteda has its own built in functions for cleaning text data.  Let's take a look at some.  First we have to
-```{r quanteda_cleaning}
-tokens <- tokens(corpus) #tokenize the text so each doc (page, in this case) is a list of tokens (words)
-
-tokens <- tokens(tokens, remove_punct = TRUE, 
-                     remove_numbers = TRUE)
-
-tokens <- tokens_select(tokens, stopwords('english'),selection='remove') #stopwords lexicon built in to quanteda
-
-tokens <- tokens_wordstem(tokens) #stem words down to their base form for comparisons across tense and quantity
-
-tokens <- tokens_tolower(tokens)
-
-```
-
-
-we can use the kwic function (keywords-in-context) to briefly examine the context in which certain words appear. 
-```{r initial_analysis}
-head(kwic(tokens, "tree", window = 3))
-
-```
-
-```{r}
- dfm <- dfm(tokens)
+```{r tweet_data}
  
- topfeatures(dfm, 5)
+read <- read_csv("dat/IPCC_tweets_April1-10_sample.csv")
+tweets<- read[,7] # Extract Date and Title fields (what about emotion and sentiment for assignment)
+tweets$Date <- as.Date(read$Date,'%m/%d/%y')
+names(tweets) <- c("text", "date")
+tweets$id <- seq(1:length(tweets$text))
+
+write.csv(tweets, "tweets.csv")
+
+tweets$text <- gsub("http[^[:space:]]*", "",tweets$text)
+
+
+# corpus <- corpus(tweets$Title) #enter quanteda
+# summary(corpus) 
+
 ```
 
+```{r}
+bing_sent <- get_sentiments('bing')
+
+#tokenize tweets to individual words
+words <- tweets %>% 
+  select(id, date, text) %>% 
+  unnest_tokens(output = word, input = text, token = "words") %>% 
+  anti_join(stop_words, by = "word") %>% 
+  left_join(bing_sent, by = "word") %>% 
+  left_join(
+    tribble(
+      ~sentiment, ~sent_score,
+      "positive", 1,
+      "negative", -1),
+    by = "sentiment")
+
+#take average sentiment score by tweet
+tweets <- tweets %>% 
+  left_join(
+    words %>% 
+      group_by(id) %>% 
+      summarize(
+        sent_score = mean(sent_score, na.rm = T)),
+    by = "id")
+
+neutral <- length(which(tweets$sent_score == 0))
+positive <- length(which(tweets$sent_score > 0))
+negative <- length(which(tweets$sent_score < 0))
+
+Sentiment <- c("Positive","Neutral","Negative")
+Count <- c(positive,neutral,negative)
+output <- data.frame(Sentiment,Count)
+output$Sentiment<-factor(output$Sentiment,levels=Sentiment)
+ggplot(output, aes(x=Sentiment,y=Count))+
+  geom_bar(stat = "identity", aes(fill = Sentiment))+
+  scale_fill_manual("legend", values = c("Positive" = "green", "Neutral" = "black", "Negative" = "red"))+
+  ggtitle("Barplot of Sentiment in IPCC tweets")
 
 
+# tally sentiment score per day
+daily_sent <- tweets %>% 
+  group_by(date) %>% 
+  summarize(sent_score = mean(sent_score, na.rm = T))
+
+p <- daily_sent %>%
+  ggplot(
+    aes(x = date, y = sent_score)) +
+  geom_line()
+
+```
+
+are using a package called "quanteda" which is full of useful tools. We'll be working today with simplified tweet data (just the date and text fields).
+
+#dfm.sentiment \<- dfm(corpus, dictionary = bing)
+
+"Types" is the number of one-of-a-kind tokens a text contains. While "tokens" counts the number of words in a text--every "and" or "the" is another token--types only counts each unique word one time, no matter how often it appears.
+
+quanteda has its own built in functions for cleaning text data. Let's take a look at some. First we have to clean the messy tweet data:
+
+```{r quanteda_cleaning}
+# tokens <- tokens(corpus) #tokenize the text so each doc (page, in this case) is a list of tokens (words)
+# 
+# tokens <- tokens(tokens, remove_punct = TRUE, 
+#                      remove_numbers = TRUE)
+# 
+# tokens <- tokens_select(tokens, stopwords('english'),selection='remove') #stopwords lexicon built in to quanteda
+# 
+# tokens <- tokens_wordstem(tokens) #stem words down to their base form for comparisons across tense and quantity
+# 
+# tokens <- tokens_tolower(tokens)
 
 
+```
+
+we can use the kwic function (keywords-in-context) to briefly examine the context in which certain words appear.
+
+```{r initial_analysis}
+#head(kwic(tokens, "climate", window = 10))
+
+```
+
+```{r}
+ # dfm <- dfm(tokens)
+ # 
+ # topfeatures(dfm, 12)
+```
 
 ```{r wordcloud}
-library(wordcloud)
 
-tidy_books %>%
-  anti_join(stop_words) %>%
-  count(word) %>%
-  with(wordcloud(word, n, max.words = 100))
+ words %>%
+   anti_join(stop_words) %>%
+   count(word) %>%
+   with(wordcloud(word, n, max.words = 200))
 
-library(reshape2)
-
-tidy_books %>%
-  inner_join(get_sentiments("bing")) %>%
-  count(word, sentiment, sort = TRUE) %>%
-  acast(word ~ sentiment, value.var = "n", fill = 0) %>%
-  comparison.cloud(colors = c("gray20", "gray80"),
+words %>%
+inner_join(get_sentiments("bing")) %>%
+count(word, sentiment, sort = TRUE) %>%
+acast(word ~ sentiment, value.var = "n", fill = 0) %>%
+comparison.cloud(colors = c("gray20", "gray80"),
                    max.words = 100)
 ```
 
+Assignment
+
+1.  Time for some further cleaning of the twitter data set. Let's assume that the mentions of twitter accounts is not useful to us. Remove them from the text field.
+
+2.  Create a plot
+
+X. Create a wordcloud of the

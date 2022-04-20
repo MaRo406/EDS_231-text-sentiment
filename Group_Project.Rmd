@@ -16,7 +16,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ***June 1st, 2022: Final report & presentation due***
 
-#### Project Proposal - Due at the end of Week 6 (5/6 by 5:00 PM). Email me your proposal at [mateorobbins\@gmail.com](mailto:mateorobbins@gmail.com){.email} by 5pm on May 6th, 2022.
+#### Project Proposal - Due at the end of Week 6 (5/6 by 5:00 PM).
+
+\
+Email me your proposal at [mateorobbins\@gmail.com](mailto:mateorobbins@gmail.com){.email} by 5pm on May 6th, 2022.
 
 The purpose of the project proposal is to ensure that you have a feasible project to continue to move forward with during the rest of the quarter. You can adjust your project plan (check in with me) if you'd like to include analyses that we cover in class after Week 6 or as you begin working with your data.
 
