@@ -105,7 +105,7 @@ word_pairs %>%
 
 Hmm, interesting, but maybe we further subset the word pairs to get a cleaner picture of the most common ones by raising the cutoff for number of occurrences (n).
 
-Pairs like “environmental” and “justice” are the most common co-occurring words, but that doesn't give us the full picture asthey’re also the most common individual words. We can also look at correlation among words, which tells us how often they appear together relative to how often they appear separately. 
+Pairs like "environmental" and "justice" are the most common co-occurring words, but that doesn't give us the full picture asthey're also the most common individual words. We can also look at correlation among words, which tells us how often they appear together relative to how often they appear separately.
 
 ```{r corr_paragraphs}
  
@@ -140,7 +140,8 @@ just_cors <- word_cors %>%
    mutate(n = 1:n())
  
 ```
-Not surprisingly, the correlation between "environmental" and "justice" is by far the highest, which makes sense given the nature of these reports.  How might we visualize these correlations to develop of sense of the context in which justice is discussed here?
+
+Not surprisingly, the correlation between "environmental" and "justice" is by far the highest, which makes sense given the nature of these reports. How might we visualize these correlations to develop of sense of the context in which justice is discussed here?
 
 ```{r corr_network}
 justice_cors  %>%
@@ -210,7 +211,7 @@ keyness <- textstat_keyness(dfm, target = 1)
 textplot_keyness(keyness)
 ```
 
-And fianlly, we can run a hierarchical clustering algorithm to assess document similarity.  This tends to be more informative when you are dealing with a larger number of documents, but we'll add it here for future reference.
+And finally, we can run a hierarchical clustering algorithm to assess document similarity. This tends to be more informative when you are dealing with a larger number of documents, but we'll add it here for future reference.
 
 ```{r hierarch_clust}
 dist <- as.dist(textstat_dist(dfm))
@@ -218,9 +219,12 @@ clust <- hclust(dist)
 plot(clust, xlab = "Distance", ylab = NULL)
 ```
 
+Assignment
 
-##Assignment 1. What are the most frequent trigrams in the dataset? How does this compare to the most frequent bigrams? Which n-gram seems more informative here, and why?
+1.  What are the most frequent trigrams in the dataset? How does this compare to the most frequent bigrams? Which n-gram seems more informative here, and why?
 
-2.  Write a function that allows you to compare two individual EPA reports (hint: that means target and reference need to both be individual reports). Run the function on 3 pairs of reports, generating 3 keyness plots.
+2.  Choose a new focal term to replace "justice" and recreate the correlation table and network (see corr_paragraphs and corr_network chunks). Explore some of the plotting parameters in the cor_network chunk to see if you can improve the clarity or amount of information your plot conveys. Make sure to use a different color for the ties!
 
-3.  Choose a new focal term to replace "justice" and recreate the correlation table and network (see corr_paragraphs and corr_network chunks).  Explore some of the plotting parameters in the cor_network chunk to see if you can improve the clarity or amount of information your plot conveys.  Make sure to use a different color for the ties!
+3.  Write a function that allows you to conduct a keyness analysis to compare two individual EPA reports (hint: that means target and reference need to both be individual reports). Run the function on 3 pairs of reports, generating 3 keyness plots.
+
+4.  Select a word or multi-word term of interest and identify words related to it using windowing and keyness comparison. To do this you will create to objects: one containing all words occurring within a 10-word window of your term of interest, and the second object containing all other words. Then run a keyness comparison on these objects. Which one is the target, and which the reference? [Hint](https://tutorials.quanteda.io/advanced-operations/target-word-collocations/)
