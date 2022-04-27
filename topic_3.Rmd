@@ -31,9 +31,9 @@ The excerpt is in .pdf format, so we'll need a tool (the pdftools package) to he
 
 ```{r over_story_data}
 
-over <- pdf_text('dat/overstory_exerpt.pdf')
-over_df <- data.frame(text = over) %>% #create 1-column df with 'text' variable
-  mutate(page = 1:n()) #add a page number variable, 'page'
+# over <- pdf_text('dat/overstory_exerpt.pdf')
+# over_df <- data.frame(text = over) %>% #create 1-column df with 'text' variable
+#   mutate(page = 1:n()) #add a page number variable, 'page'
 
 #examine the beginning of the data frame
 
@@ -46,6 +46,8 @@ over_df <- data.frame(text = over) %>% #create 1-column df with 'text' variable
 #write_csv(over_text, "dat/over_text.csv")
 
 #Note: \n, used above, is an example of an "escape sequence", which allow you to include characters that would otherwise break the code
+
+#***Update: Skip the PDF steps and use this already-constructed .csv
 over_text <- read_csv("dat/over_text.csv")
 
 ```
@@ -156,7 +158,7 @@ book_sent_counts %>%
 ### Introduction to the Nexis Uni data source
 
 ```{r nexis_data, message=FALSE}
-setwd("/Users/mateorobbins/Desktop/Git/test/nexis_dat")
+setwd("/Users/mateorobbins/Desktop/Git/EDS_231-text-sentiment/nexis_dat")
 #to follow along with this example, download this .docx to your working directory: 
 #https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/nexis_dat/Nexis_IPCC_Results.docx
 my_files <- list.files(pattern = ".docx", path = getwd(),

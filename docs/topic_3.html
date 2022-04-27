@@ -2485,6 +2485,8 @@ Topics
 <a href="topic_2.html">Topic 2: Text Data in R</a>
 <a href="topic_3.html">Topic 3: Sentiment Analysis I</a>
 <a href="topic_4.html">Topic 4: Sentiment Analysis II</a>
+<a href="topic_5.html">Topic 5: Word Relationships</a>
+<a href="topic_6.html">Topic 6: Internal &amp; external links</a>
 </div>
 </div>
 <a href="resources.html">Resources</a>
@@ -2534,21 +2536,24 @@ Powers<em>.</em></p>
 package) to help us deal with that.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>over</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://docs.ropensci.org/pdftools/reference/pdftools.html'>pdf_text</a></span><span class='op'>(</span><span class='st'>'dat/overstory_exerpt.pdf'</span><span class='op'>)</span>
-<span class='va'>over_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='va'>over</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'>#create 1-column df with 'text' variable</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>page <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='co'>#add a page number variable, 'page'</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># over &lt;- pdf_text('dat/overstory_exerpt.pdf')</span>
+<span class='co'># over_df &lt;- data.frame(text = over) %&gt;% #create 1-column df with 'text' variable</span>
+<span class='co'>#   mutate(page = 1:n()) #add a page number variable, 'page'</span>
 
 <span class='co'>#examine the beginning of the data frame</span>
 
-<span class='va'>over_text</span> <span class='op'>&lt;-</span> <span class='va'>over_df</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>page</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fl'>8</span><span class='op'>:</span><span class='fl'>41</span><span class='op'>)</span><span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_split.html'>str_split</a></span><span class='op'>(</span><span class='va'>text</span>, <span class='st'>'\n'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'>#this splits by page. </span>
-  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span><span class='op'>(</span><span class='va'>text</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>  <span class='co'>#this splits by line</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>line <span class='op'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/case.html'>str_to_lower</a></span><span class='op'>(</span><span class='va'>text</span><span class='op'>)</span><span class='op'>)</span> <span class='co'>#and convert to all lower case</span>
+<span class='co'># over_text &lt;- over_df %&gt;%</span>
+<span class='co'>#   filter(page %in% 8:41)%&gt;%</span>
+<span class='co'>#   mutate(text = str_split(text, '\n')) %&gt;% #this splits by page. </span>
+<span class='co'>#   unnest(text) %&gt;%  #this splits by line</span>
+<span class='co'>#   mutate(line = str_to_lower(text)) #and convert to all lower case</span>
 
 <span class='co'>#write_csv(over_text, "dat/over_text.csv")</span>
 
 <span class='co'>#Note: \n, used above, is an example of an "escape sequence", which allow you to include characters that would otherwise break the code</span>
+
+<span class='co'>#***Update: Skip the PDF steps and use this already-constructed .csv</span>
+<span class='va'>over_text</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"dat/over_text.csv"</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
@@ -2717,7 +2722,7 @@ categories</p>
 Nexis Uni data source</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='st'>"/Users/mateorobbins/Desktop/Git/test/nexis_dat"</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='st'>"/Users/mateorobbins/Desktop/Git/EDS_231-text-sentiment/nexis_dat"</span><span class='op'>)</span>
 <span class='co'>#to follow along with this example, download this .docx to your working directory: </span>
 <span class='co'>#https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/nexis_dat/Nexis_IPCC_Results.docx</span>
 <span class='va'>my_files</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='op'>(</span>pattern <span class='op'>=</span> <span class='st'>".docx"</span>, path <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='op'>(</span><span class='op'>)</span>,
