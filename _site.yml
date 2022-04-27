@@ -18,8 +18,8 @@ navbar:
           href: topic_3.html
         - text: "Topic 4: Sentiment Analysis II"
           href: topic_4.html
-        # - text: "Topic 5: Basic formatting"
-        #   href: topic_5.html
+        - text: "Topic 5: Word Relationships"
+          href: topic_5.html
         # - text: "Topic 6: Internal & external links"
         #   href: topic_6.html
         # - text: "Topic 7: Remove tables of contents"

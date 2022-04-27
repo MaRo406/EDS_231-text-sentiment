@@ -87,26 +87,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>EDS 231: Topic 5: Basic formatting</title>
+  <title>EDS 231: Topic 5: Word Relationships</title>
 
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="EDS 231: Topic 5: Basic formatting"/>
+  <meta property="og:title" content="EDS 231: Topic 5: Word Relationships"/>
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="EDS 231"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="EDS 231: Topic 5: Basic formatting"/>
+  <meta property="twitter:title" content="EDS 231: Topic 5: Word Relationships"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["Topic 5: Basic formatting"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["Topic 5: Word Relationships"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2463,7 +2463,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Topic 5: Basic formatting","authors":[]}
+{"title":"Topic 5: Word Relationships","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2498,7 +2498,7 @@ Topics
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Topic 5: Basic formatting</h1>
+<h1>Topic 5: Word Relationships</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
 
@@ -2506,23 +2506,309 @@ Topics
 
 
 <div class="d-article">
-<p style="color: #ba5e00">
-<b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_5.Rmd</b> file,
-in the project root, to delete this placeholder text and customize with
-your own!
-</p>
-<p>If you’re familiar with markdown, use standard syntax to update font
-styles, add bulleted lists, subscripts/superscripts, etc. (or learn more
-from the <a
-href="https://www.rstudio.org/links/r_markdown_cheat_sheet">R Markdown
-cheatsheet</a>).</p>
-<p>If you’re not familiar with markdown and want an easier way to update
-formatting, there is a Visual Editor in RStudio versions &gt; 1.4. It is
-absolutely worth it to check it out for easier formatting of text,
-images, tables, citations, and more. Read more about the new RStudio
-Visual Editor <a
-href="https://blog.rstudio.com/2020/09/30/rstudio-v1-4-preview-visual-markdown-editing/">here</a>.</p>
-<div class="sourceCode" id="cb1"><pre
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyr.tidyverse.org'>tidyr</a></span><span class='op'>)</span> <span class='co'>#text analysis in R</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/pdftools/'>pdftools</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lubridate.tidyverse.org'>lubridate</a></span><span class='op'>)</span> <span class='co'>#working with date data</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/juliasilge/tidytext'>tidytext</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://readr.tidyverse.org'>readr</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://quanteda.io'>quanteda</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/quanteda/readtext'>readtext</a></span><span class='op'>)</span> <span class='co'>#quanteda subpackage for reading pdf</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://quanteda.io'>quanteda.textstats</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>quanteda.textplots</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://forcats.tidyverse.org'>forcats</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://stringr.tidyverse.org'>stringr</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>quanteda.textplots</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/dgrtwo/widyr'>widyr</a></span><span class='op'>)</span><span class='co'># pairwise correlations</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://igraph.org'>igraph</a></span><span class='op'>)</span> <span class='co'>#network plots</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggraph.data-imaginist.com'>ggraph</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>#import EPA EJ Data</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='st'>'dat/'</span><span class='op'>)</span>
+<span class='va'>files</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='op'>(</span>pattern <span class='op'>=</span> <span class='st'>"pdf$"</span><span class='op'>)</span>
+
+<span class='va'>ej_reports</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>files</span>, <span class='va'>pdf_text</span><span class='op'>)</span>
+
+<span class='va'>ej_pdf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/readtext/man/readtext.html'>readtext</a></span><span class='op'>(</span><span class='st'>"*.pdf"</span>, docvarsfrom <span class='op'>=</span> <span class='st'>"filenames"</span>, 
+                    docvarnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"type"</span>, <span class='st'>"year"</span><span class='op'>)</span>,
+                    sep <span class='op'>=</span> <span class='st'>"_"</span><span class='op'>)</span>
+
+<span class='co'>#creating an initial corpus containing our data</span>
+<span class='va'>epa_corp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/corpus.html'>corpus</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>ej_pdf</span>, text_field <span class='op'>=</span> <span class='st'>"text"</span> <span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>epa_corp</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Corpus consisting of 6 documents, showing 6 documents:
+
+           Text Types Tokens Sentences  type year
+ EPAEJ_2015.pdf  2136   8944       263 EPAEJ 2015
+ EPAEJ_2016.pdf  1599   7965       176 EPAEJ 2016
+ EPAEJ_2017.pdf  2774  16658       447 EPAEJ 2017
+ EPAEJ_2018.pdf  3973  30564       653 EPAEJ 2018
+ EPAEJ_2019.pdf  3773  22648       672 EPAEJ 2019
+ EPAEJ_2020.pdf  4493  30523       987 EPAEJ 2020</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#I'm adding some additional, context-specific stop words to stop word lexicon</span>
+<span class='va'>more_stops</span> <span class='op'>&lt;-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2015"</span>,<span class='st'>"2016"</span>, <span class='st'>"2017"</span>, <span class='st'>"2018"</span>, <span class='st'>"2019"</span>, <span class='st'>"2020"</span>, <span class='st'>"www.epa.gov"</span>, <span class='st'>"https"</span><span class='op'>)</span>
+<span class='va'>add_stops</span><span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>word <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>stop_words</span><span class='op'>$</span><span class='va'>word</span>, <span class='va'>more_stops</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='va'>stop_vec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://purrr.tidyverse.org/reference/as_vector.html'>as_vector</a></span><span class='op'>(</span><span class='va'>add_stops</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Now we’ll create some different data objects that will set us up for
+the subsequent analyses</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#convert to tidy format and apply my stop words</span>
+<span class='va'>raw_text</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>epa_corp</span><span class='op'>)</span>
+
+<span class='co'>#Distribution of most frequent words across documents</span>
+<span class='va'>raw_words</span> <span class='op'>&lt;-</span> <span class='va'>raw_text</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>year <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>year</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>text</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>add_stops</span>, by <span class='op'>=</span> <span class='st'>'word'</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>year</span>, <span class='va'>word</span>, sort <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='co'>#number of total words by document  </span>
+<span class='va'>total_words</span> <span class='op'>&lt;-</span> <span class='va'>raw_words</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>year</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>total <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>report_words</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>raw_words</span>, <span class='va'>total_words</span><span class='op'>)</span>
+ 
+<span class='va'>par_tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='op'>(</span><span class='va'>raw_text</span>, output <span class='op'>=</span> <span class='va'>paragraphs</span>, input <span class='op'>=</span> <span class='va'>text</span>, token <span class='op'>=</span> <span class='st'>"paragraphs"</span><span class='op'>)</span>
+
+<span class='va'>par_tokens</span> <span class='op'>&lt;-</span> <span class='va'>par_tokens</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+ <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>par_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>par_words</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='op'>(</span><span class='va'>par_tokens</span>, output <span class='op'>=</span> <span class='va'>word</span>, input <span class='op'>=</span> <span class='va'>paragraphs</span>, token <span class='op'>=</span> <span class='st'>"words"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Let’s see which words tend to occur close together in the text. This
+is a way to leverage word relationships (in this case, co-occurence in a
+single paragraph) to give us some understanding of the things discussed
+in the documents.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>word_pairs</span> <span class='op'>&lt;-</span> <span class='va'>par_words</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/widyr/man/pairwise_count.html'>pairwise_count</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>par_id</span>, sort <span class='op'>=</span> <span class='cn'>TRUE</span>, upper <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>add_stops</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"item1"</span> <span class='op'>=</span> <span class='st'>"word"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter-joins.html'>anti_join</a></span><span class='op'>(</span><span class='va'>add_stops</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"item2"</span> <span class='op'>=</span> <span class='st'>"word"</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Now we can visualize</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>word_pairs</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>n</span> <span class='op'>&gt;=</span> <span class='fl'>70</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html'>graph_from_data_frame</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggraph.data-imaginist.com/reference/ggraph.html'>ggraph</a></span><span class='op'>(</span>layout <span class='op'>=</span> <span class='st'>"fr"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggraph.data-imaginist.com/reference/geom_edge_link.html'>geom_edge_link</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>edge_alpha <span class='op'>=</span> <span class='va'>n</span>, edge_width <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>, edge_colour <span class='op'>=</span> <span class='st'>"dodgerblue"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggraph.data-imaginist.com/reference/geom_node_point.html'>geom_node_point</a></span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggraph.data-imaginist.com/reference/geom_node_text.html'>geom_node_text</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>name</span><span class='op'>)</span>, repel <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+                 point.padding <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grid/unit.html'>unit</a></span><span class='op'>(</span><span class='fl'>0.2</span>, <span class='st'>"lines"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_void</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_5_files/figure-html5/co-occur_plots-1.png" width="624" /></p>
+</div>
+<p>Hmm, interesting, but maybe we further subset the word pairs to get a
+cleaner picture of the most common ones by raising the cutoff for number
+of occurrences (n).</p>
+<p>Pairs like “environmental” and “justice” are the most common
+co-occurring words, but that doesn’t give us the full picture asthey’re
+also the most common individual words. We can also look at correlation
+among words, which tells us how often they appear together relative to
+how often they appear separately.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>word_cors</span> <span class='op'>&lt;-</span> <span class='va'>par_words</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>add_count</a></span><span class='op'>(</span><span class='va'>par_id</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>n</span> <span class='op'>&gt;=</span> <span class='fl'>50</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>n</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/widyr/man/pairwise_cor.html'>pairwise_cor</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>par_id</span>, sort <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='va'>just_cors</span> <span class='op'>&lt;-</span> <span class='va'>word_cors</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>item1</span> <span class='op'>==</span> <span class='st'>"justice"</span><span class='op'>)</span>
+
+  <span class='va'>word_cors</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>item1</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"environmental"</span>, <span class='st'>"justice"</span>, <span class='st'>"equity"</span>, <span class='st'>"income"</span><span class='op'>)</span><span class='op'>)</span><span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>item1</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/top_n.html'>top_n</a></span><span class='op'>(</span><span class='fl'>6</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>ungroup</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>item1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>item1</span><span class='op'>)</span>,
+  name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/reorder_within.html'>reorder_within</a></span><span class='op'>(</span><span class='va'>item2</span>, <span class='va'>correlation</span>, <span class='va'>item1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>name</span>, x <span class='op'>=</span> <span class='va'>correlation</span>, fill <span class='op'>=</span> <span class='va'>item1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span>show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>item1</span>, ncol <span class='op'>=</span> <span class='fl'>2</span>, scales <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span><span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/reorder_within.html'>scale_y_reordered</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='cn'>NULL</span>,
+         x <span class='op'>=</span> <span class='cn'>NULL</span>,
+         title <span class='op'>=</span> <span class='st'>"Correlations with key words"</span>,
+         subtitle <span class='op'>=</span> <span class='st'>"EPA EJ Reports"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="topic_5_files/figure-html5/corr_paragraphs-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">  <span class='co'>#let's zoom in on just one of our key terms</span>
+   <span class='va'>justice_cors</span> <span class='op'>&lt;-</span> <span class='va'>word_cors</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>item1</span> <span class='op'>==</span> <span class='st'>"justice"</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Not surprisingly, the correlation between “environmental” and
+“justice” is by far the highest, which makes sense given the nature of
+these reports. How might we visualize these correlations to develop of
+sense of the context in which justice is discussed here?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>justice_cors</span>  <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>n</span> <span class='op'>&lt;=</span> <span class='fl'>50</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html'>graph_from_data_frame</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggraph.data-imaginist.com/reference/ggraph.html'>ggraph</a></span><span class='op'>(</span>layout <span class='op'>=</span> <span class='st'>"fr"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggraph.data-imaginist.com/reference/geom_edge_link.html'>geom_edge_link</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>edge_alpha <span class='op'>=</span> <span class='va'>correlation</span>, edge_width <span class='op'>=</span> <span class='va'>correlation</span><span class='op'>)</span>, edge_colour <span class='op'>=</span> <span class='st'>"cyan4"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggraph.data-imaginist.com/reference/geom_node_point.html'>geom_node_point</a></span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggraph.data-imaginist.com/reference/geom_node_text.html'>geom_node_text</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>name</span><span class='op'>)</span>, repel <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+                 point.padding <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grid/unit.html'>unit</a></span><span class='op'>(</span><span class='fl'>0.2</span>, <span class='st'>"lines"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_void</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_5_files/figure-html5/corr_network-1.png" width="624" /></p>
+</div>
+<p>Now let’s look at the tf-idf term we talked about. Remember, this
+statistic goes beyond simple frequency calculations within a document to
+control for overall commonality across documents</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>report_tf_idf</span> <span class='op'>&lt;-</span> <span class='va'>report_words</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/bind_tf_idf.html'>bind_tf_idf</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>year</span>, <span class='va'>n</span><span class='op'>)</span>
+
+<span class='va'>report_tf_idf</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>total</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span><span class='op'>(</span><span class='va'>tf_idf</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 13,598 × 6
+   year  word           n      tf   idf  tf_idf
+   &lt;fct&gt; &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1 2018  fy2017       112 0.00816 1.79  0.0146 
+ 2 2017  rogress       30 0.00383 1.79  0.00686
+ 3 2020  covid         51 0.00350 1.79  0.00626
+ 4 2020  pandemic      32 0.00219 1.79  0.00393
+ 5 2015  ferst          8 0.00166 1.79  0.00297
+ 6 2017  ta            30 0.00383 0.693 0.00265
+ 7 2015  cpp            7 0.00145 1.79  0.00260
+ 8 2016  appalachia     8 0.00232 1.10  0.00254
+ 9 2017  superfund     45 0.00574 0.405 0.00233
+10 2020  ta            48 0.00329 0.693 0.00228
+# … with 13,588 more rows</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>report_tf_idf</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>year</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice_max</a></span><span class='op'>(</span><span class='va'>tf_idf</span>, n <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>ungroup</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span><span class='op'>(</span><span class='va'>word</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'><a href='https://tidyr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>tf_idf</span>, <span class='fu'><a href='https://forcats.tidyverse.org/reference/fct_reorder.html'>fct_reorder</a></span><span class='op'>(</span><span class='va'>word</span>, <span class='va'>tf_idf</span><span class='op'>)</span>, fill <span class='op'>=</span> <span class='va'>year</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span>show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>year</span>, ncol <span class='op'>=</span> <span class='fl'>2</span>, scales <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"tf-idf"</span>, y <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_5_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
+</div>
+<p>So that gives an idea which words are frequent and unique to certain
+documents.</p>
+<p>Now let’s switch gears to quanteda for some additional word
+relationship tools. We’ll also get into some ways to assess the
+similarity of documents.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens.html'>tokens</a></span><span class='op'>(</span><span class='va'>epa_corp</span>, remove_punct <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>toks1</span><span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens_select.html'>tokens_select</a></span><span class='op'>(</span><span class='va'>tokens</span>, min_nchar <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>toks1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens_tolower.html'>tokens_tolower</a></span><span class='op'>(</span><span class='va'>toks1</span><span class='op'>)</span>
+<span class='va'>toks1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens_select.html'>tokens_remove</a></span><span class='op'>(</span><span class='va'>toks1</span>, pattern <span class='op'>=</span> <span class='op'>(</span><span class='va'>stop_vec</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>dfm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm.html'>dfm</a></span><span class='op'>(</span><span class='va'>toks1</span><span class='op'>)</span>
+
+<span class='co'>#first the basic frequency stat</span>
+<span class='va'>tstat_freq</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/textstat_frequency.html'>textstat_frequency</a></span><span class='op'>(</span><span class='va'>dfm</span>, n <span class='op'>=</span> <span class='fl'>5</span>, groups <span class='op'>=</span> <span class='va'>year</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>tstat_freq</span>, <span class='fl'>10</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>         feature frequency rank docfreq group
+1  environmental       127    1       1  2015
+2    communities        99    2       1  2015
+3            epa        92    3       1  2015
+4        justice        84    4       1  2015
+5      community        47    5       1  2015
+6  environmental       109    1       1  2016
+7    communities        85    2       1  2016
+8        justice        71    3       1  2016
+9            epa        48    4       1  2016
+10       federal        31    5       1  2016</code></pre>
+</div>
+<p>Another useful word relationship concept is that of the n-gram, which
+essentially means tokenizing at the multi-word level</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>toks2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens_ngrams.html'>tokens_ngrams</a></span><span class='op'>(</span><span class='va'>toks1</span>, n<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>dfm2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm.html'>dfm</a></span><span class='op'>(</span><span class='va'>toks2</span><span class='op'>)</span>
+<span class='va'>dfm2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm_select.html'>dfm_remove</a></span><span class='op'>(</span><span class='va'>dfm2</span>, pattern <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>stop_vec</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>freq_words2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/textstat_frequency.html'>textstat_frequency</a></span><span class='op'>(</span><span class='va'>dfm2</span>, n<span class='op'>=</span><span class='fl'>20</span><span class='op'>)</span>
+<span class='va'>freq_words2</span><span class='op'>$</span><span class='va'>token</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"bigram"</span>, <span class='fl'>20</span><span class='op'>)</span>
+<span class='co'>#tokens1 &lt;- tokens_select(tokens1,pattern = stopwords("en"), selection = "remove")</span>
+</code></pre>
+</div>
+</div>
+<p>Now we can upgrade that by using all of the frequencies for each word
+in each document and calculating a chi-square to see which words occur
+significantly more or less within a particular target document</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>keyness</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/textstat_keyness.html'>textstat_keyness</a></span><span class='op'>(</span><span class='va'>dfm</span>, target <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/quanteda.textplots/man/textplot_keyness.html'>textplot_keyness</a></span><span class='op'>(</span><span class='va'>keyness</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_5_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
+</div>
+<p>And fianlly, we can run a hierarchical clustering algorithm to assess
+document similarity. This tends to be more informative when you are
+dealing with a larger number of documents, but we’ll add it here for
+future reference.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/dist.html'>as.dist</a></span><span class='op'>(</span><span class='fu'><a href='https://quanteda.io/reference/textstat_simil.html'>textstat_dist</a></span><span class='op'>(</span><span class='va'>dfm</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>clust</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>clust</span>, xlab <span class='op'>=</span> <span class='st'>"Distance"</span>, ylab <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_5_files/figure-html5/hierarch_clust-1.png" width="624" /></p>
+</div>
+<p>##Assignment 1. What are the most frequent trigrams in the dataset?
+How does this compare to the most frequent bigrams? Which n-gram seems
+more informative here, and why?</p>
+<ol start="2" type="1">
+<li><p>Write a function that allows you to compare two individual EPA
+reports (hint: that means target and reference need to both be
+individual reports). Run the function on 3 pairs of reports, generating
+3 keyness plots.</p></li>
+<li><p>Choose a new focal term to replace “justice” and recreate the
+correlation table and network (see corr_paragraphs and corr_network
+chunks). Explore some of the plotting parameters in the cor_network
+chunk to see if you can improve the clarity or amount of information
+your plot conveys. Make sure to use a different color for the
+ties!</p></li>
+</ol>
+<div class="sourceCode" id="cb4"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
