@@ -20,8 +20,8 @@ navbar:
           href: topic_4.html
         - text: "Topic 5: Word Relationships"
           href: topic_5.html
-        - text: "Topic 6: Internal & external links"
-          href: topic_6.html
+        # - text: "Topic 6: Internal & external links"
+        #   href: topic_6.html
         # - text: "Topic 7: Remove tables of contents"
         #   href: topic_7.html
         # - text: "Topic 8: Add a dropdown menu from navigation bar item"
