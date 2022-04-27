@@ -93,7 +93,7 @@ Now we can visualize
 
 ```{r co-occur_plots}
 word_pairs %>%
-  filter(n >= 70) %>%
+  filter(n >= 100) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
   geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "dodgerblue") +
@@ -159,9 +159,7 @@ Now let's look at the tf-idf term we talked about. Remember, this statistic goes
 
 ```{r}
 report_tf_idf <- report_words %>%
-  bind_tf_idf(word, year, n)
-
-report_tf_idf %>%
+  bind_tf_idf(word, year, n) %>%
   select(-total) %>%
   arrange(desc(tf_idf))
 
@@ -207,7 +205,7 @@ freq_words2$token <- rep("bigram", 20)
 Now we can upgrade that by using all of the frequencies for each word in each document and calculating a chi-square to see which words occur significantly more or less within a particular target document
 
 ```{r}
-keyness <- textstat_keyness(dfm, target = 1)
+keyness <- textstat_keyness(dfm2, target = 2)
 textplot_keyness(keyness)
 ```
 
