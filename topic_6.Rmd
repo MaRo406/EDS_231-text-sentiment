@@ -2,26 +2,59 @@
 title: "Topic 6: Internal & external links"
 ---
 
-<p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_6.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p>
+```{r semantic_network}
+topfeatures(dfm, 20)
+freq_words1 <- textstat_frequency(dfm)
+head(freq_words1, n = 20)
 
-## Linking to internal parts of your site
+fcm1 <- fcm(toks1, context = "window", window = 3)
+filter_freq <- freq_words1$feature[1:50]
+top_fcm<- fcm_select(fcm1, pattern = filter_freq)
 
-Sometimes you'll want to have a link to another page *in your website*. How? Use the format `[text](link_to_this_page.html)`. 
+mat <- as.matrix(top_fcm)
+net <- graph_from_adjacency_matrix(mat, diag = F, weighted = T, mode = "undirected")
+weight = E(net)$weight/100
+lo <- layout_nicely(net)
 
-For example, if I want to link here to the Resources page, within my .Rmd that looks like this: 
 
-      Find more resources [here](resources.html). 
+V(net)$deg <- degree(net)
 
-Which, when built, looks like this: 
+#Create network
+plot(net, layout=lo,edge.arrow.size=0, vertex.size = 0 , main= "EPA EJ Reports 2015-2020",
+     vertex.label.font = 2, vertex.label.color = "black", vertex.shape = "none",edge.width = weight, vertex.label.cex = V(net)$deg/50+.1)
+```
+clust <- cluster_fast_greedy(as.undirected(net))
+```
+```{r}
+#Clustering for themes
 
-Find more resources [here](resources.html).
+name.df <- tibble(V(net)$name)
 
-## External links
+colnames(name.df) <- "feature"
+freq_words <- textstat_frequency(dfm)
+att <- full_join(name.df, freq_words)
+att <- att %>%
+  mutate(community = clust$membership)
 
-Same thing, just add the full URL within the parentheses. For example, to link to UCSB's home page that would look like: 
 
-      Learn more about [UCSB](https://www.ucsb.edu/).
-      
-Which when built looks like this: 
+gpatt$color[gpatt$community == 1] <- "green3"
+gpatt$color[gpatt$community == 2] <- "purple"
+gpatt$color[gpatt$community == 3] <- "dodgerblue3"
+gpatt$color[gpatt$community == 4] <-  "darkorange"
 
-Learn more about [UCSB](https://www.ucsb.edu/).
+
+#V(net)$community <- cfg$membership
+V(gpnet)$community <- gpatt$community
+V(gpnet)$color <- gpatt$color
+
+#assign freq of occurence as vertex gpattribute for sizing nodes in diagram
+freq <- V(gpnet)$freq
+
+gplo <- layout_with_fr(gpnet)
+
+#all words colored
+plot(gpnet, edge.arrow.size=0,vertex.label=V(gpnet)$name, vertex.size = 0.01, main= "General Public with Communities, Ties by Sentence",
+     edge.width = weight*2, vertex.label.color=V(gpnet)$color, vertex.label.font = 2, vertex.label.cex = freq/max(freq)+.5, layout = gplo)
+
+
+```

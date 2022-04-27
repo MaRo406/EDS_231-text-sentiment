@@ -28,7 +28,7 @@ Last week we used the tidytext approach to sentiment analysis for Nexis Uni .pdf
 
 raw_tweets <- read.csv("https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/dat/IPCC_tweets_April1-10_sample.csv", header=TRUE)
 
-dat<- raw_tweets[,c(5,7)] # Extract Date and Title fields
+dat<- raw_tweets[,c(4,6)] # Extract Date and Title fields
 
 tweets <- tibble(text = dat$Title,
                   id = seq(1:length(dat$Title)),

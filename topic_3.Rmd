@@ -37,15 +37,16 @@ over_df <- data.frame(text = over) %>% #create 1-column df with 'text' variable
 
 #examine the beginning of the data frame
 
-over_text <- over_df %>%
-  filter(page %in% 8:41)%>%
-  mutate(text = str_split(text, '\n')) %>% #this splits by page. 
-  unnest(text) %>%  #this splits by line
-  mutate(line = str_to_lower(text)) #and convert to all lower case
+# over_text <- over_df %>%
+#   filter(page %in% 8:41)%>%
+#   mutate(text = str_split(text, '\n')) %>% #this splits by page. 
+#   unnest(text) %>%  #this splits by line
+#   mutate(line = str_to_lower(text)) #and convert to all lower case
 
 #write_csv(over_text, "dat/over_text.csv")
 
 #Note: \n, used above, is an example of an "escape sequence", which allow you to include characters that would otherwise break the code
+over_text <- read_csv("dat/over_text.csv")
 
 ```
 
