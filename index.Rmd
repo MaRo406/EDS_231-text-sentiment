@@ -1,6 +1,6 @@
 ---
-title: "EDS 231: Text and Sentiment Analysis for Environmental Problems"
-description: "Master’s of Environmental Data Science Program, UC Santa Barbara"
+title: 'EDS 231: Text and Sentiment Analysis for Environmental Problems'
+description: Master’s of Environmental Data Science Program, UC Santa Barbara
 site: distill::distill_website
 ---
 
@@ -76,7 +76,7 @@ The goal of EDS 231 (Text and Sentiment Analysis for Environmental Problems) is 
 | 3 (4/13)  | Sentiment analysis I                                                                                                                            | [TMR Ch. 2](https://www.tidytextmining.com/sentiment.html)                                                                    | [Topic 3](https://maro406.github.io/EDS_231-text-sentiment/topic_3.html) |
 | 4 (4/20)  | Sentiment analysis II                                                                                                                           | \-                                                                                                                            | Topic 4                                                                  |
 | 5 (4/27)  | Word relationship analysis                                                                                                                      | link                                                                                                                          | [Topic 5](https://maro406.github.io/EDS_231-text-sentiment/topic_5.html) |
-| 6 (5/4)   | Topic analysis                                                                                                                                  | link                                                                                                                          | TBA                                                                      |
+| 6 (5/4)   | Topic analysis                                                                                                                                  | TMR Ch. 4                                                                                                                     | TBA                                                                      |
 | 7 (5/11)  | Word Embeddings                                                                                                                                 | link                                                                                                                          | TBA                                                                      |
 | 8 (5/18)  | Classification                                                                                                                                  | link                                                                                                                          | TBA                                                                      |
 | 9 (5/25)  | TBD                                                                                                                                             | link                                                                                                                          | TBA                                                                      |
