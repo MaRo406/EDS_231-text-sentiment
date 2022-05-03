@@ -1,60 +1,135 @@
 # ---
+
 # title: "Topic 6: Internal & external links"
+
 # ---
+
 # 
-# ```{r semantic_network}
-# topfeatures(dfm, 20)
-# freq_words1 <- textstat_frequency(dfm)
-# head(freq_words1, n = 20)
-# 
-# fcm1 <- fcm(toks1, context = "window", window = 3)
-# filter_freq <- freq_words1$feature[1:50]
-# top_fcm<- fcm_select(fcm1, pattern = filter_freq)
-# 
-# mat <- as.matrix(top_fcm)
-# net <- graph_from_adjacency_matrix(mat, diag = F, weighted = T, mode = "undirected")
-# weight = E(net)$weight/100
-# lo <- layout_nicely(net)
-# 
-# 
-# V(net)$deg <- degree(net)
-# 
-# #Create network
-# plot(net, layout=lo,edge.arrow.size=0, vertex.size = 0 , main= "EPA EJ Reports 2015-2020",
-#      vertex.label.font = 2, vertex.label.color = "black", vertex.shape = "none",edge.width = weight, vertex.label.cex = V(net)$deg/50+.1)
-# ```
-<!-- clust <- cluster_fast_greedy(as.undirected(net)) -->
+
+```{r packages}
+library("here")
+library("pdftools")
+library("quanteda")
+library("tm")
+library("topicmodels")
+library(ldatuning)
+library(tidyverse)
+library(tidytext)
+
 ```
-<!-- ```{r} -->
-<!-- #Clustering for themes -->
 
-<!-- name.df <- tibble(V(net)$name) -->
+```{r}
+setwd(here("pdfs"))
+files <- list.files(pattern = "pdf$")
+comments_df <- data.frame(Document = files,
+                          text = sapply(files, function(x) 
+                                 paste0(pdf_text(x), collapse = ' '))) 
 
-<!-- colnames(name.df) <- "feature" -->
-<!-- freq_words <- textstat_frequency(dfm) -->
-<!-- att <- full_join(name.df, freq_words) -->
-<!-- att <- att %>% -->
-<!--   mutate(community = clust$membership) -->
+saveRDS(comments_df, "comments_df.csv")
+epa_corp <- corpus(x = comments_df, text_field = "text")
+add_stops <- c(stopwords("en"),"environmental", "justice", "ej", "epa", "public", "comment")
+
+```
+
+```{r}
+epa_corp.stats <- summary(epa_corp)
+head(epa_corp.stats, n = 25)
+toks <- tokens(epa_corp, remove_punct = TRUE, remove_numbers = TRUE)
+toks1 <- tokens_select(toks, pattern = add_stops, selection = "remove")
+dfm_comm<- dfm(toks1, tolower = TRUE)
+dfm <- dfm_wordstem(dfm_comm)
+dfm <- dfm_trim(dfm, min_docfreq = 2) #min_termfreq = 10,
+
+print(dfm)
+
+#remove rows (docs) with all zeros
+sel_idx <- slam::row_sums(dfm) > 0
+dfm <- dfm[sel_idx, ]
+comments_df <- comments_df[sel_idx, ]
+
+```
+
+We somehow have to come up with a value for k, how many latent topics are present in the data. How do we do this? There are multiple methods. Let's use one based on what we already know about the data. The EPA has 9 priority areas: Rulemaking, Permitting, Compliance and Enforcement, Science, States and Local Governments, Federal Agencies, Community-based Work, Tribes and Indigenous People, National Measures SECTION 2: CROSS-CUTTING & RELATED ISSUES:
+
+1\. Title VI of the Civil Rights Act of 1964
+
+2.[EJSCREEN](https://www.epa.gov/ejscreen/download-ejscreen-data)
+
+3\. climate change, climate adaptation and promoting greenhouse gas reductions co-benefits
+
+4\. overburdened communities and other stakeholders to meaningfully, effectively, and transparently participate in aspects of EJ 2020, as well as other agency processes
+
+5\. utilize multiple Federal Advisory Committees to better obtain outside environmental justice perspectives
+
+6\. environmental justice and area-specific training to EPA staff
+
+7\. air quality issues in overburdened communities After receiving all the comments, the EPA
 
 
-<!-- gpatt$color[gpatt$community == 1] <- "green3" -->
-<!-- gpatt$color[gpatt$community == 2] <- "purple" -->
-<!-- gpatt$color[gpatt$community == 3] <- "dodgerblue3" -->
-<!-- gpatt$color[gpatt$community == 4] <-  "darkorange" -->
+Now we must grapple with choosing a value for k.  How many latent topics do we think are in this data set?
+```{rLDA_modeling}
+k <- 7
+
+topicModel_k7 <- LDA(dfm, k, method="Gibbs", control=list(iter = 500, verbose = 25))
+#nTerms(dfm_comm) 
 
 
-<!-- #V(net)$community <- cfg$membership -->
-<!-- V(gpnet)$community <- gpatt$community -->
-<!-- V(gpnet)$color <- gpatt$color -->
-
-<!-- #assign freq of occurence as vertex gpattribute for sizing nodes in diagram -->
-<!-- freq <- V(gpnet)$freq -->
-
-<!-- gplo <- layout_with_fr(gpnet) -->
-
-<!-- #all words colored -->
-<!-- plot(gpnet, edge.arrow.size=0,vertex.label=V(gpnet)$name, vertex.size = 0.01, main= "General Public with Communities, Ties by Sentence", -->
-<!--      edge.width = weight*2, vertex.label.color=V(gpnet)$color, vertex.label.font = 2, vertex.label.cex = freq/max(freq)+.5, layout = gplo) -->
+tmResult <- posterior(topicModel_k7)
+attributes(tmResult)
+#nTerms(dfm_comm)   
+beta <- tmResult$terms   # get beta from results
+dim(beta)                # K distributions over nTerms(DTM) terms# lengthOfVocab
+terms(topicModel_k7, 10)
+```
 
 
-<!-- ``` -->
+
+```{r LDA_modeling}
+
+result <- FindTopicsNumber(
+  dfm,
+  topics = seq(from = 2, to = 20, by = 1),
+  metrics = c("CaoJuan2009",  "Deveaud2014"),
+  method = "Gibbs",
+  control = list(seed = 77),
+  verbose = TRUE
+)
+
+FindTopicsNumber_plot(result)
+
+k <- 7
+
+topicModel_k7 <- LDA(dfm, k, method="Gibbs", control=list(iter = 500, verbose = 25))
+
+tmResult <- posterior(topicModel_k7)
+terms(topicModel_k7, 10)
+```
+
+
+There are multiple proposed methods for how to measure the best k value. You can [go down the rabbit hole here](#multiple%20proposed%20methods%20for%20measuring%20the%20best%20k%20value.%20You%20can)
+
+```{r top_terms_topic}
+
+comment_topics <- tidy(topicModel_k7, matrix = "beta")
+
+top_terms <- chapter_topics %>%
+  group_by(topic) %>%
+  top_n(20, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+top_terms
+```
+```{r plot_top_terms}
+
+top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip()
+
+```
+
+
+
