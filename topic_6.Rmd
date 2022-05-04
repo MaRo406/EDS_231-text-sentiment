@@ -165,6 +165,8 @@ ggplot(data = vizDataFrame, aes(topic, value, fill = document), ylab = "proporti
   facet_wrap(~ document, ncol = N)
 ```
 
+Here's a neat JSON-based model visualizer
+
 ```{r LDAvis}
 library(LDAvis)
 library("tsne")
@@ -181,3 +183,19 @@ json <- createJSON(
 serVis(json)
 
 ```
+
+### Assignment:
+
+Either:
+
+A) continue on with the analysis we started:
+
+Run three more models and select the overall best value for k (the number of topics) - include some justification for your selection: theory, FindTopicsNumber() optimization metrics, interpretability, LDAvis
+
+OR
+
+B) use the data you plan to use for your final project:
+
+Prepare the data so that it can be analyzed in the topicmodels package
+
+Run three more models and select the overall best value for k (the number of topics) - include some justification for your selection: theory, FindTopicsNumber() optimization metrics, interpretability, LDAvis
