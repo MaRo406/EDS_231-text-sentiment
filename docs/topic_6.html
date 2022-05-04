@@ -18,29 +18,95 @@
  <!--radix_placeholder_import_source-->
  <!--/radix_placeholder_import_source-->
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>EDS 231: Untitled</title>
+  <title>EDS 231: Topic 6: Topic Analysis</title>
 
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="EDS 231: Untitled"/>
+  <meta property="og:title" content="EDS 231: Topic 6: Topic Analysis"/>
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="EDS 231"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="EDS 231: Untitled"/>
+  <meta property="twitter:title" content="EDS 231: Topic 6: Topic Analysis"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{},"value":[]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["Topic 6: Topic Analysis"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2397,7 +2463,7 @@
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Untitled","authors":[]}
+{"title":"Topic 6: Topic Analysis","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2420,6 +2486,7 @@ Topics
 <a href="topic_3.html">Topic 3: Sentiment Analysis I</a>
 <a href="topic_4.html">Topic 4: Sentiment Analysis II</a>
 <a href="topic_5.html">Topic 5: Word Relationships</a>
+<a href="topic_6.html">Topic_6: Topic Analysis</a>
 </div>
 </div>
 <a href="resources.html">Resources</a>
@@ -2433,7 +2500,7 @@ Topics
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>topic_6.knit</h1>
+<h1>Topic 6: Topic Analysis</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
 
@@ -2441,48 +2508,351 @@ Topics
 
 
 <div class="d-article">
-<h1 id="section">—</h1>
-<h1 id="title-topic-6-internal-external-links">title: “Topic 6: Internal
-&amp; external links”</h1>
-<h1 id="section-1">—</h1>
-<h1 id="section-2"></h1>
-<h1
-id="r-semantic_network-topfeaturesdfm-20-freq_words1---textstat_frequencydfm-headfreq_words1-n-20-fcm1---fcmtoks1-context-window-window-3-filter_freq---freq_words1feature150-top_fcm--fcm_selectfcm1-pattern-filter_freq-mat---as.matrixtop_fcm-net---graph_from_adjacency_matrixmat-diag-f-weighted-t-mode-undirected-weight-enetweight100-lo---layout_nicelynet-vnetdeg---degreenet-create-network-plotnet-layoutloedge.arrow.size0-vertex.size-0-main-epa-ej-reports-2015-2020-vertex.label.font-2-vertex.label.color-black-vertex.shape-noneedge.width-weight-vertex.label.cex-vnetdeg50.1"><code>{r semantic_network} # topfeatures(dfm, 20) # freq_words1 &lt;- textstat_frequency(dfm) # head(freq_words1, n = 20) #  # fcm1 &lt;- fcm(toks1, context = "window", window = 3) # filter_freq &lt;- freq_words1$feature[1:50] # top_fcm&lt;- fcm_select(fcm1, pattern = filter_freq) #  # mat &lt;- as.matrix(top_fcm) # net &lt;- graph_from_adjacency_matrix(mat, diag = F, weighted = T, mode = "undirected") # weight = E(net)$weight/100 # lo &lt;- layout_nicely(net) #  #  # V(net)$deg &lt;- degree(net) #  # #Create network # plot(net, layout=lo,edge.arrow.size=0, vertex.size = 0 , main= "EPA EJ Reports 2015-2020", #      vertex.label.font = 2, vertex.label.color = "black", vertex.shape = "none",edge.width = weight, vertex.label.cex = V(net)$deg/50+.1) #</code></h1>
-<!-- clust <- cluster_fast_greedy(as.undirected(net)) -->
-<pre><code>&lt;!-- ```{r} --&gt;
-&lt;!-- #Clustering for themes --&gt;
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/pdftools/'>pdftools</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://quanteda.io'>quanteda</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tm.r-forge.r-project.org/'>tm</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>topicmodels</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/nikita-moor/ldatuning'>ldatuning</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/juliasilge/tidytext'>tidytext</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/hadley/reshape'>reshape2</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+Load the data
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>##Topic 6 .Rmd here:https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/topic_6.Rmd</span>
+<span class='co'>#grab data here: https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/dat/comments_df.csv</span>
+<span class='va'>comments_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span><span class='st'>"dat"</span>, <span class='st'>"comments_df.csv"</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+Now we’ll build and clean the corpus
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>epa_corp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/corpus.html'>corpus</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>comments_df</span>, text_field <span class='op'>=</span> <span class='st'>"text"</span><span class='op'>)</span>
+<span class='va'>epa_corp.stats</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>epa_corp</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>epa_corp.stats</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>     Text Types Tokens Sentences
+1   text1  1196   3973       178
+2   text2   830   2509       111
+3   text3   279    571        31
+4   text4  1745   6904       251
+5   text5   581   1534        49
+6   text6   469   1187        53
+7   text7   424    903        38
+8   text8  3622  22270       655
+9   text9   373    717        25
+10 text10   404    971        42
+11 text11   710   2190        77
+12 text12   636   1896        82
+13 text13   146    206         3
+14 text14  1124   3197        86
+15 text15   914   2943        90
+16 text16    13     45         1
+17 text17  1043   3190       103
+18 text18   313    601        24
+19 text19   152    229         6
+20 text20   341    786        35
+21 text21   211    403        15
+22 text22   186    322        12
+23 text23   211    398        14
+24 text24   325    696        33
+25 text25  1749   5382       115
+                                                Document
+1                                     1_Air Alliance.pdf
+2                                         10_Bus NEJ.pdf
+3                                   11_Carlton Ginny.pdf
+4                                    15_City Project.pdf
+5                                   16_Corporate EEC.pdf
+6                             17_Detriot Sierra Club.pdf
+7                                    18_District DOE.pdf
+8                                   19_Earth Justice.pdf
+9                                        2_Alex Kidd.pdf
+10                               20_Elizabeth Mooney.pdf
+11                                        21_Env COS.pdf
+12                                   22_Env Def Fund.pdf
+13                               23_Env Health Watch.pdf
+14 24_Env Justice Leadership Forum on Climate Change.pdf
+15                                25_Env Law at Duke.pdf
+16                                 26_Farm worker AF.pdf
+17                            27_Farm Worker Justice.pdf
+18                                 28_Faulker County.pdf
+19                                  29_First Peoples.pdf
+20                              3_Alliance for Metro.pdf
+21                                     30_Gage Blasi.pdf
+22                                      31_Gull Leon.pdf
+23                                  32_Hilary Kramer.pdf
+24                             33_Housing Land Advoc.pdf
+25                                   34_Human rights.pdf</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>toks</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens.html'>tokens</a></span><span class='op'>(</span><span class='va'>epa_corp</span>, remove_punct <span class='op'>=</span> <span class='cn'>TRUE</span>, remove_numbers <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='co'>#I added some project-specific stop words here</span>
+<span class='va'>add_stops</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/stopwords/man/stopwords.html'>stopwords</a></span><span class='op'>(</span><span class='st'>"en"</span><span class='op'>)</span>,<span class='st'>"environmental"</span>, <span class='st'>"justice"</span>, <span class='st'>"ej"</span>, <span class='st'>"epa"</span>, <span class='st'>"public"</span>, <span class='st'>"comment"</span><span class='op'>)</span>
+<span class='va'>toks1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens_select.html'>tokens_select</a></span><span class='op'>(</span><span class='va'>toks</span>, pattern <span class='op'>=</span> <span class='va'>add_stops</span>, selection <span class='op'>=</span> <span class='st'>"remove"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+And now convert to a document-feature matrix
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dfm_comm</span><span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm.html'>dfm</a></span><span class='op'>(</span><span class='va'>toks1</span>, tolower <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>dfm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/tokens_wordstem.html'>dfm_wordstem</a></span><span class='op'>(</span><span class='va'>dfm_comm</span><span class='op'>)</span>
+<span class='va'>dfm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm_trim.html'>dfm_trim</a></span><span class='op'>(</span><span class='va'>dfm</span>, min_docfreq <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='co'>#remove terms only appearing in one doc (min_termfreq = 10)</span>
 
-&lt;!-- name.df &lt;- tibble(V(net)$name) --&gt;
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>dfm</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Document-feature matrix of: 6 documents, 2,781 features (82.75% sparse) and 1 docvar.
+       features
+docs    charl lee deputi associ assist administr usepa offic 2201-a
+  text1     1   2      1      1      6         6     1     7      1
+  text2     1   1      1      4      3         1     0     5      0
+  text3     0   0      0      0      1         0     0     2      0
+  text4     0   0      0      0      1         9     0     1      0
+  text5     4   5      1      1      1         1     0     1      1
+  text6     1   1      1      3      1         3     0     4      0
+       features
+docs    pennsylvania
+  text1            1
+  text2            0
+  text3            0
+  text4            0
+  text5            1
+  text6            0
+[ reached max_nfeat ... 2,771 more features ]</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#remove rows (docs) with all zeros</span>
+<span class='va'>sel_idx</span> <span class='op'>&lt;-</span> <span class='fu'>slam</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/slam/man/sums.html'>row_sums</a></span><span class='op'>(</span><span class='va'>dfm</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>0</span> 
+<span class='va'>dfm</span> <span class='op'>&lt;-</span> <span class='va'>dfm</span><span class='op'>[</span><span class='va'>sel_idx</span>, <span class='op'>]</span>
+<span class='co'>#comments_df &lt;- dfm[sel_idx, ]</span>
+</code></pre>
+</div>
+</div>
+<p>We somehow have to come up with a value for k,the number of latent
+topics present in the data. How do we do this? There are multiple
+methods. Let’s use what we already know about the data to inform a
+prediction. The EPA has 9 priority areas: Rulemaking, Permitting,
+Compliance and Enforcement, Science, States and Local Governments,
+Federal Agencies, Community-based Work, Tribes and Indigenous People,
+National Measures. Maybe the comments correspond to those areas?</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="rlda_modeling"><code>k &lt;- 9 
 
-&lt;!-- colnames(name.df) &lt;- &quot;feature&quot; --&gt;
-&lt;!-- freq_words &lt;- textstat_frequency(dfm) --&gt;
-&lt;!-- att &lt;- full_join(name.df, freq_words) --&gt;
-&lt;!-- att &lt;- att %&gt;% --&gt;
-&lt;!--   mutate(community = clust$membership) --&gt;
+topicModel_k9 &lt;- LDA(dfm, k, method=&quot;Gibbs&quot;, control=list(iter = 500, verbose = 25))
+#nTerms(dfm_comm) 
 
 
-&lt;!-- gpatt$color[gpatt$community == 1] &lt;- &quot;green3&quot; --&gt;
-&lt;!-- gpatt$color[gpatt$community == 2] &lt;- &quot;purple&quot; --&gt;
-&lt;!-- gpatt$color[gpatt$community == 3] &lt;- &quot;dodgerblue3&quot; --&gt;
-&lt;!-- gpatt$color[gpatt$community == 4] &lt;-  &quot;darkorange&quot; --&gt;
+tmResult &lt;- posterior(topicModel_k9)
+attributes(tmResult)
+#nTerms(dfm_comm)   
+beta &lt;- tmResult$terms   # get beta from results
+dim(beta)                # K distributions over nTerms(DTM) terms# lengthOfVocab
+terms(topicModel_k9, 10)</code></pre>
+</div>
+<p>Some of those topics seem related to the cross-cutting and additional
+topics identified in the EPA’s response to the public comments:</p>
+<p>1. Title VI of the Civil Rights Act of 1964</p>
+<p>2.<a
+href="https://www.epa.gov/ejscreen/download-ejscreen-data">EJSCREEN</a></p>
+<p>3. climate change, climate adaptation and promoting greenhouse gas
+reductions co-benefits</p>
+<p>4. overburdened communities and other stakeholders to meaningfully,
+effectively, and transparently participate in aspects of EJ 2020, as
+well as other agency processes</p>
+<p>5. utilize multiple Federal Advisory Committees to better obtain
+outside environmental justice perspectives</p>
+<p>6. environmental justice and area-specific training to EPA staff</p>
+<p>7. air quality issues in overburdened communities</p>
+<p>So we could guess that there might be a 16 topics (9 priority + 7
+additional). Or we could calculate some metrics from the data.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#</span>
+<span class='va'>result</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ldatuning/man/FindTopicsNumber.html'>FindTopicsNumber</a></span><span class='op'>(</span>
+  <span class='va'>dfm</span>,
+  topics <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span>from <span class='op'>=</span> <span class='fl'>2</span>, to <span class='op'>=</span> <span class='fl'>20</span>, by <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,
+  metrics <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CaoJuan2009"</span>,  <span class='st'>"Deveaud2014"</span><span class='op'>)</span>,
+  method <span class='op'>=</span> <span class='st'>"Gibbs"</span>,
+  control <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>seed <span class='op'>=</span> <span class='fl'>77</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>fit models... done.
+calculate metrics:
+  CaoJuan2009... done.
+  Deveaud2014... done.</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/ldatuning/man/FindTopicsNumber_plot.html'>FindTopicsNumber_plot</a></span><span class='op'>(</span><span class='va'>result</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="topic_6_files/figure-html5/LDA_modeling-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>k</span> <span class='op'>&lt;-</span> <span class='fl'>7</span>
 
+<span class='va'>topicModel_k7</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/topicmodels/man/lda.html'>LDA</a></span><span class='op'>(</span><span class='va'>dfm</span>, <span class='va'>k</span>, method<span class='op'>=</span><span class='st'>"Gibbs"</span>, control<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>iter <span class='op'>=</span> <span class='fl'>500</span>, verbose <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>K = 7; V = 2781; M = 77
+Sampling 500 iterations!
+Iteration 25 ...
+Iteration 50 ...
+Iteration 75 ...
+Iteration 100 ...
+Iteration 125 ...
+Iteration 150 ...
+Iteration 175 ...
+Iteration 200 ...
+Iteration 225 ...
+Iteration 250 ...
+Iteration 275 ...
+Iteration 300 ...
+Iteration 325 ...
+Iteration 350 ...
+Iteration 375 ...
+Iteration 400 ...
+Iteration 425 ...
+Iteration 450 ...
+Iteration 475 ...
+Iteration 500 ...
+Gibbs sampling completed!</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tmResult</span> <span class='op'>&lt;-</span> <span class='fu'>posterior</span><span class='op'>(</span><span class='va'>topicModel_k7</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>topicModel_k7</span>, <span class='fl'>10</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>      Topic 1     Topic 2  Topic 3     Topic 4      Topic 5   
+ [1,] &quot;communiti&quot; &quot;right&quot;  &quot;state&quot;     &quot;framework&quot;  &quot;state&quot;   
+ [2,] &quot;enforc&quot;    &quot;health&quot; &quot;permit&quot;    &quot;draft&quot;      &quot;impact&quot;  
+ [3,] &quot;comment&quot;   &quot;civil&quot;  &quot;consid&quot;    &quot;agenc&quot;      &quot;rule&quot;    
+ [4,] &quot;air&quot;       &quot;titl&quot;   &quot;feder&quot;     &quot;action&quot;     &quot;pollut&quot;  
+ [5,] &quot;action&quot;    &quot;vi&quot;     &quot;implement&quot; &quot;epa&quot;        &quot;popul&quot;   
+ [6,] &quot;pollut&quot;    &quot;peopl&quot;  &quot;comment&quot;   &quot;develop&quot;    &quot;health&quot;  
+ [7,] &quot;monitor&quot;   &quot;includ&quot; &quot;air&quot;       &quot;effort&quot;     &quot;guidanc&quot; 
+ [8,] &quot;provid&quot;    &quot;agenc&quot;  &quot;opportun&quot;  &quot;communiti&quot;  &quot;also&quot;    
+ [9,] &quot;requir&quot;    &quot;law&quot;    &quot;meet&quot;      &quot;overburden&quot; &quot;ejscreen&quot;
+[10,] &quot;complianc&quot; &quot;act&quot;    &quot;polici&quot;    &quot;program&quot;    &quot;benefit&quot; 
+      Topic 6    Topic 7    
+ [1,] &quot;prison&quot;   &quot;communiti&quot;
+ [2,] &quot;water&quot;    &quot;comment&quot;  
+ [3,] &quot;popul&quot;    &quot;plan&quot;     
+ [4,] &quot;work&quot;     &quot;local&quot;    
+ [5,] &quot;new&quot;      &quot;use&quot;      
+ [6,] &quot;peopl&quot;    &quot;strategi&quot; 
+ [7,] &quot;facil&quot;    &quot;govern&quot;   
+ [8,] &quot;energi&quot;   &quot;agenda&quot;   
+ [9,] &quot;sourc&quot;    &quot;can&quot;      
+[10,] &quot;industri&quot; &quot;make&quot;     </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>theta</span> <span class='op'>&lt;-</span> <span class='va'>tmResult</span><span class='op'>$</span><span class='va'>topics</span>
+<span class='va'>beta</span> <span class='op'>&lt;-</span> <span class='va'>tmResult</span><span class='op'>$</span><span class='va'>terms</span>
+<span class='va'>vocab</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>beta</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>There are multiple proposed methods for how to measure the best k
+value. You can <a
+href="#multiple%20proposed%20methods%20for%20measuring%20the%20best%20k%20value.%20You%20can">go
+down the rabbit hole here</a></p>
+<p>json_lda &lt;- LDAvis::createJSON(phi = beta, theta = theta, vocab =
+vocab, doc.length = doc_length, term.frequency = freq_matrix$Freq)</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>comment_topics</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>topicModel_k7</span>, matrix <span class='op'>=</span> <span class='st'>"beta"</span><span class='op'>)</span>
 
-&lt;!-- #V(net)$community &lt;- cfg$membership --&gt;
-&lt;!-- V(gpnet)$community &lt;- gpatt$community --&gt;
-&lt;!-- V(gpnet)$color &lt;- gpatt$color --&gt;
+<span class='va'>top_terms</span> <span class='op'>&lt;-</span> <span class='va'>comment_topics</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>topic</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/top_n.html'>top_n</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='va'>beta</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>ungroup</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>topic</span>, <span class='op'>-</span><span class='va'>beta</span><span class='op'>)</span>
 
-&lt;!-- #assign freq of occurence as vertex gpattribute for sizing nodes in diagram --&gt;
-&lt;!-- freq &lt;- V(gpnet)$freq --&gt;
+<span class='va'>top_terms</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 71 × 3
+   topic term        beta
+   &lt;int&gt; &lt;chr&gt;      &lt;dbl&gt;
+ 1     1 communiti 0.0477
+ 2     1 enforc    0.0175
+ 3     1 comment   0.0122
+ 4     1 air       0.0113
+ 5     1 action    0.0111
+ 6     1 pollut    0.0111
+ 7     1 monitor   0.0110
+ 8     1 provid    0.0108
+ 9     1 requir    0.0108
+10     1 complianc 0.0105
+# … with 61 more rows</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>top_terms</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>term <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/reorder.factor.html'>reorder</a></span><span class='op'>(</span><span class='va'>term</span>, <span class='va'>beta</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://quanteda.io/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>term</span>, <span class='va'>beta</span>, fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>topic</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span>show.legend <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span> <span class='va'>topic</span>, scales <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_6_files/figure-html5/plot_top_terms-1.png" width="624" /></p>
+</div>
+Let’s assign names to the topics so we know what we are working with. We
+can name them by their top terms
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>top5termsPerTopic</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>topicModel_k7</span>, <span class='fl'>5</span><span class='op'>)</span>
+<span class='va'>topicNames</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>top5termsPerTopic</span>, <span class='fl'>2</span>, <span class='va'>paste</span>, collapse<span class='op'>=</span><span class='st'>" "</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+We can explore the theta matrix, which contains the distribution of each
+topic over each document
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>exampleIds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>N</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>exampleIds</span><span class='op'>)</span>
 
-&lt;!-- gplo &lt;- layout_with_fr(gpnet) --&gt;
-
-&lt;!-- #all words colored --&gt;
-&lt;!-- plot(gpnet, edge.arrow.size=0,vertex.label=V(gpnet)$name, vertex.size = 0.01, main= &quot;General Public with Communities, Ties by Sentence&quot;, --&gt;
-&lt;!--      edge.width = weight*2, vertex.label.color=V(gpnet)$color, vertex.label.font = 2, vertex.label.cex = freq/max(freq)+.5, layout = gplo) --&gt;
-
-
-&lt;!-- ``` --&gt;
-```{.r .distill-force-highlighting-css}</code></pre>
+<span class='co'>#lapply(epa_corp[exampleIds], as.character) #uncomment to view example text</span>
+<span class='co'># get topic proportions form example documents</span>
+<span class='va'>topicProportionExamples</span> <span class='op'>&lt;-</span> <span class='va'>theta</span><span class='op'>[</span><span class='va'>exampleIds</span>,<span class='op'>]</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>topicProportionExamples</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>topicNames</span>
+<span class='va'>vizDataFrame</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/reshape2/man/melt.html'>melt</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>topicProportionExamples</span><span class='op'>)</span>, document<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>, variable.name <span class='op'>=</span> <span class='st'>"topic"</span>, id.vars <span class='op'>=</span> <span class='st'>"document"</span><span class='op'>)</span>  
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>vizDataFrame</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>topic</span>, <span class='va'>value</span>, fill <span class='op'>=</span> <span class='va'>document</span><span class='op'>)</span>, ylab <span class='op'>=</span> <span class='st'>"proportion"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span>stat<span class='op'>=</span><span class='st'>"identity"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>axis.text.x <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>angle <span class='op'>=</span> <span class='fl'>90</span>, hjust <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>  
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span> <span class='va'>document</span>, ncol <span class='op'>=</span> <span class='va'>N</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_6_files/figure-html5/topic_dists-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/cpsievert/LDAvis'>LDAvis</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/jdonaldson/rtsne/'>"tsne"</a></span><span class='op'>)</span>
+<span class='va'>svd_tsne</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/pkg/tsne/man/tsne.html'>tsne</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/svd.html'>svd</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>$</span><span class='va'>u</span><span class='op'>)</span>
+<span class='va'>json</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/LDAvis/man/createJSON.html'>createJSON</a></span><span class='op'>(</span>
+  phi <span class='op'>=</span> <span class='va'>tmResult</span><span class='op'>$</span><span class='va'>terms</span>, 
+  theta <span class='op'>=</span> <span class='va'>tmResult</span><span class='op'>$</span><span class='va'>topics</span>, 
+  doc.length <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowSums</a></span><span class='op'>(</span><span class='va'>dfm</span><span class='op'>)</span>, 
+  vocab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>dfm</span><span class='op'>)</span>, 
+  term.frequency <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span><span class='op'>(</span><span class='va'>dfm</span><span class='op'>)</span>,
+  mds.method <span class='op'>=</span> <span class='va'>svd_tsne</span>,
+  plot.opts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>xlab<span class='op'>=</span><span class='st'>""</span>, ylab<span class='op'>=</span><span class='st'>""</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/LDAvis/man/serVis.html'>serVis</a></span><span class='op'>(</span><span class='va'>json</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
