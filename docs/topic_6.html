@@ -2522,16 +2522,18 @@ Topics
 </code></pre>
 </div>
 </div>
-Load the data
+<p>Load the data</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>##Topic 6 .Rmd here:https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/topic_6.Rmd</span>
-<span class='co'>#grab data here: https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/dat/comments_df.csv</span>
-<span class='va'>comments_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span><span class='st'>"dat"</span>, <span class='st'>"comments_df.csv"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'>#grab data here: </span>
+<span class='va'>comments_df</span><span class='op'>&lt;-</span><span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/dat/comments_df.csv"</span><span class='op'>)</span>
+
+<span class='co'>#comments_df &lt;- read_csv(here("dat", "comments_df.csv")) #if reading from local</span>
 </code></pre>
 </div>
 </div>
-Now we’ll build and clean the corpus
+<p>Now we’ll build and clean the corpus</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>epa_corp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/corpus.html'>corpus</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>comments_df</span>, text_field <span class='op'>=</span> <span class='st'>"text"</span><span class='op'>)</span>
@@ -2599,7 +2601,7 @@ Now we’ll build and clean the corpus
 </code></pre>
 </div>
 </div>
-And now convert to a document-feature matrix
+<p>And now convert to a document-feature matrix</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dfm_comm</span><span class='op'>&lt;-</span> <span class='fu'><a href='https://quanteda.io/reference/dfm.html'>dfm</a></span><span class='op'>(</span><span class='va'>toks1</span>, tolower <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
@@ -2643,18 +2645,77 @@ Compliance and Enforcement, Science, States and Local Governments,
 Federal Agencies, Community-based Work, Tribes and Indigenous People,
 National Measures. Maybe the comments correspond to those areas?</p>
 <div class="layout-chunk" data-layout="l-body">
-<pre class="rlda_modeling"><code>k &lt;- 9 
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>k</span> <span class='op'>&lt;-</span> <span class='fl'>9</span> 
 
-topicModel_k9 &lt;- LDA(dfm, k, method=&quot;Gibbs&quot;, control=list(iter = 500, verbose = 25))
-#nTerms(dfm_comm) 
+<span class='va'>topicModel_k9</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/topicmodels/man/lda.html'>LDA</a></span><span class='op'>(</span><span class='va'>dfm</span>, <span class='va'>k</span>, method<span class='op'>=</span><span class='st'>"Gibbs"</span>, control<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>iter <span class='op'>=</span> <span class='fl'>500</span>, verbose <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>K = 9; V = 2781; M = 77
+Sampling 500 iterations!
+Iteration 25 ...
+Iteration 50 ...
+Iteration 75 ...
+Iteration 100 ...
+Iteration 125 ...
+Iteration 150 ...
+Iteration 175 ...
+Iteration 200 ...
+Iteration 225 ...
+Iteration 250 ...
+Iteration 275 ...
+Iteration 300 ...
+Iteration 325 ...
+Iteration 350 ...
+Iteration 375 ...
+Iteration 400 ...
+Iteration 425 ...
+Iteration 450 ...
+Iteration 475 ...
+Iteration 500 ...
+Gibbs sampling completed!</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#nTerms(dfm_comm) </span>
 
-
-tmResult &lt;- posterior(topicModel_k9)
-attributes(tmResult)
-#nTerms(dfm_comm)   
-beta &lt;- tmResult$terms   # get beta from results
-dim(beta)                # K distributions over nTerms(DTM) terms# lengthOfVocab
-terms(topicModel_k9, 10)</code></pre>
+<span class='va'>tmResult</span> <span class='op'>&lt;-</span> <span class='fu'>posterior</span><span class='op'>(</span><span class='va'>topicModel_k9</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/attributes.html'>attributes</a></span><span class='op'>(</span><span class='va'>tmResult</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$names
+[1] &quot;terms&quot;  &quot;topics&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#nTerms(dfm_comm)   </span>
+<span class='va'>beta</span> <span class='op'>&lt;-</span> <span class='va'>tmResult</span><span class='op'>$</span><span class='va'>terms</span>   <span class='co'># get beta from results</span>
+<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>beta</span><span class='op'>)</span>                <span class='co'># K distributions over nTerms(DTM) terms# lengthOfVocab</span>
+</code></pre>
+</div>
+<pre><code>[1]    9 2781</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>topicModel_k9</span>, <span class='fl'>10</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>      Topic 1     Topic 2    Topic 3   Topic 4     Topic 5  
+ [1,] &quot;communiti&quot; &quot;prison&quot;   &quot;program&quot; &quot;framework&quot; &quot;right&quot;  
+ [2,] &quot;pollut&quot;    &quot;site&quot;     &quot;state&quot;   &quot;draft&quot;     &quot;health&quot; 
+ [3,] &quot;need&quot;      &quot;water&quot;    &quot;feder&quot;   &quot;action&quot;    &quot;civil&quot;  
+ [4,] &quot;comment&quot;   &quot;energi&quot;   &quot;agenc&quot;   &quot;effort&quot;    &quot;peopl&quot;  
+ [5,] &quot;clean&quot;     &quot;popul&quot;    &quot;issu&quot;    &quot;agenc&quot;     &quot;law&quot;    
+ [6,] &quot;protect&quot;   &quot;facil&quot;    &quot;act&quot;     &quot;develop&quot;   &quot;citi&quot;   
+ [7,] &quot;air&quot;       &quot;project&quot;  &quot;vi&quot;      &quot;communiti&quot; &quot;park&quot;   
+ [8,] &quot;impact&quot;    &quot;industri&quot; &quot;polici&quot;  &quot;epa&quot;       &quot;includ&quot; 
+ [9,] &quot;area&quot;      &quot;gas&quot;      &quot;follow&quot;  &quot;support&quot;   &quot;address&quot;
+[10,] &quot;result&quot;    &quot;counti&quot;   &quot;will&quot;    &quot;goal&quot;      &quot;access&quot; 
+      Topic 6     Topic 7    Topic 8     Topic 9    
+ [1,] &quot;communiti&quot; &quot;rule&quot;     &quot;state&quot;     &quot;communiti&quot;
+ [2,] &quot;enforc&quot;    &quot;impact&quot;   &quot;permit&quot;    &quot;work&quot;     
+ [3,] &quot;includ&quot;    &quot;state&quot;    &quot;consid&quot;    &quot;plan&quot;     
+ [4,] &quot;monitor&quot;   &quot;health&quot;   &quot;comment&quot;   &quot;use&quot;      
+ [5,] &quot;action&quot;    &quot;provid&quot;   &quot;organ&quot;     &quot;strategi&quot; 
+ [6,] &quot;provid&quot;    &quot;popul&quot;    &quot;use&quot;       &quot;make&quot;     
+ [7,] &quot;permit&quot;    &quot;must&quot;     &quot;grant&quot;     &quot;agenda&quot;   
+ [8,] &quot;data&quot;      &quot;ejscreen&quot; &quot;feder&quot;     &quot;particip&quot; 
+ [9,] &quot;requir&quot;    &quot;also&quot;     &quot;framework&quot; &quot;local&quot;    
+[10,] &quot;complianc&quot; &quot;asthma&quot;   &quot;air&quot;       &quot;help&quot;     </code></pre>
 </div>
 <p>Some of those topics seem related to the cross-cutting and additional
 topics identified in the EPA’s response to the public comments:</p>
@@ -2693,7 +2754,7 @@ calculate metrics:
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/ldatuning/man/FindTopicsNumber_plot.html'>FindTopicsNumber_plot</a></span><span class='op'>(</span><span class='va'>result</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="topic_6_files/figure-html5/LDA_modeling-1.png" width="624" />
+<img src="topic_6_files/figure-html5/LDA_again-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>k</span> <span class='op'>&lt;-</span> <span class='fl'>7</span>
 
@@ -2728,28 +2789,28 @@ Gibbs sampling completed!</code></pre>
 <span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>topicModel_k7</span>, <span class='fl'>10</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code>      Topic 1     Topic 2  Topic 3     Topic 4      Topic 5   
- [1,] &quot;communiti&quot; &quot;right&quot;  &quot;state&quot;     &quot;framework&quot;  &quot;state&quot;   
- [2,] &quot;enforc&quot;    &quot;health&quot; &quot;permit&quot;    &quot;draft&quot;      &quot;impact&quot;  
- [3,] &quot;comment&quot;   &quot;civil&quot;  &quot;consid&quot;    &quot;agenc&quot;      &quot;rule&quot;    
- [4,] &quot;air&quot;       &quot;titl&quot;   &quot;feder&quot;     &quot;action&quot;     &quot;pollut&quot;  
- [5,] &quot;action&quot;    &quot;vi&quot;     &quot;implement&quot; &quot;epa&quot;        &quot;popul&quot;   
- [6,] &quot;pollut&quot;    &quot;peopl&quot;  &quot;comment&quot;   &quot;develop&quot;    &quot;health&quot;  
- [7,] &quot;monitor&quot;   &quot;includ&quot; &quot;air&quot;       &quot;effort&quot;     &quot;guidanc&quot; 
- [8,] &quot;provid&quot;    &quot;agenc&quot;  &quot;opportun&quot;  &quot;communiti&quot;  &quot;also&quot;    
- [9,] &quot;requir&quot;    &quot;law&quot;    &quot;meet&quot;      &quot;overburden&quot; &quot;ejscreen&quot;
-[10,] &quot;complianc&quot; &quot;act&quot;    &quot;polici&quot;    &quot;program&quot;    &quot;benefit&quot; 
-      Topic 6    Topic 7    
- [1,] &quot;prison&quot;   &quot;communiti&quot;
- [2,] &quot;water&quot;    &quot;comment&quot;  
- [3,] &quot;popul&quot;    &quot;plan&quot;     
- [4,] &quot;work&quot;     &quot;local&quot;    
- [5,] &quot;new&quot;      &quot;use&quot;      
- [6,] &quot;peopl&quot;    &quot;strategi&quot; 
- [7,] &quot;facil&quot;    &quot;govern&quot;   
- [8,] &quot;energi&quot;   &quot;agenda&quot;   
- [9,] &quot;sourc&quot;    &quot;can&quot;      
-[10,] &quot;industri&quot; &quot;make&quot;     </code></pre>
+<pre><code>      Topic 1     Topic 2     Topic 3     Topic 4      Topic 5   
+ [1,] &quot;state&quot;     &quot;communiti&quot; &quot;communiti&quot; &quot;communiti&quot;  &quot;prison&quot;  
+ [2,] &quot;communiti&quot; &quot;enforc&quot;    &quot;water&quot;     &quot;framework&quot;  &quot;new&quot;     
+ [3,] &quot;pollut&quot;    &quot;includ&quot;    &quot;local&quot;     &quot;action&quot;     &quot;facil&quot;   
+ [4,] &quot;popul&quot;     &quot;comment&quot;   &quot;agenda&quot;    &quot;develop&quot;    &quot;sourc&quot;   
+ [5,] &quot;impact&quot;    &quot;provid&quot;    &quot;work&quot;      &quot;draft&quot;      &quot;industri&quot;
+ [6,] &quot;rule&quot;      &quot;monitor&quot;   &quot;comment&quot;   &quot;effort&quot;     &quot;texa&quot;    
+ [7,] &quot;health&quot;    &quot;health&quot;    &quot;can&quot;       &quot;agenc&quot;      &quot;center&quot;  
+ [8,] &quot;also&quot;      &quot;requir&quot;    &quot;plan&quot;      &quot;overburden&quot; &quot;project&quot; 
+ [9,] &quot;guidanc&quot;   &quot;complianc&quot; &quot;make&quot;      &quot;comment&quot;    &quot;use&quot;     
+[10,] &quot;air&quot;       &quot;pollut&quot;    &quot;econom&quot;    &quot;epa&quot;        &quot;data&quot;    
+      Topic 6  Topic 7   
+ [1,] &quot;right&quot;  &quot;state&quot;   
+ [2,] &quot;civil&quot;  &quot;permit&quot;  
+ [3,] &quot;health&quot; &quot;program&quot; 
+ [4,] &quot;peopl&quot;  &quot;feder&quot;   
+ [5,] &quot;titl&quot;   &quot;polici&quot;  
+ [6,] &quot;vi&quot;     &quot;consid&quot;  
+ [7,] &quot;includ&quot; &quot;meet&quot;    
+ [8,] &quot;feder&quot;  &quot;opportun&quot;
+ [9,] &quot;access&quot; &quot;comment&quot; 
+[10,] &quot;act&quot;    &quot;air&quot;     </code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>theta</span> <span class='op'>&lt;-</span> <span class='va'>tmResult</span><span class='op'>$</span><span class='va'>topics</span>
 <span class='va'>beta</span> <span class='op'>&lt;-</span> <span class='va'>tmResult</span><span class='op'>$</span><span class='va'>terms</span>
@@ -2761,8 +2822,6 @@ Gibbs sampling completed!</code></pre>
 value. You can <a
 href="#multiple%20proposed%20methods%20for%20measuring%20the%20best%20k%20value.%20You%20can">go
 down the rabbit hole here</a></p>
-<p>json_lda &lt;- LDAvis::createJSON(phi = beta, theta = theta, vocab =
-vocab, doc.length = doc_length, term.frequency = freq_matrix$Freq)</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>comment_topics</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>topicModel_k7</span>, matrix <span class='op'>=</span> <span class='st'>"beta"</span><span class='op'>)</span>
@@ -2777,18 +2836,18 @@ vocab, doc.length = doc_length, term.frequency = freq_matrix$Freq)</p>
 </code></pre>
 </div>
 <pre><code># A tibble: 71 × 3
-   topic term        beta
-   &lt;int&gt; &lt;chr&gt;      &lt;dbl&gt;
- 1     1 communiti 0.0477
- 2     1 enforc    0.0175
- 3     1 comment   0.0122
- 4     1 air       0.0113
- 5     1 action    0.0111
- 6     1 pollut    0.0111
- 7     1 monitor   0.0110
- 8     1 provid    0.0108
- 9     1 requir    0.0108
-10     1 complianc 0.0105
+   topic term         beta
+   &lt;int&gt; &lt;chr&gt;       &lt;dbl&gt;
+ 1     1 state     0.0152 
+ 2     1 communiti 0.0145 
+ 3     1 pollut    0.0142 
+ 4     1 popul     0.0120 
+ 5     1 impact    0.0113 
+ 6     1 rule      0.0108 
+ 7     1 health    0.0108 
+ 8     1 also      0.0108 
+ 9     1 guidanc   0.0104 
+10     1 air       0.00996
 # … with 61 more rows</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
@@ -2803,8 +2862,8 @@ vocab, doc.length = doc_length, term.frequency = freq_matrix$Freq)</p>
 </div>
 <p><img src="topic_6_files/figure-html5/plot_top_terms-1.png" width="624" /></p>
 </div>
-Let’s assign names to the topics so we know what we are working with. We
-can name them by their top terms
+<p>Let’s assign names to the topics so we know what we are working with.
+We can name them by their top terms</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>top5termsPerTopic</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>topicModel_k7</span>, <span class='fl'>5</span><span class='op'>)</span>
@@ -2812,8 +2871,8 @@ can name them by their top terms
 </code></pre>
 </div>
 </div>
-We can explore the theta matrix, which contains the distribution of each
-topic over each document
+<p>We can explore the theta matrix, which contains the distribution of
+each topic over each document</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>exampleIds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span>
@@ -2851,7 +2910,7 @@ topic over each document
 </code></pre>
 </div>
 </div>
-<div class="sourceCode" id="cb8"><pre
+<div class="sourceCode" id="cb11"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

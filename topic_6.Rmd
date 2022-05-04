@@ -15,14 +15,18 @@ library(reshape2)
 
 ```
 
+Load the data
 
-Load the data 
 ```{r data}
 ##Topic 6 .Rmd here:https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/topic_6.Rmd
-#grab data here: https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/dat/comments_df.csv
-comments_df <- read_csv(here("dat", "comments_df.csv"))
+#grab data here: 
+comments_df<-read_csv("https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/main/dat/comments_df.csv")
+
+#comments_df <- read_csv(here("dat", "comments_df.csv")) #if reading from local
 ```
-Now we'll build  and clean the corpus
+
+Now we'll build and clean the corpus
+
 ```{r corpus}
 epa_corp <- corpus(x = comments_df, text_field = "text")
 epa_corp.stats <- summary(epa_corp)
@@ -33,7 +37,9 @@ add_stops <- c(stopwords("en"),"environmental", "justice", "ej", "epa", "public"
 toks1 <- tokens_select(toks, pattern = add_stops, selection = "remove")
 
 ```
+
 And now convert to a document-feature matrix
+
 ```{r dfm}
 dfm_comm<- dfm(toks1, tolower = TRUE)
 dfm <- dfm_wordstem(dfm_comm)
@@ -49,14 +55,13 @@ dfm <- dfm[sel_idx, ]
 
 ```
 
-We somehow have to come up with a value for k,the number of latent topics  present in the data. How do we do this? There are multiple methods. Let's use what we already know about the data to inform a prediction. The EPA has 9 priority areas: Rulemaking, Permitting, Compliance and Enforcement, Science, States and Local Governments, Federal Agencies, Community-based Work, Tribes and Indigenous People, National Measures.  Maybe the comments correspond to those areas?
+We somehow have to come up with a value for k,the number of latent topics present in the data. How do we do this? There are multiple methods. Let's use what we already know about the data to inform a prediction. The EPA has 9 priority areas: Rulemaking, Permitting, Compliance and Enforcement, Science, States and Local Governments, Federal Agencies, Community-based Work, Tribes and Indigenous People, National Measures. Maybe the comments correspond to those areas?
 
-```{rLDA_modeling}
+```{r LDA_modeling}
 k <- 9 
 
 topicModel_k9 <- LDA(dfm, k, method="Gibbs", control=list(iter = 500, verbose = 25))
 #nTerms(dfm_comm) 
-
 
 tmResult <- posterior(topicModel_k9)
 attributes(tmResult)
@@ -65,6 +70,7 @@ beta <- tmResult$terms   # get beta from results
 dim(beta)                # K distributions over nTerms(DTM) terms# lengthOfVocab
 terms(topicModel_k9, 10)
 ```
+
 Some of those topics seem related to the cross-cutting and additional topics identified in the EPA's response to the public comments:
 
 1\. Title VI of the Civil Rights Act of 1964
@@ -79,11 +85,11 @@ Some of those topics seem related to the cross-cutting and additional topics ide
 
 6\. environmental justice and area-specific training to EPA staff
 
-7\. air quality issues in overburdened communities 
+7\. air quality issues in overburdened communities
 
-So we could guess that there might be a 16 topics (9 priority + 7 additional).  Or we could calculate some metrics from the data.
+So we could guess that there might be a 16 topics (9 priority + 7 additional). Or we could calculate some metrics from the data.
 
-```{r LDA_modeling}
+```{r LDA_again}
 #
 result <- FindTopicsNumber(
   dfm,
@@ -110,12 +116,6 @@ vocab <- (colnames(beta))
 
 There are multiple proposed methods for how to measure the best k value. You can [go down the rabbit hole here](#multiple%20proposed%20methods%20for%20measuring%20the%20best%20k%20value.%20You%20can)
 
-json_lda <- LDAvis::createJSON(phi = beta, theta = theta,
-                            vocab = vocab,
-                            doc.length = doc_length,
-                            term.frequency = freq_matrix$Freq)
-
-
 ```{r top_terms_topic}
 
 comment_topics <- tidy(topicModel_k7, matrix = "beta")
@@ -139,13 +139,16 @@ top_terms %>%
   coord_flip()
 
 ```
-Let's assign names to the topics so we know what we are working with.  We can  name them by their top terms
+
+Let's assign names to the topics so we know what we are working with. We can name them by their top terms
+
 ```{r topic_names}
 top5termsPerTopic <- terms(topicModel_k7, 5)
 topicNames <- apply(top5termsPerTopic, 2, paste, collapse=" ")
 ```
 
 We can explore the theta matrix, which contains the distribution of each topic over each document
+
 ```{r topic_dists}
 exampleIds <- c(1, 2, 3)
 N <- length(exampleIds)
@@ -161,7 +164,7 @@ ggplot(data = vizDataFrame, aes(topic, value, fill = document), ylab = "proporti
   coord_flip() +
   facet_wrap(~ document, ncol = N)
 ```
- 
+
 ```{r LDAvis}
 library(LDAvis)
 library("tsne")
@@ -178,5 +181,3 @@ json <- createJSON(
 serVis(json)
 
 ```
- 
- 
