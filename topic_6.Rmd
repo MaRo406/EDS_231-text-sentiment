@@ -114,7 +114,7 @@ vocab <- (colnames(beta))
 
 ```
 
-There are multiple proposed methods for how to measure the best k value. You can [go down the rabbit hole here](#multiple%20proposed%20methods%20for%20measuring%20the%20best%20k%20value.%20You%20can)
+There are multiple proposed methods for how to measure the best k value. You can [go down the rabbit hole here](https://rpubs.com/siri/ldatuning)
 
 ```{r top_terms_topic}
 
