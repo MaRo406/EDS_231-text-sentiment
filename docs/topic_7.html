@@ -1277,6 +1277,7 @@ Topics
 <a href="topic_4.html">Topic 4: Sentiment Analysis II</a>
 <a href="topic_5.html">Topic 5: Word Relationships</a>
 <a href="topic_6.html">Topic 6: Topic Analysis</a>
+<a href="topic_7.html">Topic 7: Word Embeddings</a>
 </div>
 </div>
 <a href="resources.html">Resources</a>
@@ -1329,6 +1330,9 @@ Topics
     <li>
       <a href="topic_6.html">Topic 6: Topic Analysis</a>
     </li>
+    <li>
+      <a href="topic_7.html">Topic 7: Word Embeddings</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -1351,32 +1355,13 @@ Topics
 </div>
 
 
-<pre class="r"><code>library(here)</code></pre>
-<pre><code>## here() starts at /Users/mateorobbins/Desktop/Git/EDS_231-text-sentiment</code></pre>
-<pre class="r"><code>library(tidytext)
-library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.6     ✓ dplyr   1.0.8
-## ✓ tidyr   1.2.0     ✓ stringr 1.4.0
-## ✓ readr   2.1.2     ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(widyr)
-library(irlba) #singluar value decomposition</code></pre>
-<pre><code>## Loading required package: Matrix</code></pre>
-<pre><code>## 
-## Attaching package: &#39;Matrix&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
-## 
-##     expand, pack, unpack</code></pre>
-<pre class="r"><code>library(broom) # creating search_synonym function
-library(textdata)
-library(ggplot2)
-library(dplyr)
-
-#https://semantle.com/</code></pre>
+<p>Today we are using climbing incident data from this repo: <a
+href="https://github.com/ecaroom/climbing-accidents"
+class="uri">https://github.com/ecaroom/climbing-accidents</a>. Some
+analysis (in Excel) on the data was written up into a Rock and Ice
+magazine article.</p>
+<p>But I’ve constructed our data set (link below) by pulling a few key
+variables including the full text of each incident report.</p>
 <pre class="r"><code>incidents_df&lt;-read_csv(&quot;https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/825b159b6da4c7040ce8295b9eae2fbbe9991ffd/dat/climbing_report_text.csv&quot;)</code></pre>
 <pre><code>## Rows: 2770 Columns: 4
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -1443,12 +1428,12 @@ skipgram_probs &lt;- skipgrams %&gt;%
 ## This warning is displayed once every 8 hours.
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
 <p>Having all the skipgram windows lets us calculate how often words
-occur on their own, and how often words occur together with other words.
-We do this using the point-wise mutual information (PMI). It’s the
-logarithm of the probability of finding two words together, normalized
-for the probability of finding each of the words alone. PMI tells us
-which words occur together more often than expected based on how often
-they occurred on their own.</p>
+together occur within a window, relative to their total occurrences in
+the data. We do this using the point-wise mutual information (PMI). It’s
+the logarithm of the probability of finding two words together,
+normalized for the probability of finding each of the words alone. PMI
+tells us which words occur together more often than expected based on
+how often they occurred on their own.</p>
 <pre class="r"><code>#normalize probabilities
 normalized_prob &lt;- skipgram_probs %&gt;%
     filter(n &gt; 20) %&gt;%

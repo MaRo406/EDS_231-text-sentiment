@@ -2,8 +2,11 @@
 title: 'Topic 7: Word Embeddings'
 output: html_document
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
-```{r packages}
+```{r packages, include = FALSE}
 library(here)
 library(tidytext)
 library(tidyverse)
@@ -17,7 +20,11 @@ library(dplyr)
 #https://semantle.com/
 ```
 
-```{r data}
+Today we are using climbing incident data from this repo: https://github.com/ecaroom/climbing-accidents. Some analysis (in Excel) on the data was written up into a Rock and Ice magazine article.
+
+But I've constructed our data set (link below) by pulling a few key variables including the full text of each incident report.
+
+```{r data,}
 incidents_df<-read_csv("https://raw.githubusercontent.com/MaRo406/EDS_231-text-sentiment/825b159b6da4c7040ce8295b9eae2fbbe9991ffd/dat/climbing_report_text.csv")
 ```
 
@@ -52,7 +59,7 @@ skipgram_probs <- skipgrams %>%
     mutate(p = n / sum(n))
 ```
 
-Having all the skipgram windows lets us calculate how often words occur on their own, and how often words occur together with other words. We do this using the point-wise mutual information (PMI). It's the logarithm of the probability of finding two words together, normalized for the probability of finding each of the words alone. PMI tells us which words occur together more often than expected based on how often they occurred on their own.
+Having all the skipgram windows lets us calculate how often words together occur within a window, relative to their total occurrences in the data. We do this using the point-wise mutual information (PMI). It’s the logarithm of the probability of finding two words together, normalized for the probability of finding each of the words alone. PMI tells us which words occur together more often than expected based on how often they occurred on their own.
 
 ```{r norm-prob}
 #normalize probabilities
