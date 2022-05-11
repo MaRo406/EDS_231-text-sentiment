@@ -2,9 +2,12 @@
 title: 'Topic 7: Word Embeddings'
 output: html_document
 ---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+This week's Rmd file here: <https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/topic_7.Rmd>
 
 ```{r packages, include = FALSE}
 library(here)
@@ -20,7 +23,7 @@ library(dplyr)
 #https://semantle.com/
 ```
 
-Today we are using climbing incident data from this repo: https://github.com/ecaroom/climbing-accidents. Some analysis (in Excel) on the data was written up into a Rock and Ice magazine article.
+Today we are using climbing incident data from this repo: <https://github.com/ecaroom/climbing-accidents>. Some analysis (in Excel) on the data was written up into a Rock and Ice magazine article.
 
 But I've constructed our data set (link below) by pulling a few key variables including the full text of each incident report.
 
@@ -59,7 +62,7 @@ skipgram_probs <- skipgrams %>%
     mutate(p = n / sum(n))
 ```
 
-Having all the skipgram windows lets us calculate how often words together occur within a window, relative to their total occurrences in the data. We do this using the point-wise mutual information (PMI). It’s the logarithm of the probability of finding two words together, normalized for the probability of finding each of the words alone. PMI tells us which words occur together more often than expected based on how often they occurred on their own.
+Having all the skipgram windows lets us calculate how often words together occur within a window, relative to their total occurrences in the data. We do this using the point-wise mutual information (PMI). It's the logarithm of the probability of finding two words together, normalized for the probability of finding each of the words alone. PMI tells us which words occur together more often than expected based on how often they occurred on their own.
 
 ```{r norm-prob}
 #normalize probabilities
@@ -141,10 +144,17 @@ no_snow_danger <- word_vectors["danger",] - word_vectors["snow",]
 search_synonyms(word_vectors, no_snow_danger)
 ```
 
-Assignment: Download a set of pretrained vectors, GloVe, and explore them. #Data: download.file('<https://nlp.stanford.edu/data/glove.6B.zip>',destfile = 'glove.6B.zip') #unzip('glove.6B.zip') #Use this file: 'glove.6B.300d.txt'
+### Assignment
+
+Download a set of pretrained vectors, GloVe, and explore them. 
+
+Grab data here:
+<!-- download.file('<https://nlp.stanford.edu/data/glove.6B.zip>',destfile = 'glove.6B.zip')  -->
+<!-- unzip('glove.6B.zip')  -->
+<!-- Use this file: 'glove.6B.300d.txt' -->
 
 1.  Recreate the analyses in the last three chunks (find-synonyms, plot-synonyms, word-math) with the GloVe embeddings. How are they different from the embeddings created from the climbing accident data? Why do you think they are different?
 
 2.  Run the classic word math equation, "king" - "man" = ?
 
-3.  Think of three new word math equations. They can involve any words you'd like, whatever catches you interest.
+3.  Think of three new word math equations. They can involve any words you'd like, whatever catches your interest.
