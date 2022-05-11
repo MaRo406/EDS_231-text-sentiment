@@ -22,7 +22,7 @@ navbar:
           href: topic_5.html
         - text: "Topic 6: Topic Analysis"
           href: topic_6.html
-        - text: "Topic 7: Remove tables of contents"
+        - text: "Topic 7: Word Embeddings"
           href: topic_7.html
         # - text: "Topic 8: Add a dropdown menu from navigation bar item"
         #   href: topic_8.html
