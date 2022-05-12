@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 -   [All library text mining resources](https://guides.library.ucsb.edu/c.php?g=1095771)
 -   [Scholarly Journals](https://guides.library.ucsb.edu/c.php?g=1059769&p=8319664)
 -   [Twitter data](https://guides.library.ucsb.edu/c.php?g=1095771)
+-   [Nexi Uni](https://www.library.ucsb.edu/research/db/211)
 
 ### Kaggle
 
