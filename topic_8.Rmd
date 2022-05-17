@@ -55,7 +55,9 @@ recipe <- incidents_rec %>%
   step_tokenfilter(Text, max_tokens = 1000) %>%
   step_tfidf(Text) 
 ```
+
 Create  tidymodels workflow to combine the modeling components
+
 ```{r workflow}
 incidents_wf <- workflow() %>%
   add_recipe(recipe)
@@ -70,6 +72,7 @@ nb_spec
 ```
 
 Now we are ready to add our model to the workflow and fit it to the training data
+
 ```{r fit-model}
 nb_fit <- incidents_wf %>%
   add_model(nb_spec) %>%
