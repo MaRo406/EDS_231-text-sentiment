@@ -1,24 +1,286 @@
 ---
-title: "Topic 8: Dropdown list from a navigation bar item"
+title: "Topic 8: Classification"
 ---
 
-<p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_8.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p>
-
-If you look at this template, you'll notice that some navigation bar items go directly to a single page, while the Modules item takes you to a dropdown menu. 
-
-To create a dropdown menu of pages: 
-
-1. Create and save the pages as individual R Markdown documents as described [here](module_1.html).
-
-2. Open the `_site.yml` file. In the `navbar` section, create a menu with the pages as linked items using a structure like this: 
-
-```
-   - text: "Dropdown menu"
-      menu:
-        - text: "First dropdown item"
-          href: item_1.html
-        - text: "Second dropdown item"
-          href: item_2.html
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The example above would only work if the new pages were created as `item_1.Rmd` and `item_2.Rmd`, so that when the site is built the rendered `item_1.html` and `item_2.html` files exist in the `docs` output directory.
+This week's Rmd file here: <https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/topic_8.Rmd>
+
+```{r packages, include = FALSE}
+library(here)
+library(tidytext)
+library(tidyverse)
+library(tidymodels)
+library(textrecipes) #create modeling recipes
+library(discrim) # naive-bayes
+```
+
+This data set includes more *possible* predictors than the text alone, but for this model we will only use the text variable
+
+```{r data,}
+incidents_df<-read_csv("dat/climbing_reports_model_dat.csv")
+glimpse(incidents_df)
+```
+
+Now we'll split our data into training and test portions
+
+```{r split-data}
+set.seed(1234)
+incidents2class <- incidents_df %>%
+  mutate(fatal = factor(if_else(
+    is.na(Deadly) ,
+    "non-fatal", "fatal")))
+
+
+incidents_split <- initial_split(incidents2class, strata = fatal)
+
+incidents_train <- training(incidents_split)
+incidents_test <- testing(incidents_split)
+
+```
+
+We use recipe() to initialize our preprocessing transformations,specifying the predictor and outcome variables and the data.
+
+```{r recipe}
+incidents_rec <- recipe(fatal ~ Text, data = incidents_train)
+```
+
+Next we add some familiar pre-processing steps on our Text variable: tokenize to word level, filter to the most common words, and calculate tf-idf.
+
+```{r pre-process}
+recipe <- incidents_rec %>%
+  step_tokenize(Text) %>%
+  step_tokenfilter(Text, max_tokens = 1000) %>%
+  step_tfidf(Text) 
+```
+Create  tidymodels workflow to combine the modeling components
+```{r workflow}
+incidents_wf <- workflow() %>%
+  add_recipe(recipe)
+```
+
+```{r nb-spec}
+nb_spec <- naive_Bayes() %>%
+  set_mode("classification") %>% #set modeling context
+  set_engine("naivebayes") #method for fitting model
+
+nb_spec
+```
+
+Now we are ready to add our model to the workflow and fit it to the training data
+```{r fit-model}
+nb_fit <- incidents_wf %>%
+  add_model(nb_spec) %>%
+  fit(data = incidents_train)
+```
+Next up is model evaluation. We can stretch our training data a little further and use resampled data sets built from the training set to evaluate our naive Bayes model. Here we create 10-fold cross-validation sets, and use them performance estimates.
+
+```{r}
+set.seed(234)
+incidents_folds <- vfold_cv(incidents_train) #default is v = 10
+
+incidents_folds
+```
+
+```{r nb-workflow}
+nb_wf <- workflow() %>%
+  add_recipe(recipe) %>%
+  add_model(nb_spec)
+
+nb_wf
+```
+
+To estimate its performance, we fit the model many times, once to each of these resampled folds, and then evaluate on the heldout part of each resampled fold.
+
+```{r fit-resamples}
+nb_rs <- fit_resamples(
+  nb_wf,
+  incidents_folds,
+  control = control_resamples(save_pred = TRUE)
+)
+```
+
+Extract the relevant information using collect_metrics() and collect_predictions() and examine the performance metrics.
+
+```{r performance}
+nb_rs_metrics <- collect_metrics(nb_rs)
+nb_rs_predictions <- collect_predictions(nb_rs)
+nb_rs_metrics
+```
+
+We'll use two performance metrics: accuracy and ROC AUC.
+Accuracy is the proportion of the data that is predicted correctly. 
+The ROC curve plots the true positive rate against the false positive rate; AUC closer to 1 indicates a better-performing model, while AUC closer to 0.5 indicates a model that does no better than random guessing.
+
+```{r performance-plot}
+nb_rs_predictions %>%
+  group_by(id) %>%
+  roc_curve(truth = fatal, .pred_fatal) %>%
+  autoplot() +
+  labs(
+    "Resamples",
+    title = "ROC curve for Climbing Incident Reports"
+  )
+```
+
+Another model method involves the confusion matrix. A confusion matrix tabulates a model's false positives and false negatives for each class.
+
+```{r confuction-matrix}
+conf_mat_resampled(nb_rs, tidy = FALSE) %>% #compute matrix for each fold then average
+  autoplot(type = "heatmap")
+```
+
+```{r null-model}
+null_classification <- null_model() %>%
+  set_engine("parsnip") %>% #parsnip package
+  set_mode("classification")
+
+null_rs <- workflow() %>%
+  add_recipe(recipe) %>%
+  add_model(null_classification) %>%
+  fit_resamples(
+    incidents_folds
+  )
+```
+
+Let's move up to a more sophisticated model. A lasso classification model uses regularization to help us choose a simpler, more generalizable model.  Variable selection helps us identify which features to include in our model.
+
+Lasso classification learns how much of a penalty to put on features to reduce the high-dimensional space of original possible variables (tokens) for the final model.
+
+```{r lasso-specification}
+lasso_spec <- logistic_reg(penalty = 0.01, mixture = 1) %>% #glm for binary outcomes
+  set_mode("classification") %>%
+  set_engine("glmnet") #estimation method for classification
+
+lasso_spec
+```
+
+```{r lasso-workflow}
+lasso_wf <- workflow() %>%
+  add_recipe(recipe) %>%
+  add_model(lasso_spec)
+
+lasso_wf
+```
+
+```{r fit-resamples-lasso}
+set.seed(2020)
+lasso_rs <- fit_resamples(
+  lasso_wf,
+  incidents_folds,
+  control = control_resamples(save_pred = TRUE)
+)
+
+#pull out metric and predictino
+lasso_rs_metrics <- collect_metrics(lasso_rs)
+lasso_rs_predictions <- collect_predictions(lasso_rs)
+
+lasso_rs_metrics
+```
+
+```{r lasso-plot}
+lasso_rs_predictions %>%
+  group_by(id) %>%
+  roc_curve(truth = fatal, .pred_fatal) %>%
+  autoplot() +
+  labs(
+    color = "Resamples",
+    title = "ROC curve for Climbing Incident Reports",
+  )
+```
+
+```{r}
+conf_mat_resampled(lasso_rs, tidy = FALSE) %>%
+  autoplot(type = "heatmap")
+```
+
+The value penalty = 0.01 is a model hyperparameter. The higher it is, the more model coefficients are reduced (sometimes to 0, removing them -- feature selection) We set it manually before, but we can also estimate its best value, again by training many models on resampled data sets and examining their performance.
+
+```{r penalty-tuning-specification}
+tune_spec <- logistic_reg(penalty = tune(), mixture = 1) %>%
+  set_mode("classification") %>%
+  set_engine("glmnet")
+
+tune_spec
+```
+
+```{r}
+lambda_grid <- grid_regular(penalty(), levels = 30)
+lambda_grid
+```
+
+Here we use grid_regular() to create 30 possible values for the regularization penalty. Then tune_grid() fits a model at each of those values.
+
+PARALLELIZATION?
+
+```{r tune}
+tune_wf <- workflow() %>%
+  add_recipe(recipe) %>%
+  add_model(tune_spec)
+
+set.seed(2020)
+tune_rs <- tune_grid(
+  tune_wf,
+  incidents_folds,
+  grid = lambda_grid,
+  control = control_resamples(save_pred = TRUE)
+)
+
+tune_rs
+```
+
+collect_metrics(tune_rs)
+
+```{r plot_metrics}
+autoplot(tune_rs) +
+  labs(
+    title = "Lasso model performance across regularization penalties"
+  )
+```
+
+```{r penalty-show-best}
+ tune_rs %>%
+  show_best("roc_auc")
+  
+tune_rs %>%
+  show_best("accuracy")
+
+chosen_acc <- tune_rs %>%
+  select_by_one_std_err(metric = "accuracy", -penalty)
+
+chosen_acc
+```
+
+Next, let's finalize our tunable workflow with this particular regularization penalty. This is the regularization penalty that our tuning results indicate give us the best model.
+
+```{r final-model}
+final_lasso <- finalize_workflow(tune_wf, chosen_acc)
+
+final_lasso
+```
+
+The penalty argument value now reflects our tuning result. Now we fit to our training data.
+
+```{r}
+fitted_lasso <- fit(final_lasso, incidents_train)
+```
+
+First let's look at the words associated with an accident being non-fatal.
+
+```{r words-non-fatal}
+fitted_lasso %>%
+  extract_fit_parsnip() %>%
+  tidy() %>%
+  arrange(-estimate)
+```
+
+And now the words that are most associated with a fatal incident.
+
+```{r words-fatal}
+fitted_lasso %>%
+  extract_fit_parsnip() %>%
+  tidy() %>%
+  arrange(estimate)
+```

@@ -24,8 +24,8 @@ navbar:
           href: topic_6.html
         - text: "Topic 7: Word Embeddings"
           href: topic_7.html
-        # - text: "Topic 8: Add a dropdown menu from navigation bar item"
-        #   href: topic_8.html
+        - text: "Topic 8: Classification"
+          href: topic_8.html
         # - text: "Topic 9: Change site fonts"
         #   href: topic_9.html
         # - text: "Topic 10: Add a table"

@@ -87,26 +87,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>EDS 231: Topic 8: Dropdown list from a navigation bar item</title>
+  <title>EDS 231: Topic 8: Classification</title>
 
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="EDS 231: Topic 8: Dropdown list from a navigation bar item"/>
+  <meta property="og:title" content="EDS 231: Topic 8: Classification"/>
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="EDS 231"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="EDS 231: Topic 8: Dropdown list from a navigation bar item"/>
+  <meta property="twitter:title" content="EDS 231: Topic 8: Classification"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["Topic 8: Dropdown list from a navigation bar item"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["Topic 8: Classification"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2463,7 +2463,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Topic 8: Dropdown list from a navigation bar item","authors":[]}
+{"title":"Topic 8: Classification","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2486,6 +2486,8 @@ Topics
 <a href="topic_3.html">Topic 3: Sentiment Analysis I</a>
 <a href="topic_4.html">Topic 4: Sentiment Analysis II</a>
 <a href="topic_5.html">Topic 5: Word Relationships</a>
+<a href="topic_6.html">Topic 6: Topic Analysis</a>
+<a href="topic_7.html">Topic 7: Word Embeddings</a>
 </div>
 </div>
 <a href="resources.html">Resources</a>
@@ -2499,7 +2501,7 @@ Topics
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Topic 8: Dropdown list from a navigation bar item</h1>
+<h1>Topic 8: Classification</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
 
@@ -2507,34 +2509,534 @@ Topics
 
 
 <div class="d-article">
-<p style="color: #ba5e00">
-<b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_8.Rmd</b> file,
-in the project root, to delete this placeholder text and customize with
-your own!
-</p>
-<p>If you look at this template, you’ll notice that some navigation bar
-items go directly to a single page, while the Modules item takes you to
-a dropdown menu.</p>
-<p>To create a dropdown menu of pages:</p>
-<ol type="1">
-<li><p>Create and save the pages as individual R Markdown documents as
-described <a href="module_1.html">here</a>.</p></li>
-<li><p>Open the <code>_site.yml</code> file. In the <code>navbar</code>
-section, create a menu with the pages as linked items using a structure
-like this:</p></li>
-</ol>
-<pre><code>   - text: &quot;Dropdown menu&quot;
-      menu:
-        - text: &quot;First dropdown item&quot;
-          href: item_1.html
-        - text: &quot;Second dropdown item&quot;
-          href: item_2.html</code></pre>
-<p>The example above would only work if the new pages were created as
-<code>item_1.Rmd</code> and <code>item_2.Rmd</code>, so that when the
-site is built the rendered <code>item_1.html</code> and
-<code>item_2.html</code> files exist in the <code>docs</code> output
-directory.</p>
-<div class="sourceCode" id="cb2"><pre
+<p>This week’s Rmd file here: <a
+href="https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/topic_8.Rmd"
+class="uri">https://github.com/MaRo406/EDS_231-text-sentiment/blob/main/topic_8.Rmd</a></p>
+<p>This data set includes more <em>possible</em> predictors than the
+text alone, but for this model we will only use the text variable</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>incidents_df</span><span class='op'>&lt;-</span><span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"dat/climbing_reports_model_dat.csv"</span><span class='op'>)</span>
+<span class='fu'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='op'>(</span><span class='va'>incidents_df</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 2,770
+Columns: 5
+$ ID                 &lt;chr&gt; &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;…
+$ `Accident Title`   &lt;chr&gt; &quot;Failure of Rappel Setup (Protection Pull…
+$ `Publication Year` &lt;dbl&gt; 1990, 1990, 1990, 1990, 1990, 1990, 1990,…
+$ Text               &lt;chr&gt; &quot;Colorado, Rocky Mountain National Park\n…
+$ Deadly             &lt;dbl&gt; NA, NA, NA, NA, 1, 1, NA, NA, NA, NA, NA,…</code></pre>
+</div>
+<p>Now we’ll split our data into training and test portions</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1234</span><span class='op'>)</span>
+<span class='va'>incidents2class</span> <span class='op'>&lt;-</span> <span class='va'>incidents_df</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>fatal <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/if_else.html'>if_else</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>Deadly</span><span class='op'>)</span> ,
+    <span class='st'>"non-fatal"</span>, <span class='st'>"fatal"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+
+<span class='va'>incidents_split</span> <span class='op'>&lt;-</span> <span class='fu'>initial_split</span><span class='op'>(</span><span class='va'>incidents2class</span>, strata <span class='op'>=</span> <span class='va'>fatal</span><span class='op'>)</span>
+
+<span class='va'>incidents_train</span> <span class='op'>&lt;-</span> <span class='fu'>training</span><span class='op'>(</span><span class='va'>incidents_split</span><span class='op'>)</span>
+<span class='va'>incidents_test</span> <span class='op'>&lt;-</span> <span class='fu'>testing</span><span class='op'>(</span><span class='va'>incidents_split</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>We use recipe() to initialize our preprocessing
+transformations,specifying the predictor and outcome variables and the
+data.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>incidents_rec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>fatal</span> <span class='op'>~</span> <span class='va'>Text</span>, data <span class='op'>=</span> <span class='va'>incidents_train</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Next we add some familiar pre-processing steps on our Text variable:
+tokenize to word level, filter to the most common words, and calculate
+tf-idf.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>recipe</span> <span class='op'>&lt;-</span> <span class='va'>incidents_rec</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://textrecipes.tidymodels.org/reference/step_tokenize.html'>step_tokenize</a></span><span class='op'>(</span><span class='va'>Text</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://textrecipes.tidymodels.org/reference/step_tokenfilter.html'>step_tokenfilter</a></span><span class='op'>(</span><span class='va'>Text</span>, max_tokens <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://textrecipes.tidymodels.org/reference/step_tfidf.html'>step_tfidf</a></span><span class='op'>(</span><span class='va'>Text</span><span class='op'>)</span> 
+</code></pre>
+</div>
+</div>
+Create tidymodels workflow to combine the modeling components
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>incidents_wf</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>recipe</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nb_spec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://parsnip.tidymodels.org/reference/naive_Bayes.html'>naive_Bayes</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://parsnip.tidymodels.org/reference/set_args.html'>set_mode</a></span><span class='op'>(</span><span class='st'>"classification"</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'>#set modeling context</span>
+  <span class='fu'><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine</a></span><span class='op'>(</span><span class='st'>"naivebayes"</span><span class='op'>)</span> <span class='co'>#method for fitting model</span>
+
+<span class='va'>nb_spec</span>
+</code></pre>
+</div>
+<pre><code>Naive Bayes Model Specification (classification)
+
+Computational engine: naivebayes </code></pre>
+</div>
+Now we are ready to add our model to the workflow and fit it to the
+training data
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nb_fit</span> <span class='op'>&lt;-</span> <span class='va'>incidents_wf</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>nb_spec</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://generics.r-lib.org/reference/fit.html'>fit</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>incidents_train</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Next up is model evaluation. We can stretch our training data a
+little further and use resampled data sets built from the training set
+to evaluate our naive Bayes model. Here we create 10-fold
+cross-validation sets, and use them performance estimates.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>234</span><span class='op'>)</span>
+<span class='va'>incidents_folds</span> <span class='op'>&lt;-</span> <span class='fu'>vfold_cv</span><span class='op'>(</span><span class='va'>incidents_train</span><span class='op'>)</span> <span class='co'>#default is v = 10</span>
+
+<span class='va'>incidents_folds</span>
+</code></pre>
+</div>
+<pre><code>#  10-fold cross-validation 
+# A tibble: 10 × 2
+   splits             id    
+   &lt;list&gt;             &lt;chr&gt; 
+ 1 &lt;split [1869/208]&gt; Fold01
+ 2 &lt;split [1869/208]&gt; Fold02
+ 3 &lt;split [1869/208]&gt; Fold03
+ 4 &lt;split [1869/208]&gt; Fold04
+ 5 &lt;split [1869/208]&gt; Fold05
+ 6 &lt;split [1869/208]&gt; Fold06
+ 7 &lt;split [1869/208]&gt; Fold07
+ 8 &lt;split [1870/207]&gt; Fold08
+ 9 &lt;split [1870/207]&gt; Fold09
+10 &lt;split [1870/207]&gt; Fold10</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nb_wf</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>recipe</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>nb_spec</span><span class='op'>)</span>
+
+<span class='va'>nb_wf</span>
+</code></pre>
+</div>
+<pre><code>══ Workflow ══════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: naive_Bayes()
+
+── Preprocessor ──────────────────────────────────────────────────────
+3 Recipe Steps
+
+• step_tokenize()
+• step_tokenfilter()
+• step_tfidf()
+
+── Model ─────────────────────────────────────────────────────────────
+Naive Bayes Model Specification (classification)
+
+Computational engine: naivebayes </code></pre>
+</div>
+<p>To estimate its performance, we fit the model many times, once to
+each of these resampled folds, and then evaluate on the heldout part of
+each resampled fold.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nb_rs</span> <span class='op'>&lt;-</span> <span class='fu'>fit_resamples</span><span class='op'>(</span>
+  <span class='va'>nb_wf</span>,
+  <span class='va'>incidents_folds</span>,
+  control <span class='op'>=</span> <span class='fu'>control_resamples</span><span class='op'>(</span>save_pred <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Extract the relevant information using collect_metrics() and
+collect_predictions() and examine the performance metrics.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nb_rs_metrics</span> <span class='op'>&lt;-</span> <span class='fu'>collect_metrics</span><span class='op'>(</span><span class='va'>nb_rs</span><span class='op'>)</span>
+<span class='va'>nb_rs_predictions</span> <span class='op'>&lt;-</span> <span class='fu'>collect_predictions</span><span class='op'>(</span><span class='va'>nb_rs</span><span class='op'>)</span>
+<span class='va'>nb_rs_metrics</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 × 6
+  .metric  .estimator  mean     n std_err .config             
+  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 accuracy binary     0.800    10 0.00474 Preprocessor1_Model1
+2 roc_auc  binary     0.730    10 0.0121  Preprocessor1_Model1</code></pre>
+</div>
+<p>We’ll use two performance metrics: accuracy and ROC AUC. Accuracy is
+the proportion of the data that is predicted correctly. The ROC curve
+plots the true positive rate against the false positive rate; AUC closer
+to 1 indicates a better-performing model, while AUC closer to 0.5
+indicates a model that does no better than random guessing.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nb_rs_predictions</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>roc_curve</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>fatal</span>, <span class='va'>.pred_fatal</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>
+    <span class='st'>"Resamples"</span>,
+    title <span class='op'>=</span> <span class='st'>"ROC curve for Climbing Incident Reports"</span>
+  <span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_8_files/figure-html5/performance-plot-1.png" width="624" /></p>
+</div>
+<p>Another model method involves the confusion matrix. A confusion
+matrix tabulates a model’s false positives and false negatives for each
+class.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>conf_mat_resampled</span><span class='op'>(</span><span class='va'>nb_rs</span>, tidy <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'>#compute matrix for each fold then average</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"heatmap"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_8_files/figure-html5/confuction-matrix-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>null_classification</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://parsnip.tidymodels.org/reference/null_model.html'>null_model</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine</a></span><span class='op'>(</span><span class='st'>"parsnip"</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'>#parsnip package</span>
+  <span class='fu'><a href='https://parsnip.tidymodels.org/reference/set_args.html'>set_mode</a></span><span class='op'>(</span><span class='st'>"classification"</span><span class='op'>)</span>
+
+<span class='va'>null_rs</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>recipe</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>null_classification</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>fit_resamples</span><span class='op'>(</span>
+    <span class='va'>incidents_folds</span>
+  <span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Let’s move up to a more sophisticated model. A lasso classification
+model uses regularization to help us choose a simpler, more
+generalizable model. Variable selection helps us identify which features
+to include in our model.</p>
+<p>Lasso classification learns how much of a penalty to put on features
+to reduce the high-dimensional space of original possible variables
+(tokens) for the final model.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lasso_spec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://parsnip.tidymodels.org/reference/logistic_reg.html'>logistic_reg</a></span><span class='op'>(</span>penalty <span class='op'>=</span> <span class='fl'>0.01</span>, mixture <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span> <span class='co'>#glm for binary outcomes</span>
+  <span class='fu'><a href='https://parsnip.tidymodels.org/reference/set_args.html'>set_mode</a></span><span class='op'>(</span><span class='st'>"classification"</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine</a></span><span class='op'>(</span><span class='st'>"glmnet"</span><span class='op'>)</span> <span class='co'>#estimation method for classification</span>
+
+<span class='va'>lasso_spec</span>
+</code></pre>
+</div>
+<pre><code>Logistic Regression Model Specification (classification)
+
+Main Arguments:
+  penalty = 0.01
+  mixture = 1
+
+Computational engine: glmnet </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lasso_wf</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>recipe</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>lasso_spec</span><span class='op'>)</span>
+
+<span class='va'>lasso_wf</span>
+</code></pre>
+</div>
+<pre><code>══ Workflow ══════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: logistic_reg()
+
+── Preprocessor ──────────────────────────────────────────────────────
+3 Recipe Steps
+
+• step_tokenize()
+• step_tokenfilter()
+• step_tfidf()
+
+── Model ─────────────────────────────────────────────────────────────
+Logistic Regression Model Specification (classification)
+
+Main Arguments:
+  penalty = 0.01
+  mixture = 1
+
+Computational engine: glmnet </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>2020</span><span class='op'>)</span>
+<span class='va'>lasso_rs</span> <span class='op'>&lt;-</span> <span class='fu'>fit_resamples</span><span class='op'>(</span>
+  <span class='va'>lasso_wf</span>,
+  <span class='va'>incidents_folds</span>,
+  control <span class='op'>=</span> <span class='fu'>control_resamples</span><span class='op'>(</span>save_pred <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='co'>#pull out metric and predictino</span>
+<span class='va'>lasso_rs_metrics</span> <span class='op'>&lt;-</span> <span class='fu'>collect_metrics</span><span class='op'>(</span><span class='va'>lasso_rs</span><span class='op'>)</span>
+<span class='va'>lasso_rs_predictions</span> <span class='op'>&lt;-</span> <span class='fu'>collect_predictions</span><span class='op'>(</span><span class='va'>lasso_rs</span><span class='op'>)</span>
+
+<span class='va'>lasso_rs_metrics</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 × 6
+  .metric  .estimator  mean     n std_err .config             
+  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 accuracy binary     0.895    10 0.00538 Preprocessor1_Model1
+2 roc_auc  binary     0.947    10 0.00593 Preprocessor1_Model1</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lasso_rs_predictions</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>roc_curve</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>fatal</span>, <span class='va'>.pred_fatal</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>
+    color <span class='op'>=</span> <span class='st'>"Resamples"</span>,
+    title <span class='op'>=</span> <span class='st'>"ROC curve for Climbing Incident Reports"</span>,
+  <span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_8_files/figure-html5/lasso-plot-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>conf_mat_resampled</span><span class='op'>(</span><span class='va'>lasso_rs</span>, tidy <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"heatmap"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_8_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
+</div>
+<p>The value penalty = 0.01 is a model hyperparameter. The higher it is,
+the more model coefficients are reduced (sometimes to 0, removing them –
+feature selection) We set it manually before, but we can also estimate
+its best value, again by training many models on resampled data sets and
+examining their performance.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tune_spec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://parsnip.tidymodels.org/reference/logistic_reg.html'>logistic_reg</a></span><span class='op'>(</span>penalty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/hardhat/man/tune.html'>tune</a></span><span class='op'>(</span><span class='op'>)</span>, mixture <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://parsnip.tidymodels.org/reference/set_args.html'>set_mode</a></span><span class='op'>(</span><span class='st'>"classification"</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine</a></span><span class='op'>(</span><span class='st'>"glmnet"</span><span class='op'>)</span>
+
+<span class='va'>tune_spec</span>
+</code></pre>
+</div>
+<pre><code>Logistic Regression Model Specification (classification)
+
+Main Arguments:
+  penalty = tune()
+  mixture = 1
+
+Computational engine: glmnet </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lambda_grid</span> <span class='op'>&lt;-</span> <span class='fu'>grid_regular</span><span class='op'>(</span><span class='fu'>penalty</span><span class='op'>(</span><span class='op'>)</span>, levels <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
+<span class='va'>lambda_grid</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 30 × 1
+    penalty
+      &lt;dbl&gt;
+ 1 1   e-10
+ 2 2.21e-10
+ 3 4.89e-10
+ 4 1.08e- 9
+ 5 2.40e- 9
+ 6 5.30e- 9
+ 7 1.17e- 8
+ 8 2.59e- 8
+ 9 5.74e- 8
+10 1.27e- 7
+# … with 20 more rows</code></pre>
+</div>
+<p>Here we use grid_regular() to create 30 possible values for the
+regularization penalty. Then tune_grid() fits a model at each of those
+values.</p>
+<p>PARALLELIZATION?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tune_wf</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>recipe</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>tune_spec</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>2020</span><span class='op'>)</span>
+<span class='va'>tune_rs</span> <span class='op'>&lt;-</span> <span class='fu'>tune_grid</span><span class='op'>(</span>
+  <span class='va'>tune_wf</span>,
+  <span class='va'>incidents_folds</span>,
+  grid <span class='op'>=</span> <span class='va'>lambda_grid</span>,
+  control <span class='op'>=</span> <span class='fu'>control_resamples</span><span class='op'>(</span>save_pred <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='va'>tune_rs</span>
+</code></pre>
+</div>
+<pre><code># Tuning results
+# 10-fold cross-validation 
+# A tibble: 10 × 5
+   splits             id     .metrics          .notes   .predictions
+   &lt;list&gt;             &lt;chr&gt;  &lt;list&gt;            &lt;list&gt;   &lt;list&gt;      
+ 1 &lt;split [1869/208]&gt; Fold01 &lt;tibble [60 × 5]&gt; &lt;tibble&gt; &lt;tibble&gt;    
+ 2 &lt;split [1869/208]&gt; Fold02 &lt;tibble [60 × 5]&gt; &lt;tibble&gt; &lt;tibble&gt;    
+ 3 &lt;split [1869/208]&gt; Fold03 &lt;tibble [60 × 5]&gt; &lt;tibble&gt; &lt;tibble&gt;    
+ 4 &lt;split [1869/208]&gt; Fold04 &lt;tibble [60 × 5]&gt; &lt;tibble&gt; &lt;tibble&gt;    
+ 5 &lt;split [1869/208]&gt; Fold05 &lt;tibble [60 × 5]&gt; &lt;tibble&gt; &lt;tibble&gt;    
+ 6 &lt;split [1869/208]&gt; Fold06 &lt;tibble [60 × 5]&gt; &lt;tibble&gt; &lt;tibble&gt;    
+ 7 &lt;split [1869/208]&gt; Fold07 &lt;tibble [60 × 5]&gt; &lt;tibble&gt; &lt;tibble&gt;    
+ 8 &lt;split [1870/207]&gt; Fold08 &lt;tibble [60 × 5]&gt; &lt;tibble&gt; &lt;tibble&gt;    
+ 9 &lt;split [1870/207]&gt; Fold09 &lt;tibble [60 × 5]&gt; &lt;tibble&gt; &lt;tibble&gt;    
+10 &lt;split [1870/207]&gt; Fold10 &lt;tibble [60 × 5]&gt; &lt;tibble&gt; &lt;tibble&gt;    </code></pre>
+</div>
+<p>collect_metrics(tune_rs)</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>tune_rs</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>
+    title <span class='op'>=</span> <span class='st'>"Lasso model performance across regularization penalties"</span>
+  <span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="topic_8_files/figure-html5/plot_metrics-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"> <span class='va'>tune_rs</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>show_best</span><span class='op'>(</span><span class='st'>"roc_auc"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 × 7
+   penalty .metric .estimator  mean     n std_err .config             
+     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 0.00853  roc_auc binary     0.947    10 0.00586 Preprocessor1_Model…
+2 0.00386  roc_auc binary     0.945    10 0.00532 Preprocessor1_Model…
+3 0.00174  roc_auc binary     0.939    10 0.00500 Preprocessor1_Model…
+4 0.0189   roc_auc binary     0.936    10 0.00596 Preprocessor1_Model…
+5 0.000788 roc_auc binary     0.932    10 0.00527 Preprocessor1_Model…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tune_rs</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>show_best</span><span class='op'>(</span><span class='st'>"accuracy"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 × 7
+   penalty .metric  .estimator  mean     n std_err .config            
+     &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;              
+1 0.00386  accuracy binary     0.904    10 0.00581 Preprocessor1_Mode…
+2 0.00174  accuracy binary     0.899    10 0.00672 Preprocessor1_Mode…
+3 0.00853  accuracy binary     0.898    10 0.00516 Preprocessor1_Mode…
+4 0.000788 accuracy binary     0.897    10 0.00624 Preprocessor1_Mode…
+5 0.000356 accuracy binary     0.896    10 0.00648 Preprocessor1_Mode…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>chosen_acc</span> <span class='op'>&lt;-</span> <span class='va'>tune_rs</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>select_by_one_std_err</span><span class='op'>(</span>metric <span class='op'>=</span> <span class='st'>"accuracy"</span>, <span class='op'>-</span><span class='va'>penalty</span><span class='op'>)</span>
+
+<span class='va'>chosen_acc</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 × 9
+  penalty .metric  .estimator  mean     n std_err .config .best .bound
+    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1 0.00853 accuracy binary     0.898    10 0.00516 Prepro… 0.904  0.898</code></pre>
+</div>
+<p>Next, let’s finalize our tunable workflow with this particular
+regularization penalty. This is the regularization penalty that our
+tuning results indicate give us the best model.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>final_lasso</span> <span class='op'>&lt;-</span> <span class='fu'>finalize_workflow</span><span class='op'>(</span><span class='va'>tune_wf</span>, <span class='va'>chosen_acc</span><span class='op'>)</span>
+
+<span class='va'>final_lasso</span>
+</code></pre>
+</div>
+<pre><code>══ Workflow ══════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: logistic_reg()
+
+── Preprocessor ──────────────────────────────────────────────────────
+3 Recipe Steps
+
+• step_tokenize()
+• step_tokenfilter()
+• step_tfidf()
+
+── Model ─────────────────────────────────────────────────────────────
+Logistic Regression Model Specification (classification)
+
+Main Arguments:
+  penalty = 0.00853167852417281
+  mixture = 1
+
+Computational engine: glmnet </code></pre>
+</div>
+<p>The penalty argument value now reflects our tuning result. Now we fit
+to our training data.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fitted_lasso</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://generics.r-lib.org/reference/fit.html'>fit</a></span><span class='op'>(</span><span class='va'>final_lasso</span>, <span class='va'>incidents_train</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>First let’s look at the words associated with an accident being
+non-fatal.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fitted_lasso</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>extract_fit_parsnip</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>estimate</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1,001 × 3
+   term                 estimate penalty
+   &lt;chr&gt;                   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 tfidf_Text_analysis      90.9 0.00853
+ 2 tfidf_Text_hospital      78.6 0.00853
+ 3 tfidf_Text_treatment     55.9 0.00853
+ 4 tfidf_Text_fractures     47.5 0.00853
+ 5 tfidf_Text_injury        47.5 0.00853
+ 6 tfidf_Text_pain          44.1 0.00853
+ 7 tfidf_Text_helped        43.6 0.00853
+ 8 tfidf_Text_able          41.7 0.00853
+ 9 tfidf_Text_broken        36.9 0.00853
+10 tfidf_Text_condition     35.3 0.00853
+# … with 991 more rows</code></pre>
+</div>
+<p>And now the words that are most associated with a fatal incident.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fitted_lasso</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>extract_fit_parsnip</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>estimate</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1,001 × 3
+   term                 estimate penalty
+   &lt;chr&gt;                   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 tfidf_Text_died        -277.  0.00853
+ 2 tfidf_Text_body        -158.  0.00853
+ 3 tfidf_Text_death       -132.  0.00853
+ 4 tfidf_Text_fatal        -76.8 0.00853
+ 5 tfidf_Text_breathing    -47.7 0.00853
+ 6 tfidf_Text_past         -32.5 0.00853
+ 7 tfidf_Text_observed     -32.5 0.00853
+ 8 tfidf_Text_occurred     -31.7 0.00853
+ 9 tfidf_Text_noticed      -31.1 0.00853
+10 tfidf_Text_either       -31.0 0.00853
+# … with 991 more rows</code></pre>
+</div>
+<div class="sourceCode" id="cb18"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
