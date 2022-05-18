@@ -2488,6 +2488,7 @@ Topics
 <a href="topic_5.html">Topic 5: Word Relationships</a>
 <a href="topic_6.html">Topic 6: Topic Analysis</a>
 <a href="topic_7.html">Topic 7: Word Embeddings</a>
+<a href="topic_8.html">Topic 8: Classification</a>
 </div>
 </div>
 <a href="resources.html">Resources</a>
@@ -2566,7 +2567,7 @@ tf-idf.</p>
 </code></pre>
 </div>
 </div>
-Create tidymodels workflow to combine the modeling components
+<p>Create tidymodels workflow to combine the modeling components</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>incidents_wf</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
@@ -2587,8 +2588,8 @@ Create tidymodels workflow to combine the modeling components
 
 Computational engine: naivebayes </code></pre>
 </div>
-Now we are ready to add our model to the workflow and fit it to the
-training data
+<p>Now we are ready to add our model to the workflow and fit it to the
+training data</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>nb_fit</span> <span class='op'>&lt;-</span> <span class='va'>incidents_wf</span> <span class='op'><a href='https://textrecipes.tidymodels.org/reference/pipe.html'>%&gt;%</a></span>
