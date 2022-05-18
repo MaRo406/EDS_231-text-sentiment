@@ -20,7 +20,8 @@ library(discrim) # naive-bayes
 This data set includes more *possible* predictors than the text alone, but for this model we will only use the text variable
 
 ```{r data,}
-incidents_df<-read_csv("dat/climbing_reports_model_dat.csv")
+#download data spreadsheet here: #https://drive.google.com/file/d/1936GbWMjswqrOJuKfwik5vNmd0N4hPGF/view?usp=sharing
+incidents_df <- read.csv("dat/climbing_reports_model_dat.csv")
 glimpse(incidents_df)
 ```
 
